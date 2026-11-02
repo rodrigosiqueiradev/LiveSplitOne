@@ -24,7 +24,7 @@
  * put together the wrong way.
  */
 
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { CcLabel, resolveCc } from "../../../localization/custom-comparisons";
 import {
     type Block,
@@ -32,6 +32,7 @@ import {
     type Path,
     type Slot,
     canUnwrap,
+    samePath,
     setAt,
     createBlock,
     slotsOf,
@@ -46,7 +47,7 @@ import {
     MenuItem,
     type Position,
 } from "../../components/ContextMenu";
-import { Eye, EllipsisVertical, Plus, Trash } from "lucide-react";
+import { Eye, EllipsisVertical, Info, Plus, Trash } from "lucide-react";
 
 import classes from "../../../css/CustomComparisons.module.css";
 
@@ -57,6 +58,11 @@ export interface TreeContext extends FieldContext {
     onPreview: (path: Path) => void;
     /** The block being previewed, if any. */
     previewPath: Path | null;
+    /**
+     * The block the time of the preview row the runner clicked comes from,
+     * if any.
+     */
+    highlightPath: Path | null;
 }
 
 type Picking =
@@ -154,8 +160,23 @@ function BlockView({
     const spec = blockSpec(block.type);
     const [menu, setMenu] = useState<Position | null>(null);
     const [picking, setPicking] = useState<Picking | null>(null);
+    const [showTip, setShowTip] = useState(false);
+    const element = useRef<HTMLDivElement>(null);
     const segmentCount = ctx.segmentNames.length;
     const { lang } = ctx;
+    const isHighlighted = samePath(ctx.highlightPath, path);
+
+    // The block a clicked preview row comes from may be far from the
+    // preview in a big comparison, or scrolled away on a phone, where the
+    // preview is below the blocks.
+    useEffect(() => {
+        if (isHighlighted) {
+            element.current?.scrollIntoView({
+                block: "nearest",
+                behavior: "smooth",
+            });
+        }
+    }, [isHighlighted]);
 
     if (spec === undefined) {
         // livesplit-core only lets known blocks through, so this can only
@@ -163,10 +184,7 @@ function BlockView({
         return null;
     }
 
-    const isPreviewed =
-        ctx.previewPath !== null &&
-        ctx.previewPath.length === path.length &&
-        ctx.previewPath.every((key, i) => key === path[i]);
+    const isPreviewed = samePath(ctx.previewPath, path);
 
     const setField = (key: string, value: unknown) =>
         ctx.onChange([...path, key], value);
@@ -176,7 +194,8 @@ function BlockView({
 
     return (
         <div
-            className={`${classes.block} ${classes[spec.category]} ${isPreviewed ? classes.previewed : ""}`}
+            ref={element}
+            className={`${classes.block} ${classes[spec.category]} ${isPreviewed ? classes.previewed : ""} ${isHighlighted ? classes.highlighted : ""}`}
         >
             <div
                 className={classes.blockHeader}
@@ -197,6 +216,20 @@ function BlockView({
                         ctx={ctx}
                     />
                 )}
+                {/*
+                 * The tip is also the header's tooltip, but tooltips don't
+                 * work on touch screens and are easy to miss, so it can be
+                 * shown in the block too.
+                 */}
+                <button
+                    className={`${classes.blockMenuButton} ${showTip ? classes.active : ""}`}
+                    aria-label={resolveCc(CcLabel.AboutBlock, lang)}
+                    aria-expanded={showTip}
+                    title={resolveCc(CcLabel.AboutBlock, lang)}
+                    onClick={() => setShowTip(!showTip)}
+                >
+                    <Info size={16} strokeWidth={2.5} />
+                </button>
                 <button
                     className={classes.blockMenuButton}
                     aria-label={resolveCc(CcLabel.BlockMenu, lang)}
@@ -205,6 +238,9 @@ function BlockView({
                     <EllipsisVertical size={16} strokeWidth={2.5} />
                 </button>
             </div>
+            {showTip && (
+                <p className={classes.blockTip}>{resolveCc(spec.tip, lang)}</p>
+            )}
 
             {block.type === RANGE.type && (
                 <RangeCases block={block} path={path} ctx={ctx} />

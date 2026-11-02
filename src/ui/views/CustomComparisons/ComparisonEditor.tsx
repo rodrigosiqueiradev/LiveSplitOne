@@ -28,6 +28,7 @@ import {
     findBackwardsRange,
     findEmptySlot,
     getAt,
+    originPath,
     sameTree,
     setAt,
     writeComparison,
@@ -92,6 +93,7 @@ export function ComparisonEditor({
             : (allComparisons[0] ?? ""),
     );
     const [saveError, setSaveError] = useState<string | null>(null);
+    const [origin, setOrigin] = useState<string | null>(null);
 
     const root = history.versions[history.current] ?? null;
     const segmentNames = useMemo(
@@ -167,12 +169,28 @@ export function ComparisonEditor({
         lang,
     ]);
 
+    // Origins are relative to the previewed block.
+    const highlightPath = useMemo(() => {
+        if (origin === null || previewRoot === null) {
+            return null;
+        }
+        const path = originPath(previewRoot, origin);
+        return path !== null ? [...(previewPath ?? []), ...path] : null;
+    }, [origin, previewRoot, previewPath]);
+
+    // Why Save can't be clicked, shown next to it rather than only after
+    // clicking it, so the runner doesn't have to guess.
+    const cantSave =
+        incomplete ??
+        (name.trim() === ""
+            ? resolveCc(CcLabel.NameRequired, lang)
+            : nameProblem);
+
     const isChanged =
         name.trim() !== comparison.name || !sameTree(root, comparison.root);
 
     const save = () => {
-        if (incomplete !== null || root === null) {
-            setSaveError(incomplete);
+        if (cantSave !== null || root === null) {
             return;
         }
         if (comparison.index !== null && !isChanged) {
@@ -256,7 +274,11 @@ export function ComparisonEditor({
             }}
         >
             <div className={classes.editorToolbar}>
-                <button onClick={save} disabled={incomplete !== null}>
+                <button
+                    onClick={save}
+                    disabled={cantSave !== null}
+                    title={cantSave ?? undefined}
+                >
                     <Check strokeWidth={2.5} />
                     {resolveCc(CcLabel.Save, lang)}
                 </button>
@@ -280,6 +302,9 @@ export function ComparisonEditor({
                 >
                     <Redo2 strokeWidth={2.5} />
                 </button>
+                {cantSave !== null && (
+                    <span className={classes.cantSave}>{cantSave}</span>
+                )}
             </div>
             {saveError !== null && (
                 <p className={classes.problems}>{saveError}</p>
@@ -316,6 +341,7 @@ export function ComparisonEditor({
                             onChange: changeRoot,
                             onPreview: setPreviewPath,
                             previewPath,
+                            highlightPath,
                         }}
                     />
                 </div>
@@ -332,6 +358,7 @@ export function ComparisonEditor({
                     comparisons={allComparisons}
                     run={run}
                     lang={lang}
+                    onOriginChange={setOrigin}
                 />
             </div>
         </div>

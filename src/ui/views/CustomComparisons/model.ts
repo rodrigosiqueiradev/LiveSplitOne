@@ -153,6 +153,50 @@ export function getAt(root: unknown, path: Path): unknown {
 }
 
 /**
+ * The path of the block a preview row's time comes from, given the origin
+ * livesplit-core reports for it ("primary.cases.0.times"). Like the origin's
+ * description, blocks that only adjust the time they get ("add", "scale")
+ * count as the block, so the highlighted block is the one the description
+ * names. Returns null if the origin doesn't point into the blocks.
+ */
+export function originPath(root: Slot, origin: string): Path | null {
+    if (root === null) {
+        return null;
+    }
+    const steps = origin === "" ? [] : origin.split(".");
+    let node: unknown = root;
+    let target: Path = [];
+    const path: Path = [];
+    for (const step of steps) {
+        const key = Array.isArray(node) ? Number(step) : step;
+        node = getAt(node, [key]);
+        path.push(key);
+        if (node === undefined || node === null) {
+            return null;
+        }
+        if (
+            typeof node === "object" &&
+            !Array.isArray(node) &&
+            "type" in node &&
+            step !== "source"
+        ) {
+            target = [...path];
+        }
+    }
+    return target;
+}
+
+/** Whether two paths point to the same place. */
+export function samePath(a: Path | null, b: Path | null): boolean {
+    return (
+        a !== null &&
+        b !== null &&
+        a.length === b.length &&
+        a.every((key, i) => key === b[i])
+    );
+}
+
+/**
  * Returns a copy of the tree with the value at the path replaced. Only the
  * objects on the way to the path are copied, so the editor's undo history can
  * keep every version of the tree cheaply.

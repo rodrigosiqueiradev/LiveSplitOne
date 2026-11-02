@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { type Language } from "../../../livesplit-core";
 import { CcLabel, resolveCc } from "../../../localization/custom-comparisons";
 import { type BlockSpec, CATEGORIES, ALL_BLOCKS, RANGE } from "./blocks";
@@ -12,7 +12,11 @@ import classes from "../../../css/CustomComparisons.module.css";
  * screens, and the tips are what tells the blocks apart.
  *
  * It's a panel in the middle of the screen rather than a context menu at the
- * mouse, as the list is too long to fit below or next to most rows.
+ * mouse, as the list is too long to fit below or next to most rows. A search
+ * field at the top filters the blocks by their names and tips, so a runner
+ * who knows what they want ("median", "golds", "days") doesn't need to know
+ * which category it's in. Enter picks the first match and Escape closes the
+ * picker, so a block can be added without the mouse.
  */
 export function BlockPicker({
     title,
@@ -28,23 +32,45 @@ export function BlockPicker({
     onClose: () => void;
     lang: Language | undefined;
 }) {
+    const [query, setQuery] = useState("");
+    const words = query
+        .toLowerCase()
+        .split(/\s+/)
+        .filter((w) => w !== "");
+    const matches = (spec: BlockSpec) => {
+        const text =
+            `${blockName(spec, lang)} ${resolveCc(spec.tip, lang)}`.toLowerCase();
+        return words.every((word) => text.includes(word));
+    };
     const groups = CATEGORIES.map(({ category, label }) => ({
         label,
         blocks: ALL_BLOCKS.filter(
-            (spec) => spec.category === category && filter(spec),
+            (spec) =>
+                spec.category === category && filter(spec) && matches(spec),
         ),
     })).filter((group) => group.blocks.length > 0);
+    const first = groups[0]?.blocks[0];
+
+    // Escape closes the picker wherever the focus is, not only in the search
+    // field.
+    useEffect(() => {
+        const listener = (e: KeyboardEvent) => {
+            if (e.key === "Escape") {
+                e.preventDefault();
+                onClose();
+            }
+        };
+        window.addEventListener("keydown", listener);
+        return () => window.removeEventListener("keydown", listener);
+    }, [onClose]);
+
+    const pick = (type: string) => {
+        onPick(type);
+        onClose();
+    };
 
     return (
-        <div
-            className={classes.pickerOverlay}
-            onClick={onClose}
-            onKeyDown={(e) => {
-                if (e.key === "Escape") {
-                    onClose();
-                }
-            }}
-        >
+        <div className={classes.pickerOverlay} onClick={onClose}>
             <div
                 className={classes.picker}
                 role="dialog"
@@ -52,19 +78,35 @@ export function BlockPicker({
                 onClick={(e) => e.stopPropagation()}
             >
                 <h2>{title}</h2>
+                <input
+                    type="search"
+                    className={classes.pickerSearch}
+                    placeholder={resolveCc(CcLabel.SearchBlocks, lang)}
+                    aria-label={resolveCc(CcLabel.SearchBlocks, lang)}
+                    value={query}
+                    autoFocus
+                    onChange={(e) => setQuery(e.target.value)}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter" && first !== undefined) {
+                            e.preventDefault();
+                            pick(first.type);
+                        }
+                    }}
+                />
                 <div className={classes.pickerList}>
+                    {groups.length === 0 && (
+                        <p className={classes.pickerTip}>
+                            {resolveCc(CcLabel.NoBlocksFound, lang)}
+                        </p>
+                    )}
                     {groups.map((group) => (
                         <section key={group.label}>
                             <h3>{resolveCc(group.label, lang)}</h3>
                             {group.blocks.map((spec) => (
                                 <button
                                     key={spec.type}
-                                    autoFocus={false}
-                                    className={`${classes.pickerEntry} ${classes[spec.category]}`}
-                                    onClick={() => {
-                                        onPick(spec.type);
-                                        onClose();
-                                    }}
+                                    className={`${classes.pickerEntry} ${classes[spec.category]} ${spec === first && words.length > 0 ? classes.pickerFirst : ""}`}
+                                    onClick={() => pick(spec.type)}
                                 >
                                     <span className={classes.pickerName}>
                                         <span className={classes.kindBadge}>

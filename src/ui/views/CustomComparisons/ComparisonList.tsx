@@ -20,6 +20,11 @@ import {
     resolveCc,
 } from "../../../localization/custom-comparisons";
 import { showDialog } from "../../components/Dialog";
+import {
+    ContextMenu,
+    MenuItem,
+    type Position,
+} from "../../components/ContextMenu";
 import { exportFile, openFileAsString } from "../../../util/FileUtil";
 import { type ComparisonLibrary } from "./library";
 import { type EditedComparison } from "./ComparisonEditor";
@@ -33,6 +38,7 @@ import {
     ClipboardPaste,
     Copy,
     Download,
+    EllipsisVertical,
     Pencil,
     Plus,
     TextCursorInput,
@@ -59,6 +65,10 @@ export function ComparisonList({
 }) {
     const [selected, setSelected] = useState(0);
     const [choosingTemplate, setChoosingTemplate] = useState(false);
+    const [menu, setMenu] = useState<{
+        index: number;
+        position: Position;
+    } | null>(null);
     // The comparisons live in the layout, not in React's state, so the list
     // is told to read them again after every change.
     const [, setVersion] = useState(0);
@@ -70,8 +80,6 @@ export function ComparisonList({
         comparisons.length > 0
             ? Math.min(selected, comparisons.length - 1)
             : null;
-    const selectedComparison =
-        current !== null ? (comparisons[current] ?? null) : null;
 
     const showError = async (message: string) => {
         await showDialog({
@@ -306,96 +314,29 @@ export function ComparisonList({
         }
     };
 
-    const readable = selectedComparison?.readable ?? false;
-
     return (
         <div className={classes.list}>
             <p className={classes.listHint}>
                 {resolveCc(CcLabel.OpenEditorHint, lang)}
             </p>
+            {/*
+             * Only what adds comparisons is in the toolbar. What works on one
+             * comparison is on its row, so it's clear which one it applies
+             * to and it's one click away instead of select, then act.
+             */}
             <div className={classes.listToolbar}>
                 <button onClick={() => setChoosingTemplate(true)}>
                     <Plus strokeWidth={2.5} />
                     {resolveCc(CcLabel.New, lang)}
                 </button>
-                <button
-                    disabled={current === null || !readable}
-                    onClick={() => current !== null && edit(current)}
-                >
-                    <Pencil strokeWidth={2.5} />
-                    {resolveCc(CcLabel.Edit, lang)}
-                </button>
-                <IconButton
-                    label={resolveCc(CcLabel.Rename, lang)}
-                    disabled={current === null || !readable}
-                    onClick={() =>
-                        selectedComparison !== null &&
-                        current !== null &&
-                        rename(current, selectedComparison.name)
-                    }
-                >
-                    <TextCursorInput strokeWidth={2.5} />
-                </IconButton>
-                <IconButton
-                    label={resolveCc(CcLabel.Duplicate, lang)}
-                    disabled={current === null || !readable}
-                    onClick={() => current !== null && duplicate(current)}
-                >
-                    <Copy strokeWidth={2.5} />
-                </IconButton>
-                <IconButton
-                    label={resolveCc(CcLabel.Remove, lang)}
-                    disabled={current === null}
-                    onClick={() => current !== null && remove(current)}
-                >
-                    <Trash strokeWidth={2.5} />
-                </IconButton>
-                <IconButton
-                    label={resolveCc(CcLabel.MoveUp, lang)}
-                    disabled={current === null || current === 0}
-                    onClick={() => current !== null && move(current, true)}
-                >
-                    <ArrowUp strokeWidth={2.5} />
-                </IconButton>
-                <IconButton
-                    label={resolveCc(CcLabel.MoveDown, lang)}
-                    disabled={
-                        current === null || current === comparisons.length - 1
-                    }
-                    onClick={() => current !== null && move(current, false)}
-                >
-                    <ArrowDown strokeWidth={2.5} />
-                </IconButton>
-            </div>
-            <div className={classes.listToolbar}>
-                <IconButton
-                    label={resolveCc(CcLabel.Import, lang)}
-                    onClick={importFile}
-                >
+                <button onClick={importFile}>
                     <Upload strokeWidth={2.5} />
-                </IconButton>
-                <IconButton
-                    label={resolveCc(CcLabel.Export, lang)}
-                    disabled={current === null}
-                    onClick={() =>
-                        current !== null && exportComparison(current)
-                    }
-                >
-                    <Download strokeWidth={2.5} />
-                </IconButton>
-                <IconButton
-                    label={resolveCc(CcLabel.CopyAsText, lang)}
-                    disabled={current === null}
-                    onClick={() => current !== null && copy(current)}
-                >
-                    <ClipboardCopy strokeWidth={2.5} />
-                </IconButton>
-                <IconButton
-                    label={resolveCc(CcLabel.Paste, lang)}
-                    onClick={paste}
-                >
+                    {resolveCc(CcLabel.Import, lang)}
+                </button>
+                <button onClick={paste}>
                     <ClipboardPaste strokeWidth={2.5} />
-                </IconButton>
+                    {resolveCc(CcLabel.Paste, lang)}
+                </button>
             </div>
 
             {comparisons.length === 0 ? (
@@ -414,7 +355,7 @@ export function ComparisonList({
                                 onClick={() => setSelected(i)}
                                 onDoubleClick={() => c.readable && edit(i)}
                             >
-                                <td>
+                                <td className={classes.listCell}>
                                     <div className={classes.listName}>
                                         {c.name}
                                     </div>
@@ -441,6 +382,48 @@ export function ComparisonList({
                                         </div>
                                     )}
                                 </td>
+                                <td className={classes.listActions}>
+                                    <button
+                                        disabled={!c.readable}
+                                        aria-label={resolveCc(
+                                            CcLabel.Edit,
+                                            lang,
+                                        )}
+                                        title={resolveCc(CcLabel.Edit, lang)}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            edit(i);
+                                        }}
+                                    >
+                                        <Pencil size={16} strokeWidth={2.5} />
+                                    </button>
+                                    <button
+                                        aria-label={resolveCc(
+                                            CcLabel.ComparisonMenu,
+                                            lang,
+                                        )}
+                                        title={resolveCc(
+                                            CcLabel.ComparisonMenu,
+                                            lang,
+                                        )}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setSelected(i);
+                                            setMenu({
+                                                index: i,
+                                                position: {
+                                                    x: e.clientX,
+                                                    y: e.clientY,
+                                                },
+                                            });
+                                        }}
+                                    >
+                                        <EllipsisVertical
+                                            size={16}
+                                            strokeWidth={2.5}
+                                        />
+                                    </button>
+                                </td>
                             </tr>
                         ))}
                     </tbody>
@@ -449,6 +432,31 @@ export function ComparisonList({
             <p className={classes.listHint}>
                 {resolveCc(CcLabel.SaveReminder, lang)}
             </p>
+
+            {menu !== null && (
+                <ComparisonMenu
+                    position={menu.position}
+                    readable={comparisons[menu.index]?.readable ?? false}
+                    isFirst={menu.index === 0}
+                    isLast={menu.index === comparisons.length - 1}
+                    lang={lang}
+                    onClose={() => setMenu(null)}
+                    actions={{
+                        edit: () => edit(menu.index),
+                        rename: () =>
+                            rename(
+                                menu.index,
+                                comparisons[menu.index]?.name ?? "",
+                            ),
+                        duplicate: () => duplicate(menu.index),
+                        moveUp: () => move(menu.index, true),
+                        moveDown: () => move(menu.index, false),
+                        exportFile: () => exportComparison(menu.index),
+                        copy: () => copy(menu.index),
+                        remove: () => remove(menu.index),
+                    }}
+                />
+            )}
 
             {choosingTemplate && (
                 <TemplatePicker
@@ -461,26 +469,76 @@ export function ComparisonList({
     );
 }
 
-function IconButton({
-    label,
-    disabled,
-    onClick,
-    children,
+interface ComparisonActions {
+    edit: () => void;
+    rename: () => void;
+    duplicate: () => void;
+    moveUp: () => void;
+    moveDown: () => void;
+    exportFile: () => void;
+    copy: () => void;
+    remove: () => void;
+}
+
+/**
+ * Everything that can be done with one comparison. An unreadable comparison
+ * (made by a newer version, or broken) can only be exported, copied, moved
+ * or removed, as it can't be opened.
+ */
+function ComparisonMenu({
+    position,
+    readable,
+    isFirst,
+    isLast,
+    lang,
+    onClose,
+    actions,
 }: {
-    label: string;
-    disabled?: boolean;
-    onClick: () => void;
-    children: React.ReactNode;
+    position: Position;
+    readable: boolean;
+    isFirst: boolean;
+    isLast: boolean;
+    lang: Language | undefined;
+    onClose: () => void;
+    actions: ComparisonActions;
 }) {
+    const item = (
+        icon: React.ReactNode,
+        label: CcLabel,
+        onClick: () => void,
+    ) => (
+        <MenuItem lang={lang} onClick={onClick}>
+            {icon} {resolveCc(label, lang)}
+        </MenuItem>
+    );
+    const icon = { size: 14, strokeWidth: 2.5 };
     return (
-        <button
-            aria-label={label}
-            title={label}
-            disabled={disabled}
-            onClick={onClick}
-        >
-            {children}
-        </button>
+        <ContextMenu position={position} onClose={onClose}>
+            {readable && item(<Pencil {...icon} />, CcLabel.Edit, actions.edit)}
+            {readable &&
+                item(
+                    <TextCursorInput {...icon} />,
+                    CcLabel.Rename,
+                    actions.rename,
+                )}
+            {readable &&
+                item(<Copy {...icon} />, CcLabel.Duplicate, actions.duplicate)}
+            {!isFirst &&
+                item(<ArrowUp {...icon} />, CcLabel.MoveUp, actions.moveUp)}
+            {!isLast &&
+                item(
+                    <ArrowDown {...icon} />,
+                    CcLabel.MoveDown,
+                    actions.moveDown,
+                )}
+            {item(<Download {...icon} />, CcLabel.Export, actions.exportFile)}
+            {item(
+                <ClipboardCopy {...icon} />,
+                CcLabel.CopyAsText,
+                actions.copy,
+            )}
+            {item(<Trash {...icon} />, CcLabel.Remove, actions.remove)}
+        </ContextMenu>
     );
 }
 

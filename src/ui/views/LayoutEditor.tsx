@@ -59,13 +59,32 @@ interface ComponentClass {
 }
 
 export function LayoutEditor(props: Props) {
+    // The custom comparison being edited, if any. Its editor takes the place
+    // of the whole Layout Editor, as the blocks and the preview need the
+    // room, and it returns here when it's closed. The state lives here rather
+    // than in the view, so that the sidebar knows about it too: its OK and
+    // Cancel would close the Layout Editor and silently drop the blocks being
+    // edited, so they are disabled until the comparison is saved or
+    // cancelled.
+    const [editedComparison, setEditedComparison] =
+        useState<EditedComparison | null>(null);
     return props.callbacks.renderViewWithSidebar(
-        <View {...props} />,
+        <View
+            {...props}
+            editedComparison={editedComparison}
+            onEditComparison={setEditedComparison}
+        />,
         <SideBar
             callbacks={props.callbacks}
             lang={props.generalSettings.lang}
+            editingComparison={editedComparison !== null}
         />,
     );
+}
+
+interface ViewProps extends Props {
+    editedComparison: EditedComparison | null;
+    onEditComparison: (comparison: EditedComparison | null) => void;
 }
 
 export function View({
@@ -82,7 +101,9 @@ export function View({
     commandSink,
     renderer,
     callbacks,
-}: Props) {
+    editedComparison,
+    onEditComparison: setEditedComparison,
+}: ViewProps) {
     const lang = generalSettings.lang;
     const [state, setState] = useState(() => {
         const state = editor.stateAsJson(
@@ -93,11 +114,6 @@ export function View({
         return state as LiveSplit.LayoutEditorStateJson;
     });
     const [showComponentSettings, setShowComponentSettings] = useState(true);
-    // The custom comparison being edited, if any. Its editor takes the place
-    // of the whole Layout Editor, as the blocks and the preview need the
-    // room, and it returns here when it's closed.
-    const [editedComparison, setEditedComparison] =
-        useState<EditedComparison | null>(null);
 
     const updateState = () => {
         setState(
@@ -371,24 +387,37 @@ export function View({
 export function SideBar({
     callbacks,
     lang,
+    editingComparison = false,
 }: {
     callbacks: Callbacks;
     lang: LiveSplit.Language | undefined;
+    editingComparison?: boolean;
 }) {
     return (
         <>
             <h1>{resolve(Label.LayoutEditor, lang)}</h1>
             <hr />
             <div className={buttonGroupClasses.group}>
-                <button onClick={(_) => callbacks.closeLayoutEditor(true)}>
+                <button
+                    disabled={editingComparison}
+                    onClick={(_) => callbacks.closeLayoutEditor(true)}
+                >
                     <Check strokeWidth={2.5} />
                     {resolve(Label.Ok, lang)}
                 </button>
-                <button onClick={(_) => callbacks.closeLayoutEditor(false)}>
+                <button
+                    disabled={editingComparison}
+                    onClick={(_) => callbacks.closeLayoutEditor(false)}
+                >
                     <X strokeWidth={2.5} />
                     {resolve(Label.Cancel, lang)}
                 </button>
             </div>
+            {editingComparison && (
+                <p className={classes.sidebarHint}>
+                    {resolveCc(CcLabel.SidebarEditingHint, lang)}
+                </p>
+            )}
         </>
     );
 }
