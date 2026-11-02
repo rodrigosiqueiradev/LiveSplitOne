@@ -7,6 +7,7 @@ import {
     type ImageCacheRefMut,
     type Language,
     type LayoutEditorRefMut,
+    type LayoutRef,
     type LayoutRefMut,
     type LayoutStateRefMut,
     type Run,
@@ -27,6 +28,13 @@ interface Callbacks {
     handleEvent(event: Event): void;
     runChanged(): void;
     runNotModifiedAnymore(): void;
+    /**
+     * The layout whose Custom Comparisons components provide the custom
+     * comparisons to install on every run the timer gets. This is null while
+     * the layout isn't known yet, which is only the case while LiveSplit One
+     * starts up. It then installs them itself once the layout is loaded.
+     */
+    customComparisonsLayout(): LayoutRef | null;
     encounteredCustomVariable(name: string): void;
     getLang(): Language | undefined;
 }
@@ -390,9 +398,39 @@ export class LSOCommandSink {
     public setRun(run: Run): Run | null {
         const result = this.timer.setRun(run);
 
+        // The custom comparisons are stored in the layout, not in the splits,
+        // just like in the desktop LiveSplit. A new run only has the
+        // comparisons stored in its splits and the built-in ones, so the
+        // layout's custom comparisons need to be installed on it again.
+        // Installing them here, rather than at every place that loads splits,
+        // means no way of changing the run can forget about them.
+        if (result === null) {
+            const layout = this.callbacks.customComparisonsLayout();
+            if (layout !== null) {
+                this.timer.setCustomComparisons(layout);
+            }
+        }
+
         this.callbacks.runChanged();
 
         return result;
+    }
+
+    /**
+     * Installs the custom comparisons stored in the layout on the run,
+     * replacing the ones installed before. This needs to be called whenever
+     * the layout changes. Changes of the run are handled by `setRun`. If the
+     * current comparison was a custom comparison that no longer exists, the
+     * timer switches to the Personal Best.
+     *
+     * A custom comparison named like a comparison stored in the splits isn't
+     * installed, like in the desktop LiveSplit. The Custom Comparisons editor
+     * shows that problem next to the comparison, so the names that were left
+     * out aren't reported here.
+     */
+    public setCustomComparisons(layout: LayoutRef): void {
+        this.timer.setCustomComparisons(layout);
+        this.callbacks.runChanged();
     }
 
     public hasBeenModified(): boolean {

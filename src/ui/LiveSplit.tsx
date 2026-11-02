@@ -235,11 +235,6 @@ export class LiveSplit extends React.Component<Props, State> {
             }
         }
 
-        if (props.comparison !== undefined) {
-            timer.setCurrentComparison(props.comparison);
-        }
-        timer.setCurrentTimingMethod(props.timingMethod);
-
         let layout: Option<Layout> = null;
         try {
             const data = props.layout;
@@ -254,6 +249,16 @@ export class LiveSplit extends React.Component<Props, State> {
                 orAutoLang(props.generalSettings.lang),
             );
         }
+
+        // The layout's custom comparisons need to be installed before the
+        // stored comparison is selected again, as the runner may have been
+        // comparing against one of them.
+        timer.setCustomComparisons(layout);
+
+        if (props.comparison !== undefined) {
+            timer.setCurrentComparison(props.comparison);
+        }
+        timer.setCurrentTimingMethod(props.timingMethod);
 
         const isDesktop = this.isDesktopQuery.matches;
 
@@ -986,6 +991,7 @@ export class LiveSplit extends React.Component<Props, State> {
 
     private setLayout(layout: Layout) {
         this.state.layout[Symbol.dispose]();
+        this.state.commandSink.setCustomComparisons(layout);
         this.setState(
             {
                 layout,
@@ -1153,6 +1159,12 @@ export class LiveSplit extends React.Component<Props, State> {
                 allVariables: this.state.commandSink.getAllCustomVariables(),
             });
         }
+    }
+
+    customComparisonsLayout(): Layout | null {
+        // The command sink is created in the constructor before the state
+        // exists. The constructor installs the custom comparisons itself.
+        return this.state?.layout ?? null;
     }
 
     runNotModifiedAnymore(): void {
