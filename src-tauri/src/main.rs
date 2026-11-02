@@ -11,7 +11,7 @@ use livesplit_core::{
     event::{CommandSink, Error, Event, Result},
     hotkey::KeyCode,
     networking::server_protocol::Command,
-    HotkeyConfig, HotkeySystem, StoredAutoSplitterSettings, TimeSpan, TimingMethod,
+    HotkeyConfig, HotkeySystem, Lang, StoredAutoSplitterSettings, TimeSpan, TimingMethod,
 };
 use tauri::{Emitter, Manager, WebviewWindow};
 
@@ -53,13 +53,15 @@ fn get_hotkey_config(state: tauri::State<'_, State>) -> HotkeyConfig {
 }
 
 #[tauri::command]
-fn resolve_hotkey(state: tauri::State<'_, State>, key_code: String) -> Cow<'static, str> {
+fn resolve_hotkey(state: tauri::State<'_, State>, key_code: String) -> String {
     if let Some(hotkey_system) = &*state.hotkey_system.read().unwrap() {
         if let Ok(key_code) = KeyCode::from_str(&key_code) {
-            return hotkey_system.resolve(key_code);
+            return hotkey_system
+                .resolve_key(key_code, Lang::English)
+                .to_string();
         }
     }
-    key_code.into()
+    key_code
 }
 
 #[tauri::command]

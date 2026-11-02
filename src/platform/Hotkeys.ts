@@ -7,7 +7,7 @@ export interface HotkeyImplementation {
     setConfig(config: HotkeyConfig): void;
     activate(): void;
     deactivate(): void;
-    resolve(keyCode: string): Promise<string> | string;
+    resolveKey(keyCode: string, lang: Language): Promise<string> | string;
 }
 
 class GlobalHotkeys implements HotkeyImplementation {
@@ -60,7 +60,7 @@ class GlobalHotkeys implements HotkeyImplementation {
         this.hotkeySystem?.deactivate();
     }
 
-    public resolve(keyCode: string): Promise<string> {
+    public resolveKey(keyCode: string, _lang: Language): Promise<string> {
         return window.__TAURI__!.core.invoke("resolve_hotkey", { keyCode });
     }
 }
