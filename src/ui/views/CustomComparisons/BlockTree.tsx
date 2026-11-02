@@ -32,8 +32,9 @@ import {
     type Path,
     type Slot,
     canUnwrap,
+    isWithin,
+    replaceBlock,
     samePath,
-    setAt,
     createBlock,
     slotsOf,
     unwrapBlock,
@@ -47,7 +48,16 @@ import {
     MenuItem,
     type Position,
 } from "../../components/ContextMenu";
-import { Eye, EllipsisVertical, Info, Plus, Trash } from "lucide-react";
+import {
+    Eye,
+    EllipsisVertical,
+    GripVertical,
+    Info,
+    Plus,
+    Trash,
+} from "lucide-react";
+
+import { KindIcon } from "./KindIcon";
 
 import classes from "../../../css/CustomComparisons.module.css";
 
@@ -63,7 +73,33 @@ export interface TreeContext extends FieldContext {
      * if any.
      */
     highlightPath: Path | null;
+    /** The block being dragged, if any. */
+    dragged: Dragged | null;
+    onDrag: (dragged: Dragged | null) => void;
+    /** Drops the dragged block into the slot at the path. */
+    onDrop: (path: Path) => void;
+    /** The slot the dragged block would be dropped into, if any. */
+    dropPath: Path | null;
+    onDropPathChange: (path: Path | null) => void;
 }
+
+/**
+ * A block being dragged, either a new one from the rail of blocks or one
+ * that's already in the comparison, which is moved.
+ */
+export interface Dragged {
+    block: Block;
+    /** Where the block is in the comparison, or null for a new block. */
+    from: Path | null;
+}
+
+/**
+ * The drag and drop data type. The block itself is kept in React's state,
+ * as the data can't be read while dragging over a slot, which has to know
+ * whether the block fits. This type tells LiveSplit One's own drags apart
+ * from files or text dragged into the browser.
+ */
+export const DRAG_TYPE = "application/x-livesplit-one-block";
 
 type Picking =
     | { mode: "fill"; kind: Kind }
@@ -107,8 +143,58 @@ function SlotView({
     const [picking, setPicking] = useState(false);
     const segmentCount = ctx.segmentNames.length;
 
+    // A block fits a slot of its kind. A block can't be put into itself.
+    const dragged = ctx.dragged;
+    const accepts =
+        dragged !== null &&
+        blockSpec(dragged.block.type)?.kind === kind &&
+        (dragged.from === null || !isWithin(path, dragged.from)) &&
+        // Swapping a block with the block it's in would put it in itself.
+        (dragged.from === null ||
+            slot === null ||
+            !isWithin(dragged.from, path));
+
+    // Slots are nested, so the innermost slot under the pointer takes the
+    // drop, and the slots around it don't react.
+    const onDragOver = (e: React.DragEvent) => {
+        if (!e.dataTransfer.types.includes(DRAG_TYPE)) {
+            return;
+        }
+        e.stopPropagation();
+        if (accepts) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect =
+                dragged?.from === null ? "copy" : "move";
+        }
+        // Only one slot is marked, even when the pointer moves from a slot
+        // into a slot inside it, which the outer slot isn't told about.
+        if (!samePath(ctx.dropPath, accepts ? path : null)) {
+            ctx.onDropPathChange(accepts ? path : null);
+        }
+    };
+    const isOver = accepts && samePath(ctx.dropPath, path);
+
     return (
-        <div className={classes.slot}>
+        <div
+            className={`${classes.slot} ${accepts ? classes.dropTarget : ""} ${isOver ? classes.dropOver : ""}`}
+            onDragOver={onDragOver}
+            onDragLeave={(e) => {
+                if (
+                    isOver &&
+                    !e.currentTarget.contains(e.relatedTarget as Node)
+                ) {
+                    ctx.onDropPathChange(null);
+                }
+            }}
+            onDrop={(e) => {
+                if (!accepts) {
+                    return;
+                }
+                e.preventDefault();
+                e.stopPropagation();
+                ctx.onDrop(path);
+            }}
+        >
             {label !== undefined && (
                 <div className={classes.slotLabel}>
                     {resolveCc(label, ctx.lang)}
@@ -122,9 +208,7 @@ function SlotView({
                     onClick={() => setPicking(true)}
                 >
                     <Plus size={16} strokeWidth={2.5} />
-                    <span className={classes.kindBadge}>
-                        {kind === "samples" ? "⬡" : "⬭"}
-                    </span>
+                    <KindIcon kind={kind} />
                     {resolveCc(CcLabel.ChooseBlock, ctx.lang)}
                 </button>
             )}
@@ -195,15 +279,38 @@ function BlockView({
     return (
         <div
             ref={element}
-            className={`${classes.block} ${classes[spec.category]} ${isPreviewed ? classes.previewed : ""} ${isHighlighted ? classes.highlighted : ""}`}
+            className={`${classes.block} ${classes[spec.category]} ${isPreviewed ? classes.previewed : ""} ${isHighlighted ? classes.highlighted : ""} ${ctx.dragged !== null && samePath(ctx.dragged.from, path) ? classes.dragging : ""}`}
         >
             <div
                 className={classes.blockHeader}
                 title={resolveCc(spec.tip, lang)}
             >
-                <span className={classes.kindBadge}>
-                    {spec.kind === "samples" ? "⬡" : "⬭"}
+                {/*
+                 * Only the handle starts a drag, so selecting text in the
+                 * block's fields still works.
+                 */}
+                <span
+                    className={classes.dragHandle}
+                    draggable
+                    aria-hidden
+                    title={resolveCc(CcLabel.DragBlock, lang)}
+                    onDragStart={(e) => {
+                        e.dataTransfer.setData(DRAG_TYPE, block.type);
+                        e.dataTransfer.effectAllowed = "move";
+                        if (element.current !== null) {
+                            e.dataTransfer.setDragImage(
+                                element.current,
+                                12,
+                                12,
+                            );
+                        }
+                        ctx.onDrag({ block, from: path });
+                    }}
+                    onDragEnd={() => ctx.onDrag(null)}
+                >
+                    <GripVertical size={14} strokeWidth={2.5} />
                 </span>
+                <KindIcon kind={spec.kind} />
                 {block.type === RANGE.type ? (
                     <span className={classes.blockTitle}>
                         {resolveCc(CcLabel.BlockSegmentRangeHeader, lang)}
@@ -355,27 +462,6 @@ function BlockView({
             )}
         </div>
     );
-}
-
-/**
- * Replaces a block with a new one of another type, keeping what was inside
- * it where the new block has a slot of the same kind. Replacing "median of"
- * with "percentile of" keeps the list of times it was calculated from.
- */
-function replaceBlock(block: Block, type: string, segmentCount: number): Block {
-    const replacement = createBlock(type, segmentCount);
-    const old = slotsOf(block).filter((s) => s.value !== null);
-    for (const slot of slotsOf(replacement)) {
-        const index = old.findIndex((s) => s.spec.kind === slot.spec.kind);
-        if (index >= 0) {
-            const [taken] = old.splice(index, 1);
-            Object.assign(
-                replacement,
-                setAt(replacement, slot.path, taken?.value ?? null),
-            );
-        }
-    }
-    return replacement;
 }
 
 /** The ranges of a segment range block, each with its segments and rule. */

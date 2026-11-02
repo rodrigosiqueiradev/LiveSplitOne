@@ -197,6 +197,10 @@
 
 .block {
     border: 1px solid var(--border-color);
+    /*
+     * The stripe carries the block's category color, like the desktop's
+     * colored blocks, and shows at a glance where each nested block ends.
+     */
     border-left: 4px solid var(--block-color);
     border-radius: 4px;
     background: var(--light-row-color);
@@ -256,9 +260,10 @@
 
 .kindBadge {
     color: var(--block-color, var(--field-label-color));
-    width: 14px;
-    text-align: center;
+    width: 16px;
+    height: 12px;
     flex-shrink: 0;
+    vertical-align: -1px;
 }
 
 .blockMenuButton {
@@ -408,7 +413,6 @@
     height: auto;
     max-width: none;
     width: 100%;
-    border-left: 4px solid var(--block-color, var(--border-color));
 }
 
 .pickerName {
@@ -587,4 +591,116 @@
 /* The block Enter picks while searching. */
 .pickerFirst {
     outline: 2px solid var(--field-label-focus-color);
+}
+
+/* The rail of blocks next to the comparison. */
+
+.rail {
+    flex: 0 0 220px;
+    position: sticky;
+    top: 0;
+    /* The list scrolls on its own, so search stays in reach. */
+    max-height: calc(100vh - 2 * var(--ui-large-margin));
+    display: flex;
+    flex-direction: column;
+    gap: var(--ui-margin);
+
+    /* Browsers don't support dragging on touch screens. */
+    :global(.is-mobile) & {
+        display: none;
+    }
+
+    h2 {
+        margin: 0;
+        font-size: 18px;
+    }
+}
+
+.railHint {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.35;
+    color: var(--field-label-color);
+}
+
+.railList {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--ui-margin);
+    padding-right: 4px;
+
+    section {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    h3 {
+        margin: 0 0 2px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--field-label-color);
+    }
+}
+
+.railEntry {
+    justify-content: flex-start;
+    gap: 6px;
+    text-align: left;
+    font-size: 13px;
+    line-height: 1.25;
+    padding: 5px 8px;
+    min-height: 0;
+    height: auto;
+    width: 100%;
+    max-width: none;
+    white-space: normal;
+    cursor: grab;
+
+    &:active {
+        cursor: grabbing;
+    }
+}
+
+/* No empty slot fits it; it can still replace a block by dragging. */
+.railEntryNoSlot {
+    color: var(--field-label-color);
+}
+
+.dragHandle {
+    cursor: grab;
+    color: var(--field-label-color);
+    display: inline-flex;
+    flex-shrink: 0;
+    margin-left: -2px;
+    border-radius: 3px;
+
+    /* Browsers don't support dragging on touch screens. */
+    :global(.is-mobile) & {
+        display: none;
+    }
+
+    &:hover {
+        background: var(--hover-row-color, var(--dark-row-color));
+    }
+}
+
+.dragging {
+    opacity: 0.45;
+}
+
+/* The slots the dragged block fits. */
+.dropTarget > .emptySlot {
+    border-style: solid;
+}
+
+.dropOver {
+    outline: 2px solid var(--field-highlight-color);
+    outline-offset: 2px;
+    border-radius: 4px;
 }

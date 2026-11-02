@@ -3,6 +3,8 @@ import { type Language } from "../../../livesplit-core";
 import { CcLabel, resolveCc } from "../../../localization/custom-comparisons";
 import { type BlockSpec, CATEGORIES, ALL_BLOCKS, RANGE } from "./blocks";
 
+import { KindIcon } from "./KindIcon";
+
 import classes from "../../../css/CustomComparisons.module.css";
 
 /**
@@ -33,15 +35,8 @@ export function BlockPicker({
     lang: Language | undefined;
 }) {
     const [query, setQuery] = useState("");
-    const words = query
-        .toLowerCase()
-        .split(/\s+/)
-        .filter((w) => w !== "");
-    const matches = (spec: BlockSpec) => {
-        const text =
-            `${blockName(spec, lang)} ${resolveCc(spec.tip, lang)}`.toLowerCase();
-        return words.every((word) => text.includes(word));
-    };
+    const words = searchWords(query);
+    const matches = (spec: BlockSpec) => blockMatches(spec, words, lang);
     const groups = CATEGORIES.map(({ category, label }) => ({
         label,
         blocks: ALL_BLOCKS.filter(
@@ -109,11 +104,7 @@ export function BlockPicker({
                                     onClick={() => pick(spec.type)}
                                 >
                                     <span className={classes.pickerName}>
-                                        <span className={classes.kindBadge}>
-                                            {spec.kind === "samples"
-                                                ? "⬡"
-                                                : "⬭"}
-                                        </span>
+                                        <KindIcon kind={spec.kind} />
                                         {blockName(spec, lang)}
                                     </span>
                                     <span className={classes.pickerTip}>
@@ -125,12 +116,37 @@ export function BlockPicker({
                     ))}
                 </div>
                 <div className={classes.pickerFooter}>
-                    <span>{resolveCc(CcLabel.KindSamples, lang)}</span>
-                    <span>{resolveCc(CcLabel.KindTimes, lang)}</span>
+                    <span>
+                        <KindIcon kind="samples" />{" "}
+                        {resolveCc(CcLabel.KindSamples, lang)}
+                    </span>
+                    <span>
+                        <KindIcon kind="times" />{" "}
+                        {resolveCc(CcLabel.KindTimes, lang)}
+                    </span>
                 </div>
             </div>
         </div>
     );
+}
+
+/** The words of a search for blocks. */
+export function searchWords(query: string): string[] {
+    return query
+        .toLowerCase()
+        .split(/\s+/)
+        .filter((w) => w !== "");
+}
+
+/** Whether a block's name or tip has all the words of a search. */
+export function blockMatches(
+    spec: BlockSpec,
+    words: string[],
+    lang: Language | undefined,
+): boolean {
+    const text =
+        `${blockName(spec, lang)} ${resolveCc(spec.tip, lang)}`.toLowerCase();
+    return words.every((word) => text.includes(word));
 }
 
 /**

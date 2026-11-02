@@ -23,6 +23,9 @@ export enum CcLabel {
     SearchBlocks,
     NoBlocksFound,
     AboutBlock,
+    RailTitle,
+    RailHint,
+    DragBlock,
     OpenEditorHint,
 
     // The list of comparisons.

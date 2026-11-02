@@ -16,6 +16,10 @@ export const english: CcTexts = {
     [CcLabel.SearchBlocks]: "Search blocks",
     [CcLabel.NoBlocksFound]: "No block matches. Try another word.",
     [CcLabel.AboutBlock]: "What does this block do?",
+    [CcLabel.RailTitle]: "Blocks",
+    [CcLabel.RailHint]:
+        "Drag a block onto a slot, or onto a block to replace it. Click one to put it in the first empty slot it fits.",
+    [CcLabel.DragBlock]: "Drag to move this block",
     [CcLabel.OpenEditorHint]:
         "This component doesn't show anything. It stores your custom comparisons in the layout, so they travel with it.",
 
@@ -113,8 +117,8 @@ export const english: CcTexts = {
     [CcLabel.CategoryAggregates]: "Aggregates",
     [CcLabel.CategoryMath]: "Math",
     [CcLabel.CategoryControl]: "Control",
-    [CcLabel.KindSamples]: "⬡ A list of times for each segment",
-    [CcLabel.KindTimes]: "⬭ One time for each segment",
+    [CcLabel.KindSamples]: "A list of times for each segment",
+    [CcLabel.KindTimes]: "One time for each segment",
 
     [CcLabel.BlockResult]: "this comparison is",
     [CcLabel.BlockResultTip]:

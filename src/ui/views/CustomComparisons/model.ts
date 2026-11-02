@@ -270,6 +270,63 @@ export function findEmptySlot(slot: Slot, path: Path = []): Path | null {
 }
 
 /**
+ * Finds the first empty slot that takes blocks of the kind, depth first.
+ * Returns its path, or null.
+ */
+export function findEmptySlotFor(
+    slot: Slot,
+    kind: Kind,
+    slotKind: Kind = "times",
+    path: Path = [],
+): Path | null {
+    if (slot === null) {
+        return slotKind === kind ? path : null;
+    }
+    for (const child of slotsOf(slot)) {
+        const found = findEmptySlotFor(child.value, kind, child.spec.kind, [
+            ...path,
+            ...child.path,
+        ]);
+        if (found !== null) {
+            return found;
+        }
+    }
+    return null;
+}
+
+/** Whether the path is the other path or inside what it points to. */
+export function isWithin(path: Path, outer: Path): boolean {
+    return (
+        path.length >= outer.length && outer.every((key, i) => key === path[i])
+    );
+}
+
+/**
+ * Replaces a block with a new one of another type, keeping what was inside
+ * it where the new block has a slot of the same kind. Replacing "median of"
+ * with "percentile of" keeps the list of times it was calculated from.
+ */
+export function replaceBlock(
+    block: Block,
+    type: string,
+    segmentCount: number,
+): Block {
+    const replacement = createBlock(type, segmentCount);
+    const old = slotsOf(block).filter((s) => s.value !== null);
+    for (const slot of slotsOf(replacement)) {
+        const index = old.findIndex((s) => s.spec.kind === slot.spec.kind);
+        if (index >= 0) {
+            const [taken] = old.splice(index, 1);
+            Object.assign(
+                replacement,
+                setAt(replacement, slot.path, taken?.value ?? null),
+            );
+        }
+    }
+    return replacement;
+}
+
+/**
  * Finds the first segment range whose segments are backwards. Returns the
  * numbers, or null. This can't be prevented while editing, as the runner
  * changes one end at a time.
