@@ -3,7 +3,7 @@ import { type Option, expect } from "../../../util/OptionUtil";
 import { hotkeySystem } from "../../LiveSplit";
 import { Circle, Trash } from "lucide-react";
 import { Label, resolve } from "../../../localization";
-import { type Language } from "../../../livesplit-core";
+import { Language } from "../../../livesplit-core";
 
 import classes from "../../../css/HotkeyButton.module.css";
 import tooltipClasses from "../../../css/Tooltip.module.css";
@@ -16,7 +16,7 @@ function resolveKey(
         hotkeySystem,
         "The Hotkey System should always be initialized.",
         lang,
-    ).resolve(keyCode);
+    ).resolveKey(keyCode, lang ?? Language.English);
 }
 
 export function HotkeyButton({
