@@ -14,6 +14,13 @@ import {
 } from "../components/ContextMenu";
 import { ArrowDown, ArrowUp, Check, Copy, Plus, Trash, X } from "lucide-react";
 import { Label, orAutoLang, resolve } from "../../localization";
+import { CcLabel, resolveCc } from "../../localization/custom-comparisons";
+import { ComparisonLibrary } from "./CustomComparisons/library";
+import { ComparisonList } from "./CustomComparisons/ComparisonList";
+import {
+    ComparisonEditor,
+    type EditedComparison,
+} from "./CustomComparisons/ComparisonEditor";
 
 import classes from "../../css/LayoutEditor.module.css";
 import buttonGroupClasses from "../../css/ButtonGroup.module.css";
@@ -86,6 +93,11 @@ export function View({
         return state as LiveSplit.LayoutEditorStateJson;
     });
     const [showComponentSettings, setShowComponentSettings] = useState(true);
+    // The custom comparison being edited, if any. Its editor takes the place
+    // of the whole Layout Editor, as the blocks and the preview need the
+    // room, and it returns here when it's closed.
+    const [editedComparison, setEditedComparison] =
+        useState<EditedComparison | null>(null);
 
     const updateState = () => {
         setState(
@@ -140,7 +152,9 @@ export function View({
             // Components and indentation levels are parallel arrays produced
             // by livesplit-core. Fail at the binding boundary if that invariant
             // is broken instead of rendering with an undefined offset.
-            throw new Error("Layout editor state has no component indentation.");
+            throw new Error(
+                "Layout editor state has no component indentation.",
+            );
         }
         return (
             <tr
@@ -183,7 +197,45 @@ export function View({
         );
     });
 
-    const settings = showComponentSettings ? (
+    // The Custom Comparisons component has no settings that the generic
+    // settings table can show. Its comparisons are edited with their own list
+    // instead, which reads and stores them in the selected component.
+    const library = new ComparisonLibrary(editor, commandSink.getRun());
+    const showCustomComparisons = showComponentSettings && library.isSelected();
+
+    if (editedComparison !== null) {
+        // A comparison can use any comparison of the run and the other custom
+        // comparisons, but not itself.
+        const names = new Set([
+            ...allComparisons,
+            ...library.state().comparisons.map((c) => c.name),
+        ]);
+        if (editedComparison.index !== null) {
+            names.delete(editedComparison.name);
+        }
+        return (
+            <ComparisonEditor
+                comparison={editedComparison}
+                library={library}
+                run={commandSink.getRun()}
+                comparisons={[...names]}
+                allComparisons={allComparisons}
+                initialMethod={commandSink.currentTimingMethod()}
+                lang={lang}
+                onClose={() => setEditedComparison(null)}
+            />
+        );
+    }
+
+    const settings = showCustomComparisons ? (
+        <ComparisonList
+            library={library}
+            run={commandSink.getRun()}
+            method={commandSink.currentTimingMethod()}
+            lang={lang}
+            onEdit={setEditedComparison}
+        />
+    ) : showComponentSettings ? (
         <SettingsComponent
             context={`component-settings$${state.selected_component}`}
             factory={LiveSplit.SettingValue}
@@ -648,6 +700,19 @@ function AddComponentButton({
                         {resolve(Label.ComponentSeparator, lang)}
                         <span className={tooltipClasses.tooltipText}>
                             {resolve(Label.ComponentSeparatorDescription, lang)}
+                        </span>
+                    </MenuItem>
+                    <Separator />
+                    <MenuItem
+                        className={`${tooltipClasses.contextMenuItem} ${tooltipClasses.tooltip}`}
+                        onClick={() =>
+                            addComponent(LiveSplit.CustomComparisonsComponent)
+                        }
+                        lang={lang}
+                    >
+                        {resolveCc(CcLabel.ComponentName, lang)}
+                        <span className={tooltipClasses.tooltipText}>
+                            {resolveCc(CcLabel.ComponentDescription, lang)}
                         </span>
                     </MenuItem>
                 </ContextMenu>
