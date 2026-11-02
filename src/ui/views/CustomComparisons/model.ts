@@ -153,6 +153,50 @@ export function getAt(root: unknown, path: Path): unknown {
 }
 
 /**
+ * The path of the block a preview row's time comes from, given the origin
+ * livesplit-core reports for it ("primary.cases.0.times"). Like the origin's
+ * description, blocks that only adjust the time they get ("add", "scale")
+ * count as the block, so the highlighted block is the one the description
+ * names. Returns null if the origin doesn't point into the blocks.
+ */
+export function originPath(root: Slot, origin: string): Path | null {
+    if (root === null) {
+        return null;
+    }
+    const steps = origin === "" ? [] : origin.split(".");
+    let node: unknown = root;
+    let target: Path = [];
+    const path: Path = [];
+    for (const step of steps) {
+        const key = Array.isArray(node) ? Number(step) : step;
+        node = getAt(node, [key]);
+        path.push(key);
+        if (node === undefined || node === null) {
+            return null;
+        }
+        if (
+            typeof node === "object" &&
+            !Array.isArray(node) &&
+            "type" in node &&
+            step !== "source"
+        ) {
+            target = [...path];
+        }
+    }
+    return target;
+}
+
+/** Whether two paths point to the same place. */
+export function samePath(a: Path | null, b: Path | null): boolean {
+    return (
+        a !== null &&
+        b !== null &&
+        a.length === b.length &&
+        a.every((key, i) => key === b[i])
+    );
+}
+
+/**
  * Returns a copy of the tree with the value at the path replaced. Only the
  * objects on the way to the path are copied, so the editor's undo history can
  * keep every version of the tree cheaply.
@@ -223,6 +267,63 @@ export function findEmptySlot(slot: Slot, path: Path = []): Path | null {
         }
     }
     return null;
+}
+
+/**
+ * Finds the first empty slot that takes blocks of the kind, depth first.
+ * Returns its path, or null.
+ */
+export function findEmptySlotFor(
+    slot: Slot,
+    kind: Kind,
+    slotKind: Kind = "times",
+    path: Path = [],
+): Path | null {
+    if (slot === null) {
+        return slotKind === kind ? path : null;
+    }
+    for (const child of slotsOf(slot)) {
+        const found = findEmptySlotFor(child.value, kind, child.spec.kind, [
+            ...path,
+            ...child.path,
+        ]);
+        if (found !== null) {
+            return found;
+        }
+    }
+    return null;
+}
+
+/** Whether the path is the other path or inside what it points to. */
+export function isWithin(path: Path, outer: Path): boolean {
+    return (
+        path.length >= outer.length && outer.every((key, i) => key === path[i])
+    );
+}
+
+/**
+ * Replaces a block with a new one of another type, keeping what was inside
+ * it where the new block has a slot of the same kind. Replacing "median of"
+ * with "percentile of" keeps the list of times it was calculated from.
+ */
+export function replaceBlock(
+    block: Block,
+    type: string,
+    segmentCount: number,
+): Block {
+    const replacement = createBlock(type, segmentCount);
+    const old = slotsOf(block).filter((s) => s.value !== null);
+    for (const slot of slotsOf(replacement)) {
+        const index = old.findIndex((s) => s.spec.kind === slot.spec.kind);
+        if (index >= 0) {
+            const [taken] = old.splice(index, 1);
+            Object.assign(
+                replacement,
+                setAt(replacement, slot.path, taken?.value ?? null),
+            );
+        }
+    }
+    return replacement;
 }
 
 /**

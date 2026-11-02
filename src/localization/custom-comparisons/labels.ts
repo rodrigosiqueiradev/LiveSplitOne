@@ -17,6 +17,15 @@
 export enum CcLabel {
     ComponentName,
     ComponentDescription,
+    SidebarEditingHint,
+    ComparisonMenu,
+    NameRequired,
+    SearchBlocks,
+    NoBlocksFound,
+    AboutBlock,
+    RailTitle,
+    RailHint,
+    DragBlock,
     OpenEditorHint,
 
     // The list of comparisons.

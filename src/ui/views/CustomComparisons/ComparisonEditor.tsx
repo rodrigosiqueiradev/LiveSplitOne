@@ -25,15 +25,20 @@ import {
     type Block,
     type Path,
     type Slot,
+    createBlock,
     findBackwardsRange,
     findEmptySlot,
+    findEmptySlotFor,
     getAt,
+    originPath,
+    replaceBlock,
     sameTree,
     setAt,
     writeComparison,
 } from "./model";
 import { summarize } from "./describe";
-import { BlockTree } from "./BlockTree";
+import { BlockTree, type Dragged } from "./BlockTree";
+import { BlockRail } from "./BlockRail";
 import { Preview, readRun } from "./Preview";
 import { type ComparisonLibrary } from "./library";
 import { showDialog } from "../../components/Dialog";
@@ -92,15 +97,26 @@ export function ComparisonEditor({
             : (allComparisons[0] ?? ""),
     );
     const [saveError, setSaveError] = useState<string | null>(null);
+    const [origin, setOrigin] = useState<string | null>(null);
+    const [dragged, setDraggedState] = useState<Dragged | null>(null);
+    const [dropPath, setDropPath] = useState<Path | null>(null);
+    const setDragged = (next: Dragged | null) => {
+        setDraggedState(next);
+        setDropPath(null);
+    };
 
     const root = history.versions[history.current] ?? null;
     const segmentNames = useMemo(
         () => readRun(run, method, compareTo).map((s) => s.name),
         [run, method, compareTo],
     );
+    const segmentCount = segmentNames.length;
 
-    const changeRoot = (path: Path, value: unknown) => {
-        const next = setAt(root, path, value) as Slot;
+    const changeRoot = (path: Path, value: unknown) =>
+        commit(setAt(root, path, value) as Slot);
+
+    /** Stores a new version of the blocks, as one step to undo. */
+    const commit = (next: Slot) => {
         setHistory({
             versions: [...history.versions.slice(0, history.current + 1), next],
             current: history.current + 1,
@@ -111,6 +127,32 @@ export function ComparisonEditor({
             setPreviewPath(null);
         }
     };
+    /**
+     * Drops the dragged block into a slot. A new block replaces the block in
+     * the slot, keeping what's inside it where it fits, like picking
+     * "Replace" in the block's menu. A block that's moved swaps places with
+     * the block in the slot, so nothing is lost by dropping it in the wrong
+     * place, and it's undone in one step either way.
+     */
+    const drop = (to: Path) => {
+        if (dragged === null) {
+            return;
+        }
+        const target = (getAt(root, to) as Slot | undefined) ?? null;
+        if (dragged.from === null) {
+            changeRoot(
+                to,
+                target !== null
+                    ? replaceBlock(target, dragged.block.type, segmentCount)
+                    : dragged.block,
+            );
+        } else {
+            const removed = setAt(root, dragged.from, target);
+            commit(setAt(removed, to, dragged.block) as Slot);
+        }
+        setDragged(null);
+    };
+
     const canUndo = history.current > 0;
     const canRedo = history.current < history.versions.length - 1;
     const undo = () =>
@@ -167,12 +209,28 @@ export function ComparisonEditor({
         lang,
     ]);
 
+    // Origins are relative to the previewed block.
+    const highlightPath = useMemo(() => {
+        if (origin === null || previewRoot === null) {
+            return null;
+        }
+        const path = originPath(previewRoot, origin);
+        return path !== null ? [...(previewPath ?? []), ...path] : null;
+    }, [origin, previewRoot, previewPath]);
+
+    // Why Save can't be clicked, shown next to it rather than only after
+    // clicking it, so the runner doesn't have to guess.
+    const cantSave =
+        incomplete ??
+        (name.trim() === ""
+            ? resolveCc(CcLabel.NameRequired, lang)
+            : nameProblem);
+
     const isChanged =
         name.trim() !== comparison.name || !sameTree(root, comparison.root);
 
     const save = () => {
-        if (incomplete !== null || root === null) {
-            setSaveError(incomplete);
+        if (cantSave !== null || root === null) {
             return;
         }
         if (comparison.index !== null && !isChanged) {
@@ -256,7 +314,11 @@ export function ComparisonEditor({
             }}
         >
             <div className={classes.editorToolbar}>
-                <button onClick={save} disabled={incomplete !== null}>
+                <button
+                    onClick={save}
+                    disabled={cantSave !== null}
+                    title={cantSave ?? undefined}
+                >
                     <Check strokeWidth={2.5} />
                     {resolveCc(CcLabel.Save, lang)}
                 </button>
@@ -280,11 +342,36 @@ export function ComparisonEditor({
                 >
                     <Redo2 strokeWidth={2.5} />
                 </button>
+                {cantSave !== null && (
+                    <span className={classes.cantSave}>{cantSave}</span>
+                )}
             </div>
             {saveError !== null && (
                 <p className={classes.problems}>{saveError}</p>
             )}
             <div className={classes.editorColumns}>
+                <BlockRail
+                    lang={lang}
+                    onDragStart={(spec) =>
+                        setDragged({
+                            block: createBlock(spec.type, segmentCount),
+                            from: null,
+                        })
+                    }
+                    onDragEnd={() => setDragged(null)}
+                    canAdd={(spec) =>
+                        findEmptySlotFor(root, spec.kind) !== null
+                    }
+                    onAdd={(spec) => {
+                        const path = findEmptySlotFor(root, spec.kind);
+                        if (path !== null) {
+                            changeRoot(
+                                path,
+                                createBlock(spec.type, segmentCount),
+                            );
+                        }
+                    }}
+                />
                 <div className={classes.editorMain}>
                     <label className={classes.nameField}>
                         <span>{resolveCc(CcLabel.Name, lang)}</span>
@@ -316,6 +403,12 @@ export function ComparisonEditor({
                             onChange: changeRoot,
                             onPreview: setPreviewPath,
                             previewPath,
+                            highlightPath,
+                            dragged,
+                            onDrag: setDragged,
+                            onDrop: drop,
+                            dropPath,
+                            onDropPathChange: setDropPath,
                         }}
                     />
                 </div>
@@ -332,6 +425,7 @@ export function ComparisonEditor({
                     comparisons={allComparisons}
                     run={run}
                     lang={lang}
+                    onOriginChange={setOrigin}
                 />
             </div>
         </div>

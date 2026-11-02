@@ -17,7 +17,7 @@
  * difference from are read from the run here.
  */
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     type CustomComparisonPreviewJson,
     type Language,
@@ -57,6 +57,11 @@ export interface PreviewProps {
     comparisons: string[];
     run: RunRef;
     lang: Language | undefined;
+    /**
+     * Called with the origin of the row the runner clicked, or null when no
+     * row is selected, so the editor can point out the block it comes from.
+     */
+    onOriginChange: (origin: string | null) => void;
 }
 
 export function Preview(props: PreviewProps) {
@@ -66,6 +71,15 @@ export function Preview(props: PreviewProps) {
     const segmentNames = run.map((s) => s.name);
 
     const rows = preview?.segments ?? [];
+    const selectedOrigin =
+        selectedRow !== null ? (rows[selectedRow]?.origin ?? null) : null;
+    const { onOriginChange } = props;
+    // The origin of the selected row changes with the blocks, not only when
+    // another row is clicked.
+    useEffect(
+        () => onOriginChange(selectedOrigin),
+        [selectedOrigin, onOriginChange],
+    );
     const goldRows = rows.filter((row, i) => {
         const gold = run[i]?.gold ?? null;
         return (

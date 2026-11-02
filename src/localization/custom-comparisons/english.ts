@@ -9,6 +9,17 @@ export const english: CcTexts = {
     [CcLabel.ComponentName]: "Custom Comparisons",
     [CcLabel.ComponentDescription]:
         "Lets you make your own comparisons by putting blocks together. It doesn't show anything. The comparisons are stored in the layout and show up next to the other comparisons.",
+    [CcLabel.SidebarEditingHint]:
+        "Save or cancel the comparison you're editing first.",
+    [CcLabel.ComparisonMenu]: "More actions",
+    [CcLabel.NameRequired]: "Give the comparison a name.",
+    [CcLabel.SearchBlocks]: "Search blocks",
+    [CcLabel.NoBlocksFound]: "No block matches. Try another word.",
+    [CcLabel.AboutBlock]: "What does this block do?",
+    [CcLabel.RailTitle]: "Blocks",
+    [CcLabel.RailHint]:
+        "Drag a block onto a slot, or onto a block to replace it. Click one to put it in the first empty slot it fits.",
+    [CcLabel.DragBlock]: "Drag to move this block",
     [CcLabel.OpenEditorHint]:
         "This component doesn't show anything. It stores your custom comparisons in the layout, so they travel with it.",
 
@@ -106,8 +117,8 @@ export const english: CcTexts = {
     [CcLabel.CategoryAggregates]: "Aggregates",
     [CcLabel.CategoryMath]: "Math",
     [CcLabel.CategoryControl]: "Control",
-    [CcLabel.KindSamples]: "⬡ A list of times for each segment",
-    [CcLabel.KindTimes]: "⬭ One time for each segment",
+    [CcLabel.KindSamples]: "A list of times for each segment",
+    [CcLabel.KindTimes]: "One time for each segment",
 
     [CcLabel.BlockResult]: "this comparison is",
     [CcLabel.BlockResultTip]:
