@@ -213,6 +213,26 @@ export async function loadLayout(): Promise<LayoutSettings> {
     return await db.get("settings", "layout");
 }
 
+/**
+ * Stores the runner's custom comparisons: one list for all their splits, as
+ * the settings of the Custom Comparisons plugin.
+ */
+export async function storeCustomComparisons(settings: string) {
+    const db = await getDb();
+
+    await db.put("settings", settings, "customComparisons");
+}
+
+/**
+ * Loads the runner's custom comparisons. `undefined` means they were never
+ * stored, which is different from an empty list.
+ */
+export async function loadCustomComparisons(): Promise<string | undefined> {
+    const db = await getDb();
+
+    return await db.get("settings", "customComparisons");
+}
+
 export async function storeHotkeys(hotkeys: HotkeyConfigSettings) {
     const db = await getDb();
 

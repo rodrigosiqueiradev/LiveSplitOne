@@ -14,13 +14,6 @@ import {
 } from "../components/ContextMenu";
 import { ArrowDown, ArrowUp, Check, Copy, Plus, Trash, X } from "lucide-react";
 import { Label, orAutoLang, resolve } from "../../localization";
-import { CcLabel, resolveCc } from "../../localization/custom-comparisons";
-import { ComparisonLibrary } from "./CustomComparisons/library";
-import { ComparisonList } from "./CustomComparisons/ComparisonList";
-import {
-    ComparisonEditor,
-    type EditedComparison,
-} from "./CustomComparisons/ComparisonEditor";
 
 import classes from "../../css/LayoutEditor.module.css";
 import buttonGroupClasses from "../../css/ButtonGroup.module.css";
@@ -59,32 +52,13 @@ interface ComponentClass {
 }
 
 export function LayoutEditor(props: Props) {
-    // The custom comparison being edited, if any. Its editor takes the place
-    // of the whole Layout Editor, as the blocks and the preview need the
-    // room, and it returns here when it's closed. The state lives here rather
-    // than in the view, so that the sidebar knows about it too: its OK and
-    // Cancel would close the Layout Editor and silently drop the blocks being
-    // edited, so they are disabled until the comparison is saved or
-    // cancelled.
-    const [editedComparison, setEditedComparison] =
-        useState<EditedComparison | null>(null);
     return props.callbacks.renderViewWithSidebar(
-        <View
-            {...props}
-            editedComparison={editedComparison}
-            onEditComparison={setEditedComparison}
-        />,
+        <View {...props} />,
         <SideBar
             callbacks={props.callbacks}
             lang={props.generalSettings.lang}
-            editingComparison={editedComparison !== null}
         />,
     );
-}
-
-interface ViewProps extends Props {
-    editedComparison: EditedComparison | null;
-    onEditComparison: (comparison: EditedComparison | null) => void;
 }
 
 export function View({
@@ -101,9 +75,7 @@ export function View({
     commandSink,
     renderer,
     callbacks,
-    editedComparison,
-    onEditComparison: setEditedComparison,
-}: ViewProps) {
+}: Props) {
     const lang = generalSettings.lang;
     const [state, setState] = useState(() => {
         const state = editor.stateAsJson(
@@ -168,9 +140,7 @@ export function View({
             // Components and indentation levels are parallel arrays produced
             // by livesplit-core. Fail at the binding boundary if that invariant
             // is broken instead of rendering with an undefined offset.
-            throw new Error(
-                "Layout editor state has no component indentation.",
-            );
+            throw new Error("Layout editor state has no component indentation.");
         }
         return (
             <tr
@@ -213,45 +183,7 @@ export function View({
         );
     });
 
-    // The Custom Comparisons component has no settings that the generic
-    // settings table can show. Its comparisons are edited with their own list
-    // instead, which reads and stores them in the selected component.
-    const library = new ComparisonLibrary(editor, commandSink.getRun());
-    const showCustomComparisons = showComponentSettings && library.isSelected();
-
-    if (editedComparison !== null) {
-        // A comparison can use any comparison of the run and the other custom
-        // comparisons, but not itself.
-        const names = new Set([
-            ...allComparisons,
-            ...library.state().comparisons.map((c) => c.name),
-        ]);
-        if (editedComparison.index !== null) {
-            names.delete(editedComparison.name);
-        }
-        return (
-            <ComparisonEditor
-                comparison={editedComparison}
-                library={library}
-                run={commandSink.getRun()}
-                comparisons={[...names]}
-                allComparisons={allComparisons}
-                initialMethod={commandSink.currentTimingMethod()}
-                lang={lang}
-                onClose={() => setEditedComparison(null)}
-            />
-        );
-    }
-
-    const settings = showCustomComparisons ? (
-        <ComparisonList
-            library={library}
-            run={commandSink.getRun()}
-            method={commandSink.currentTimingMethod()}
-            lang={lang}
-            onEdit={setEditedComparison}
-        />
-    ) : showComponentSettings ? (
+    const settings = showComponentSettings ? (
         <SettingsComponent
             context={`component-settings$${state.selected_component}`}
             factory={LiveSplit.SettingValue}
@@ -387,37 +319,24 @@ export function View({
 export function SideBar({
     callbacks,
     lang,
-    editingComparison = false,
 }: {
     callbacks: Callbacks;
     lang: LiveSplit.Language | undefined;
-    editingComparison?: boolean;
 }) {
     return (
         <>
             <h1>{resolve(Label.LayoutEditor, lang)}</h1>
             <hr />
             <div className={buttonGroupClasses.group}>
-                <button
-                    disabled={editingComparison}
-                    onClick={(_) => callbacks.closeLayoutEditor(true)}
-                >
+                <button onClick={(_) => callbacks.closeLayoutEditor(true)}>
                     <Check strokeWidth={2.5} />
                     {resolve(Label.Ok, lang)}
                 </button>
-                <button
-                    disabled={editingComparison}
-                    onClick={(_) => callbacks.closeLayoutEditor(false)}
-                >
+                <button onClick={(_) => callbacks.closeLayoutEditor(false)}>
                     <X strokeWidth={2.5} />
                     {resolve(Label.Cancel, lang)}
                 </button>
             </div>
-            {editingComparison && (
-                <p className={classes.sidebarHint}>
-                    {resolveCc(CcLabel.SidebarEditingHint, lang)}
-                </p>
-            )}
         </>
     );
 }
@@ -729,19 +648,6 @@ function AddComponentButton({
                         {resolve(Label.ComponentSeparator, lang)}
                         <span className={tooltipClasses.tooltipText}>
                             {resolve(Label.ComponentSeparatorDescription, lang)}
-                        </span>
-                    </MenuItem>
-                    <Separator />
-                    <MenuItem
-                        className={`${tooltipClasses.contextMenuItem} ${tooltipClasses.tooltip}`}
-                        onClick={() =>
-                            addComponent(LiveSplit.CustomComparisonsComponent)
-                        }
-                        lang={lang}
-                    >
-                        {resolveCc(CcLabel.ComponentName, lang)}
-                        <span className={tooltipClasses.tooltipText}>
-                            {resolveCc(CcLabel.ComponentDescription, lang)}
                         </span>
                     </MenuItem>
                 </ContextMenu>

@@ -1,6 +1,5 @@
 /**
- * The list of custom comparisons stored in the selected Custom Comparisons
- * component, shown in the Layout Editor instead of the component's settings.
+ * The runner's list of custom comparisons, one list for all their splits.
  * It offers the same actions as the desktop component's settings: new,
  * edit, rename, duplicate, remove, move up and down (which is the order they
  * are offered in), import and export as files, and copy and paste as text
@@ -9,6 +8,8 @@
 
 import React, { useState } from "react";
 import {
+    CustomComparisonsEditor,
+    Layout,
     type Language,
     type RunRef,
     type TimingMethod,
@@ -69,7 +70,7 @@ export function ComparisonList({
         index: number;
         position: Position;
     } | null>(null);
-    // The comparisons live in the layout, not in React's state, so the list
+    // The comparisons live in the library, not in React's state, so the list
     // is told to read them again after every change.
     const [, setVersion] = useState(0);
     const refresh = () => setVersion((v) => v + 1);
@@ -94,7 +95,7 @@ export function ComparisonList({
      * asked for another one until it works or they give up, like on the
      * desktop.
      */
-    const addText = async (text: string) => {
+    const addText = async (text: string): Promise<boolean> => {
         let name: string | null = null;
         try {
             const json = JSON.parse(text);
@@ -108,7 +109,7 @@ export function ComparisonList({
             const error = library.write((e) => e.add(text));
             if (error !== "") {
                 await showError(error);
-                return;
+                return false;
             }
         } else {
             let newName = library.read((e) => e.suggestName(name ?? "")) ?? "";
@@ -128,14 +129,15 @@ export function ComparisonList({
                     ],
                 });
                 if (choice !== 0) {
-                    return;
+                    return false;
                 }
                 newName = input;
                 problem = library.write((e) => e.addAs(text, input));
             }
         }
-        setSelected(library.read((e) => e.len() - 1) ?? 0);
+        setSelected(library.read((e) => e.len() - 1));
         refresh();
+        return true;
     };
 
     const newComparison = (templateIndex: number) => {
@@ -267,8 +269,16 @@ export function ComparisonList({
         refresh();
     };
 
+    /**
+     * Imports comparisons from a file: a single comparison exported by
+     * LiveSplit One or the desktop LiveSplit, a whole list exported with
+     * Export All, or a desktop LiveSplit layout (.lsl) with the Custom
+     * Comparisons component.
+     */
     const importFile = async () => {
-        const result = await openFileAsString(".json,application/json");
+        const result = await openFileAsString(
+            ".json,.lsl,application/json,application/xml",
+        );
         if (result === undefined) {
             return;
         }
@@ -276,7 +286,39 @@ export function ComparisonList({
             await showError(result.message);
             return;
         }
-        await addText(result[0]);
+        const [text, file] = result;
+        let texts: string[] | null = null;
+        if (file.name.toLowerCase().endsWith(".lsl")) {
+            using layout = Layout.parseOriginalLivesplitString(text);
+            if (layout === null) {
+                await showError(resolveCc(CcLabel.LayoutUnreadable, lang));
+                return;
+            }
+            texts = readSettings(layout.customComparisonsSettings());
+            if (texts === null || texts.length === 0) {
+                await showError(
+                    resolveCc(CcLabel.LayoutHasNoComparisons, lang),
+                );
+                return;
+            }
+        } else if (isList(text)) {
+            texts = readSettings(text);
+        }
+        for (const comparison of texts ?? [text]) {
+            if (!(await addText(comparison))) {
+                return;
+            }
+        }
+    };
+
+    const exportAll = () => {
+        let text = library.getSettings();
+        try {
+            text = JSON.stringify(JSON.parse(text), null, 2);
+        } catch {
+            // It's exported as it is then.
+        }
+        exportFile(`${resolveCc(CcLabel.ExportAllFileName, lang)}.json`, text);
     };
 
     const exportComparison = (index: number) => {
@@ -336,6 +378,10 @@ export function ComparisonList({
                 <button onClick={paste}>
                     <ClipboardPaste strokeWidth={2.5} />
                     {resolveCc(CcLabel.Paste, lang)}
+                </button>
+                <button onClick={exportAll} disabled={comparisons.length === 0}>
+                    <Download strokeWidth={2.5} />
+                    {resolveCc(CcLabel.ExportAll, lang)}
                 </button>
             </div>
 
@@ -593,4 +639,22 @@ function capitalizeWords(text: string): string {
 /** Removes characters that file names can't have. */
 function safeFileName(name: string): string {
     return name.replace(/[\\/:*?"<>|]/g, "_").trim() || "comparison";
+}
+
+/**
+ * Whether the text is a whole list of comparisons, as exported with Export
+ * All, rather than a single comparison.
+ */
+function isList(text: string): boolean {
+    try {
+        const json = JSON.parse(text);
+        return Array.isArray(json?.comparisons);
+    } catch {
+        return false;
+    }
+}
+
+/** Reads a list of comparisons into the text of each one. */
+function readSettings(settings: string): string[] | null {
+    return CustomComparisonsEditor.readSettings(settings) as string[] | null;
 }

@@ -8,7 +8,7 @@ import { CcLabel, type CcTexts } from "./labels";
 export const english: CcTexts = {
     [CcLabel.ComponentName]: "Custom Comparisons",
     [CcLabel.ComponentDescription]:
-        "Lets you make your own comparisons by putting blocks together. It doesn't show anything. The comparisons are stored in the layout and show up next to the other comparisons.",
+        "Doesn't show anything. Custom comparisons are now kept by LiveSplit One itself, under Custom Comparisons in the menu.",
     [CcLabel.SidebarEditingHint]:
         "Save or cancel the comparison you're editing first.",
     [CcLabel.ComparisonMenu]: "More actions",
@@ -21,7 +21,17 @@ export const english: CcTexts = {
         "Drag a block onto a slot, or onto a block to replace it. Click one to put it in the first empty slot it fits.",
     [CcLabel.DragBlock]: "Drag to move this block",
     [CcLabel.OpenEditorHint]:
-        "This component doesn't show anything. It stores your custom comparisons in the layout, so they travel with it.",
+        "Your custom comparisons work with all your splits and show up next to the other comparisons.",
+    [CcLabel.SidebarButton]: "Custom Comparisons",
+    [CcLabel.ViewTitle]: "Custom Comparisons",
+    [CcLabel.Back]: "Back",
+    [CcLabel.ExportAll]: "Export All…",
+    [CcLabel.ExportAllFileName]: "Custom Comparisons",
+    [CcLabel.LayoutUnreadable]: "This layout file couldn't be read.",
+    [CcLabel.LayoutHasNoComparisons]:
+        "This layout has no custom comparisons. They are in its Custom Comparisons component, if it has one.",
+    [CcLabel.PluginUnavailable]:
+        "The custom comparisons couldn't be loaded, so they don't show up as comparisons right now: {0}",
 
     [CcLabel.ListHeading]: "Comparisons",
     [CcLabel.NoComparisons]:
@@ -41,7 +51,7 @@ export const english: CcTexts = {
     [CcLabel.UsedByOne]: "Used by 1 other comparison",
     [CcLabel.Unreadable]: "Can't be read",
     [CcLabel.SaveReminder]:
-        "Changes are kept when you click OK in the Layout Editor. Save the layout afterwards to keep them for next time.",
+        "Changes are saved right away, on this device. Use Export All to take them to another one.",
     [CcLabel.CopiedToClipboard]:
         "Copied. You can paste it into a chat or forum post.",
     [CcLabel.CouldNotCopy]: "Couldn't copy to the clipboard.",

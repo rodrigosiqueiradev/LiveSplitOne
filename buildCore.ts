@@ -24,6 +24,7 @@ const coreFeatures = [
     "therun-gg",
     "localization",
     "image-shrinking",
+    "web-comparison-plugins",
 ].join(",");
 const bindingsDir = "target/livesplit-one-bindings";
 
@@ -107,3 +108,19 @@ fs.createReadStream(
 fs.createReadStream(
     `livesplit-core/capi/bind_gen/${bindingsDir}/wasm_bindgen/web/preload.ts`,
 ).pipe(fs.createWriteStream("src/livesplit-core/preload.ts"));
+
+// The Custom Comparisons plugin is a WebAssembly module of its own that the
+// core runs on the browser's WebAssembly engine. It's always optimized, as
+// it calculates the comparisons between attempts.
+execSync(
+    `cargo ${toolchain} build -p livesplit-custom-comparisons-plugin --target ${target} --release`,
+    {
+        cwd: "livesplit-core",
+        stdio: "inherit",
+    },
+);
+
+fs.copyFileSync(
+    `livesplit-core/target/${targetFolder}/release/livesplit_custom_comparisons_plugin.wasm`,
+    "src/livesplit-core/custom_comparisons_plugin.wasm",
+);
