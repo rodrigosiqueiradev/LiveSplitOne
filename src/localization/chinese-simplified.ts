@@ -656,5 +656,423 @@ export function resolveChineseSimplified(text: Label): string {
             return "无法加载 LiveSplit One。\n你可能处于无痕/隐私浏览模式。\n由于浏览器隐私模式的限制，LiveSplit One 无法存储分段、布局或其他设置。\n这些限制可能会在未来解除。\n要继续使用 LiveSplit One，请在设置中关闭隐私浏览。";
         case Label.LoadFailedOutdatedBrowser:
             return "无法加载 LiveSplit One。\n你的浏览器可能不是最新版本。\n请更新浏览器或 iOS 版本后重试。\n另一种可能是浏览器扩展（如广告拦截器）阻止了重要脚本的访问。";
+        case Label.CustomComparisonsSidebarEditingHint:
+            return "请先保存或取消正在编辑的比较。";
+        case Label.CustomComparisonsComparisonMenu:
+            return "更多操作";
+        case Label.CustomComparisonsNameRequired:
+            return "请为比较命名。";
+        case Label.CustomComparisonsSearchBlocks:
+            return "搜索积木";
+        case Label.CustomComparisonsNoBlocksFound:
+            return "没有匹配的积木。换个词试试。";
+        case Label.CustomComparisonsAboutBlock:
+            return "这个积木有什么用？";
+        case Label.CustomComparisonsBlocks:
+            return "积木";
+        case Label.CustomComparisonsRailHint:
+            return "把积木拖到空位上，或拖到积木上替换它。点击积木可放入第一个合适的空位。";
+        case Label.CustomComparisonsDragBlock:
+            return "拖动以移动此积木";
+        case Label.CustomComparisonsOpenEditorHint:
+            return "自定义比较适用于你的所有分段，并与其他比较一起显示。";
+        case Label.CustomComparisons:
+            return "自定义比较";
+        case Label.CustomComparisonsExportAll:
+            return "全部导出…";
+        case Label.CustomComparisonsExportAllFileName:
+            return "自定义比较";
+        case Label.CustomComparisonsPluginUnavailable:
+            return "无法加载自定义比较，因此它们暂时不会作为比较显示：{0}";
+        case Label.CustomComparisonsListHeading:
+            return "比较";
+        case Label.CustomComparisonsNoComparisons:
+            return "还没有自定义比较。点击“新建”来创建第一个。";
+        case Label.CustomComparisonsNew:
+            return "新建…";
+        case Label.CustomComparisonsEdit:
+            return "编辑…";
+        case Label.CustomComparisonsRename:
+            return "重命名…";
+        case Label.CustomComparisonsDuplicate:
+            return "创建副本";
+        case Label.CustomComparisonsImport:
+            return "导入…";
+        case Label.CustomComparisonsExport:
+            return "导出…";
+        case Label.CustomComparisonsCopyAsText:
+            return "复制为文本";
+        case Label.CustomComparisonsPaste:
+            return "粘贴…";
+        case Label.CustomComparisonsUsedBy:
+            return "被其他 {0} 个比较使用";
+        case Label.CustomComparisonsUsedByOne:
+            return "被其他 1 个比较使用";
+        case Label.CustomComparisonsUnreadable:
+            return "无法读取";
+        case Label.CustomComparisonsSaveReminder:
+            return "更改会立即保存在此设备上。使用“全部导出”可将其带到其他设备。";
+        case Label.CustomComparisonsCopiedToClipboard:
+            return "已复制。你可以将其粘贴到聊天或论坛帖子中。";
+        case Label.CustomComparisonsCouldNotCopy:
+            return "无法复制到剪贴板。";
+        case Label.CustomComparisonsCouldNotReadClipboard:
+            return "无法读取剪贴板。请将文本粘贴到这里：";
+        case Label.CustomComparisonsErrorTitle:
+            return "操作未成功";
+        case Label.CustomComparisonsRenameTitle:
+            return "重命名比较";
+        case Label.CustomComparisonsRenameDescription:
+            return "使用此比较的其他比较会更新为新名称。";
+        case Label.CustomComparisonsNameTakenTitle:
+            return "请换一个名称";
+        case Label.CustomComparisonsNameTakenDescription:
+            return "{0} 请输入其他名称：";
+        case Label.CustomComparisonsRemoveTitle:
+            return "移除比较";
+        case Label.CustomComparisonsRemoveDescription:
+            return "移除“{0}”？";
+        case Label.CustomComparisonsRemoveUsedDescription:
+            return "移除“{0}”？有 {1} 个其他比较使用它，移除后它们将无法工作。";
+        case Label.CustomComparisonsRemoveUsedOneDescription:
+            return "移除“{0}”？有 1 个其他比较使用它，移除后它将无法工作。";
+        case Label.CustomComparisonsPasteTitle:
+            return "粘贴比较";
+        case Label.CustomComparisonsPasteDescription:
+            return "粘贴别人分享的比较文本：";
+        case Label.CustomComparisonsCopySuffix:
+            return "{0}（副本）";
+        case Label.CustomComparisonsTemplatesTitle:
+            return "新建比较";
+        case Label.CustomComparisonsTemplatesDescription:
+            return "选择一个起点。每个都是完整的比较，可以直接使用或修改。";
+        case Label.CustomComparisonsTemplateGoalPace:
+            return "目标节奏";
+        case Label.CustomComparisonsTemplateGoalPaceDescription:
+            return "你的常规跑法，按比例拉伸到恰好在目标时间完成。";
+        case Label.CustomComparisonsTemplateRealisticPace:
+            return "现实节奏";
+        case Label.CustomComparisonsTemplateRealisticPaceDescription:
+            return "最近 30 天的第 70 百分位数：你大约 70 % 的时候能打败的时间。";
+        case Label.CustomComparisonsTemplateRecentForm:
+            return "近期状态";
+        case Label.CustomComparisonsTemplateRecentFormDescription:
+            return "你最近 10 次完成的跑的中位数，去掉最好和最差的偶然情况。";
+        case Label.CustomComparisonsTemplateSafePace:
+            return "稳妥节奏";
+        case Label.CustomComparisonsTemplateSafePaceDescription:
+            return "你的最佳分段 + 2 秒与中位数中较慢的一个，因此永远不会快得不现实。";
+        case Label.CustomComparisonsTemplateBlank:
+            return "空白";
+        case Label.CustomComparisonsTemplateBlankDescription:
+            return "从头开始。";
+        case Label.CustomComparisonsNewComparisonName:
+            return "我的比较";
+        case Label.CustomComparisonsEditorTitle:
+            return "自定义比较";
+        case Label.CustomComparisonsName:
+            return "名称";
+        case Label.CustomComparisonsUndo:
+            return "撤销";
+        case Label.CustomComparisonsRedo:
+            return "重做";
+        case Label.CustomComparisonsChooseBlock:
+            return "选择积木…";
+        case Label.CustomComparisonsReplaceBlock:
+            return "替换为…";
+        case Label.CustomComparisonsWrapBlock:
+            return "放入…";
+        case Label.CustomComparisonsUnwrapBlock:
+            return "移除，保留内部积木";
+        case Label.CustomComparisonsPreviewBlock:
+            return "预览此积木";
+        case Label.CustomComparisonsBlockMenu:
+            return "积木操作";
+        case Label.CustomComparisonsFillEmptySlots:
+            return "填满空位即可查看预览。每个空位都需要一个积木。";
+        case Label.CustomComparisonsDiscardChangesDescription:
+            return "此比较有未保存的更改。";
+        case Label.CustomComparisonsDiscard:
+            return "放弃";
+        case Label.CustomComparisonsKeepEditing:
+            return "继续编辑";
+        case Label.CustomComparisonsInvalidTime:
+            return "请输入类似 20:00 或 1:05:30 的时间。";
+        case Label.CustomComparisonsNotFound:
+            return "{0}（未找到）";
+        case Label.CustomComparisonsNotInSplits:
+            return "{0}.（不在你的分段中）";
+        case Label.CustomComparisonsSegmentOption:
+            return "{0}. {1}";
+        case Label.CustomComparisonsAddRange:
+            return "添加范围";
+        case Label.CustomComparisonsRemoveRange:
+            return "移除此范围";
+        case Label.CustomComparisonsRangeBackwards:
+            return "分段 {0} 到 {1} 顺序颠倒了。请交换这两个数字。";
+        case Label.CustomComparisonsCategorySources:
+            return "来源";
+        case Label.CustomComparisonsCategoryFilters:
+            return "筛选";
+        case Label.CustomComparisonsCategoryAggregates:
+            return "汇总";
+        case Label.CustomComparisonsCategoryMath:
+            return "运算";
+        case Label.CustomComparisonsCategoryControl:
+            return "控制";
+        case Label.CustomComparisonsKindSamples:
+            return "每个分段的一组时间";
+        case Label.CustomComparisonsKindTimes:
+            return "每个分段一个时间";
+        case Label.CustomComparisonsBlockResult:
+            return "此比较为";
+        case Label.CustomComparisonsBlockResultTip:
+            return "最终的比较。把构成它的积木放在这里。";
+        case Label.CustomComparisonsBlockSegmentHistory:
+            return "每个分段的我的所有时间";
+        case Label.CustomComparisonsBlockSegmentHistoryTip:
+            return "你为每个分段记录的所有时间。跳过的分段以及跳过后紧接着的合并分段不计入。";
+        case Label.CustomComparisonsBlockComparison:
+            return "比较 {name}";
+        case Label.CustomComparisonsBlockComparisonTip:
+            return "一个现有的比较，逐段使用。内置比较即使被关闭也能使用。";
+        case Label.CustomComparisonsBlockAttempt:
+            return "第 {number} 次尝试";
+        case Label.CustomComparisonsBlockAttemptTip:
+            return "按尝试历史中的编号选出的一次过去尝试的各分段。那次跑跳过分段或重置的地方为空。";
+        case Label.CustomComparisonsBlockBestRecentRun:
+            return "我最近 {days} 天的最佳一跑";
+        case Label.CustomComparisonsBlockBestRecentRunTip:
+            return "你最近 N 天内完成的最快一跑的各分段：随你游玩而变化的“近期 PB”。如果这段时间内没有完成的跑，则为空。";
+        case Label.CustomComparisonsBlockLastN:
+            return "最近 {count} 个时间，来自";
+        case Label.CustomComparisonsBlockLastNTip:
+            return "保留每个分段最近的时间。按该分段被完成的次数计算，而不是尝试次数。";
+        case Label.CustomComparisonsBlockCompletedRunsOnly:
+            return "仅来自完成的跑";
+        case Label.CustomComparisonsBlockCompletedRunsOnlyTip:
+            return "只保留完成整跑的尝试中的时间。";
+        case Label.CustomComparisonsBlockRecentDays:
+            return "来自最近 {days} 天";
+        case Label.CustomComparisonsBlockRecentDaysTip:
+            return "只保留最近 N 天内结束的尝试中的时间，让旧时间不再计入。没有日期的尝试不计入。";
+        case Label.CustomComparisonsBlockFinishedUnder:
+            return "来自用时少于 {totalSeconds} 的跑";
+        case Label.CustomComparisonsBlockFinishedUnderTip:
+            return "只保留比这更快完成的跑中的时间，只让你的好跑计入。";
+        case Label.CustomComparisonsBlockReachedSegment:
+            return "来自到达 {segment} 的跑";
+        case Label.CustomComparisonsBlockReachedSegmentTip:
+            return "只保留至少到达此分段的尝试中的时间。类似“仅来自完成的跑”，但适用于大多数跑都很早重置的游戏。如果此分段不在你的分段中，会显示警告，并且不保留任何时间。";
+        case Label.CustomComparisonsBlockTrimOutliers:
+            return "去掉最快和最慢的 {percent} %，来自";
+        case Label.CustomComparisonsBlockTrimOutliersTip:
+            return "在求平均前去掉偶然情况：舍弃每个分段中这一比例的最快和最慢时间。时间很少时不会舍弃任何时间。";
+        case Label.CustomComparisonsBlockAtLeast:
+            return "仅当至少有 {count} 个时间时，来自";
+        case Label.CustomComparisonsBlockAtLeastTip:
+            return "时间较少的分段会变为空，这样你可以用“若为空，使用”来填补，而不是依赖太少的数据。";
+        case Label.CustomComparisonsBlockAggregate:
+            return "{kind}，来自";
+        case Label.CustomComparisonsBlockAggregateTip:
+            return "把每个分段的一组时间变成一个时间。没有时间的分段保持为空。";
+        case Label.CustomComparisonsAggregateMedian:
+            return "中位数";
+        case Label.CustomComparisonsAggregateAverage:
+            return "平均值";
+        case Label.CustomComparisonsAggregateMin:
+            return "最佳（最小）";
+        case Label.CustomComparisonsAggregateMax:
+            return "最差（最大）";
+        case Label.CustomComparisonsBlockPercentile:
+            return "第 {percent} 百分位数，来自";
+        case Label.CustomComparisonsBlockPercentileTip:
+            return "0 是你最快的时间，100 是最慢的，50 是中位数。70 表示：你大约 70 % 的时候能打败这个时间。";
+        case Label.CustomComparisonsBlockWeightedAverage:
+            return "近期加权平均值，来自";
+        case Label.CustomComparisonsBlockWeightedAverageFooter:
+            return "每早 {halfLife} 个时间，权重减半";
+        case Label.CustomComparisonsBlockWeightedAverageTip:
+            return "近期时间占比更大的平均值。最新的时间完全计入，早 N 个的时间计入一半，早 2N 个的计入四分之一，依此类推。";
+        case Label.CustomComparisonsBlockAddTime:
+            return "每个分段加上 {seconds} 秒，作用于";
+        case Label.CustomComparisonsBlockAddTimeTip:
+            return "给每个分段加上时间（若为负数则减去）。不会低于零。";
+        case Label.CustomComparisonsBlockScale:
+            return "{percent} %，作用于";
+        case Label.CustomComparisonsBlockScaleTip:
+            return "缩放每个分段。103 % 是慢 3 %，97 % 是快 3 %。";
+        case Label.CustomComparisonsBlockRound:
+            return "取整到 {step}";
+        case Label.CustomComparisonsBlockRoundTip:
+            return "把每个分段取整到最接近的 0.1 秒（或 1 秒、0.01 秒），让分段时间也整齐。";
+        case Label.CustomComparisonsRoundStep:
+            return "{0} 秒";
+        case Label.CustomComparisonsBlockClamp:
+            return "限制";
+        case Label.CustomComparisonsBlockClampTip:
+            return "把每个分段限制在两个界限之间，例如不快于你的最佳分段且不慢于你的 PB。如果界限交叉，以“不快于”为准。";
+        case Label.CustomComparisonsSlotNeverFaster:
+            return "不快于";
+        case Label.CustomComparisonsSlotNeverSlower:
+            return "不慢于";
+        case Label.CustomComparisonsBlockStretchToTotal:
+            return "拉伸到在 {totalSeconds} 完成";
+        case Label.CustomComparisonsBlockStretchToTotalTip:
+            return "按相同比例缩放所有分段，使整跑的总和等于目标时间。只要有分段为空，结果就为空：请先用“若为空，使用”填补空缺。";
+        case Label.CustomComparisonsBlockBlend:
+            return "{percent} % 位置，从";
+        case Label.CustomComparisonsBlockBlendTip:
+            return "按分段混合两条规则。0 % 完全是第一条，100 % 完全是第二条，75 % 是四分之三处。";
+        case Label.CustomComparisonsSlotTo:
+            return "到";
+        case Label.CustomComparisonsBlockPick:
+            return "较{kind}的一个，在";
+        case Label.CustomComparisonsBlockPickTip:
+            return "对每个分段，取两条规则中较慢（或较快）的一个。如果其中一条在某分段没有时间，则使用另一条。";
+        case Label.CustomComparisonsPickSlower:
+            return "慢";
+        case Label.CustomComparisonsPickFaster:
+            return "快";
+        case Label.CustomComparisonsSlotAnd:
+            return "和";
+        case Label.CustomComparisonsBlockFallback:
+            return "使用";
+        case Label.CustomComparisonsBlockFallbackTip:
+            return "只填补第一条规则留空的分段，例如因为跑的次数还不够。";
+        case Label.CustomComparisonsSlotIfEmpty:
+            return "若为空，使用";
+        case Label.CustomComparisonsBlockSegmentRange:
+            return "分段 … 使用 … 否则 …";
+        case Label.CustomComparisonsBlockSegmentRangeTip:
+            return "对一个范围的分段使用一条规则，对其余分段使用另一条。添加更多范围可加入更多规则：以第一个匹配的范围为准。如果范围超出了你的分段末尾，会显示警告。";
+        case Label.CustomComparisonsBlockSegmentRangeHeader:
+            return "不同分段使用不同规则（以第一个匹配的范围为准）";
+        case Label.CustomComparisonsRangeCase:
+            return "分段 {from} 到 {to} 使用";
+        case Label.CustomComparisonsSlotOtherwise:
+            return "否则";
+        case Label.CustomComparisonsPreview:
+            return "预览";
+        case Label.CustomComparisonsPreviewingBlock:
+            return "正在预览一个积木，而不是整个比较";
+        case Label.CustomComparisonsShowWholeComparison:
+            return "显示整个比较";
+        case Label.CustomComparisonsSegment:
+            return "分段";
+        case Label.CustomComparisonsDifferenceFrom:
+            return "差值对比";
+        case Label.CustomComparisonsFasterThanGold:
+            return "快于你在此分段的最佳时间（金段）";
+        case Label.CustomComparisonsFasterThanGoldWarning:
+            return "有 {0} 个分段快于你的金段。这是允许的，但这个节奏可能不现实。";
+        case Label.CustomComparisonsFasterThanGoldWarningOne:
+            return "有 1 个分段快于你的金段。这是允许的，但这个节奏可能不现实。";
+        case Label.CustomComparisonsFinishLine:
+            return "在 {0} 完成，与 {2} 相比 {1}。";
+        case Label.CustomComparisonsFinishVsSumOfBest:
+            return "你的最佳分段总和为 {0}。";
+        case Label.CustomComparisonsNoProblems:
+            return "没有问题。";
+        case Label.CustomComparisonsNoTimesLeft:
+            return "没有任何分段有时间。点击一行查看原因，或添加“使用 … 若为空，使用”，以你的 PB 等作为后备。";
+        case Label.CustomComparisonsOriginTitle:
+            return "此时间的来源";
+        case Label.CustomComparisonsOriginEmpty:
+            return "此分段没有时间，因此之后的每个分段也都为空。";
+        case Label.CustomComparisonsOriginFillingGap:
+            return "填补空缺";
+        case Label.CustomComparisonsOriginPicked:
+            return "两者中较{0}的一个";
+        case Label.CustomComparisonsOriginLowLimit:
+            return "被“不快于”界限限制";
+        case Label.CustomComparisonsOriginHighLimit:
+            return "被“不慢于”界限限制";
+        case Label.CustomComparisonsClickRowHint:
+            return "点击一行查看其时间的来源。";
+        case Label.CustomComparisonsDescYourGolds:
+            return "你的金段";
+        case Label.CustomComparisonsDescYourPb:
+            return "你的 PB";
+        case Label.CustomComparisonsDescComparison:
+            return "“{0}”";
+        case Label.CustomComparisonsDescAttempt:
+            return "第 {0} 次尝试";
+        case Label.CustomComparisonsDescBestRecentRun:
+            return "你最近 {0} 天的最佳一跑";
+        case Label.CustomComparisonsDescWeightedAverage:
+            return "{0}的近期加权平均值";
+        case Label.CustomComparisonsDescClamp:
+            return "{0}，限制在{1}和{2}之间";
+        case Label.CustomComparisonsDescRound:
+            return "{0}，取整到 {1}";
+        case Label.CustomComparisonsDescMedian:
+            return "{0}的中位数";
+        case Label.CustomComparisonsDescAverage:
+            return "{0}的平均值";
+        case Label.CustomComparisonsDescMin:
+            return "{0}中的最佳";
+        case Label.CustomComparisonsDescMax:
+            return "{0}中的最差";
+        case Label.CustomComparisonsDescPercentile:
+            return "{1}的第 {0} 百分位数";
+        case Label.CustomComparisonsDescAddTime:
+            return "{0} + {1}";
+        case Label.CustomComparisonsDescRemoveTime:
+            return "{0} − {1}";
+        case Label.CustomComparisonsDescScale:
+            return "{1}的 {0} %";
+        case Label.CustomComparisonsDescStretch:
+            return "{0}，拉伸到在 {1} 完成";
+        case Label.CustomComparisonsDescBlend:
+            return "从{1}到{2}的 {0} % 处";
+        case Label.CustomComparisonsDescSlower:
+            return "{0}和{1}中较慢的一个";
+        case Label.CustomComparisonsDescFaster:
+            return "{0}和{1}中较快的一个";
+        case Label.CustomComparisonsDescFallback:
+            return "{0}（为空处使用{1}）";
+        case Label.CustomComparisonsDescRangeArm:
+            return "{1}使用{0}";
+        case Label.CustomComparisonsDescRangeOtherwise:
+            return "{0}，否则{1}";
+        case Label.CustomComparisonsDescSomething:
+            return "某个值";
+        case Label.CustomComparisonsDescAllTimes:
+            return "你的所有时间";
+        case Label.CustomComparisonsDescLastN:
+            return "你最近 {0} 个时间";
+        case Label.CustomComparisonsQualCompleted:
+            return "（来自完成的跑）";
+        case Label.CustomComparisonsQualRecentDays:
+            return "（来自最近 {0} 天）";
+        case Label.CustomComparisonsQualUnder:
+            return "（来自少于 {0} 的跑）";
+        case Label.CustomComparisonsQualTrim:
+            return "（去掉最快和最慢的 {0} %）";
+        case Label.CustomComparisonsQualAtLeast:
+            return "（至少有 {0} 个时）";
+        case Label.CustomComparisonsQualReached:
+            return "（来自到达 {0} 的跑）";
+        case Label.CustomComparisonsSumGapsFilled:
+            return "{0}空缺用{1}填补。";
+        case Label.CustomComparisonsSumRangeArm:
+            return "{0}：{1}";
+        case Label.CustomComparisonsSumOtherSegments:
+            return "其他分段：{0}";
+        case Label.CustomComparisonsSegmentNumber:
+            return "分段 {0}";
+        case Label.CustomComparisonsSegmentSpan:
+            return "{0} 到 {1}";
+        case Label.CustomComparisonsSeconds:
+            return "{0} 秒";
+        case Label.CustomComparisonsListAnd:
+            return "{0} 和 {1}";
+        case Label.CustomComparisonsWarnSegment:
+            return "使用了分段 {0}，但你的分段只有 {1} 个";
+        case Label.CustomComparisonsWarnSegments:
+            return "使用了分段 {0}，但你的分段只有 {1} 个";
+        case Label.CustomComparisonsSentence:
+            return "{0}。";
     }
 }

@@ -1,9 +1,8 @@
 /**
  * The editor for one custom comparison: its name, a plain-English summary of
- * what it does, its blocks and a preview, like the desktop block editor.
+ * what it does, its blocks and a preview.
  *
- * The comparison is only stored when the runner clicks Save, and then the
- * same way the desktop stores it: a new comparison is added, and a renamed
+ * The comparison is only stored when the runner clicks Save: a new comparison is added, and a renamed
  * comparison is renamed first, which updates the other comparisons that use
  * it, before its blocks are replaced. Both happen in one step, so either
  * both are stored or, if livesplit-core refuses the comparison, neither is.
@@ -15,12 +14,7 @@ import {
     type RunRef,
     type TimingMethod,
 } from "../../../livesplit-core";
-import { Label, resolve } from "../../../localization";
-import {
-    CcLabel,
-    formatCc,
-    resolveCc,
-} from "../../../localization/custom-comparisons";
+import { Label, resolve, resolveFormat } from "../../../localization";
 import {
     type Block,
     type Path,
@@ -51,8 +45,6 @@ export interface EditedComparison {
     index: number | null;
     name: string;
     root: Slot;
-    /** The desktop block editor's layout of the blocks, if there was one. */
-    workspace?: unknown;
 }
 
 export interface Props {
@@ -176,11 +168,15 @@ export function ComparisonEditor({
     // Why the blocks can't be calculated yet, if they can't.
     const incomplete = (() => {
         if (root === null || findEmptySlot(root) !== null) {
-            return resolveCc(CcLabel.FillEmptySlots, lang);
+            return resolve(Label.CustomComparisonsFillEmptySlots, lang);
         }
         const backwards = findBackwardsRange(root);
         if (backwards !== null) {
-            return formatCc(CcLabel.RangeBackwards, lang, ...backwards);
+            return resolveFormat(
+                Label.CustomComparisonsRangeBackwards,
+                lang,
+                ...backwards,
+            );
         }
         return null;
     })();
@@ -193,7 +189,8 @@ export function ComparisonEditor({
         }
         // The preview needs a name, even while the runner hasn't typed one.
         const previewName =
-            name.trim() || resolveCc(CcLabel.NewComparisonName, lang);
+            name.trim() ||
+            resolve(Label.CustomComparisonsNewComparisonName, lang);
         return library.preview(
             writeComparison(previewName, previewRoot),
             comparison.index,
@@ -223,7 +220,7 @@ export function ComparisonEditor({
     const cantSave =
         incomplete ??
         (name.trim() === ""
-            ? resolveCc(CcLabel.NameRequired, lang)
+            ? resolve(Label.CustomComparisonsNameRequired, lang)
             : nameProblem);
 
     const isChanged =
@@ -237,13 +234,7 @@ export function ComparisonEditor({
             onClose();
             return;
         }
-        // The desktop's layout of the blocks is only kept if the blocks are
-        // the same, as it would show the old blocks otherwise. Without it,
-        // the desktop lays out the blocks on its own.
-        const workspace = sameTree(root, comparison.root)
-            ? comparison.workspace
-            : undefined;
-        const text = writeComparison(name, root, workspace);
+        const text = writeComparison(name, root);
         const index = comparison.index;
         const error = library.write((e) => {
             if (index === null) {
@@ -267,11 +258,14 @@ export function ComparisonEditor({
     const cancel = async () => {
         if (isChanged) {
             const [choice] = await showDialog({
-                title: resolveCc(CcLabel.DiscardChangesTitle, lang),
-                description: resolveCc(CcLabel.DiscardChangesDescription, lang),
+                title: resolve(Label.DiscardChangesTitle, lang),
+                description: resolve(
+                    Label.CustomComparisonsDiscardChangesDescription,
+                    lang,
+                ),
                 buttons: [
-                    resolveCc(CcLabel.Discard, lang),
-                    resolveCc(CcLabel.KeepEditing, lang),
+                    resolve(Label.CustomComparisonsDiscard, lang),
+                    resolve(Label.CustomComparisonsKeepEditing, lang),
                 ],
             });
             if (choice !== 0) {
@@ -290,7 +284,7 @@ export function ComparisonEditor({
         <div
             className={classes.editor}
             onKeyDown={(e) => {
-                // Undo and redo like on the desktop, but not while typing in
+                // Undo and redo, but not while typing in
                 // a text field, which has its own undo.
                 const target = e.target as HTMLElement;
                 if (
@@ -320,7 +314,7 @@ export function ComparisonEditor({
                     title={cantSave ?? undefined}
                 >
                     <Check strokeWidth={2.5} />
-                    {resolveCc(CcLabel.Save, lang)}
+                    {resolve(Label.Save, lang)}
                 </button>
                 <button onClick={cancel}>
                     <X strokeWidth={2.5} />
@@ -329,16 +323,16 @@ export function ComparisonEditor({
                 <button
                     onClick={undo}
                     disabled={!canUndo}
-                    aria-label={resolveCc(CcLabel.Undo, lang)}
-                    title={resolveCc(CcLabel.Undo, lang)}
+                    aria-label={resolve(Label.CustomComparisonsUndo, lang)}
+                    title={resolve(Label.CustomComparisonsUndo, lang)}
                 >
                     <Undo2 strokeWidth={2.5} />
                 </button>
                 <button
                     onClick={redo}
                     disabled={!canRedo}
-                    aria-label={resolveCc(CcLabel.Redo, lang)}
-                    title={resolveCc(CcLabel.Redo, lang)}
+                    aria-label={resolve(Label.CustomComparisonsRedo, lang)}
+                    title={resolve(Label.CustomComparisonsRedo, lang)}
                 >
                     <Redo2 strokeWidth={2.5} />
                 </button>
@@ -374,7 +368,9 @@ export function ComparisonEditor({
                 />
                 <div className={classes.editorMain}>
                     <label className={classes.nameField}>
-                        <span>{resolveCc(CcLabel.Name, lang)}</span>
+                        <span>
+                            {resolve(Label.CustomComparisonsName, lang)}
+                        </span>
                         <input
                             type="text"
                             value={name}

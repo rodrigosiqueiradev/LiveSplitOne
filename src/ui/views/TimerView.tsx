@@ -20,6 +20,7 @@ import { type LSOCommandSink } from "../../util/LSOCommandSink";
 import {
     ArrowDown,
     ArrowUp,
+    Blocks,
     Circle,
     Info,
     Layers,
@@ -66,6 +67,7 @@ interface Callbacks {
     importSplitsFromFile(file: File): Promise<void>;
     onResize(width: number, height: number): void;
     openAboutView(): void;
+    openCustomComparisons(): void;
     openLayoutView(): void;
     openSplitsView(): void;
     openMainSettings(): void;
@@ -365,6 +367,10 @@ export function SideBar({
                     {resolve(Label.GameTime, lang)}
                 </button>
             </div>
+            <button onClick={() => callbacks.openCustomComparisons()}>
+                <Blocks strokeWidth={2.5} />
+                {resolve(Label.CustomComparisons, lang)}
+            </button>
             <hr />
             <button onClick={() => callbacks.popOut()}>
                 <PictureInPicture2 strokeWidth={2.5} />

@@ -656,5 +656,423 @@ export function resolveItalian(text: Label): string {
             return "Impossibile caricare LiveSplit One.\nPotresti essere in modalità di navigazione privata.\nLiveSplit One non può salvare split, layout o altre impostazioni a causa delle limitazioni della modalità privata del browser.\nQueste limitazioni potrebbero essere rimosse in futuro.\nPer usare LiveSplit One ora, disattiva la navigazione privata nelle impostazioni.";
         case Label.LoadFailedOutdatedBrowser:
             return "Impossibile caricare LiveSplit One.\nPotresti usare un browser non aggiornato.\nAggiorna il browser o la versione di iOS e riprova.\nUn altro motivo potrebbe essere un’estensione del browser, ad esempio un adblocker, che blocca l’accesso a script importanti.";
+        case Label.CustomComparisonsSidebarEditingHint:
+            return "Prima salva o annulla il confronto che stai modificando.";
+        case Label.CustomComparisonsComparisonMenu:
+            return "Altre azioni";
+        case Label.CustomComparisonsNameRequired:
+            return "Dai un nome al confronto.";
+        case Label.CustomComparisonsSearchBlocks:
+            return "Cerca blocchi";
+        case Label.CustomComparisonsNoBlocksFound:
+            return "Nessun blocco corrisponde. Prova un'altra parola.";
+        case Label.CustomComparisonsAboutBlock:
+            return "Che cosa fa questo blocco?";
+        case Label.CustomComparisonsBlocks:
+            return "Blocchi";
+        case Label.CustomComparisonsRailHint:
+            return "Trascina un blocco in uno spazio, o su un blocco per sostituirlo. Fai clic su uno per metterlo nel primo spazio vuoto adatto.";
+        case Label.CustomComparisonsDragBlock:
+            return "Trascina per spostare questo blocco";
+        case Label.CustomComparisonsOpenEditorHint:
+            return "I tuoi confronti personalizzati funzionano con tutti i tuoi split e compaiono accanto agli altri confronti.";
+        case Label.CustomComparisons:
+            return "Confronti personalizzati";
+        case Label.CustomComparisonsExportAll:
+            return "Esporta tutto…";
+        case Label.CustomComparisonsExportAllFileName:
+            return "Confronti personalizzati";
+        case Label.CustomComparisonsPluginUnavailable:
+            return "Non è stato possibile caricare i confronti personalizzati, quindi al momento non compaiono come confronti: {0}";
+        case Label.CustomComparisonsListHeading:
+            return "Confronti";
+        case Label.CustomComparisonsNoComparisons:
+            return "Nessun confronto personalizzato. Fai clic su Nuovo per creare il primo.";
+        case Label.CustomComparisonsNew:
+            return "Nuovo…";
+        case Label.CustomComparisonsEdit:
+            return "Modifica…";
+        case Label.CustomComparisonsRename:
+            return "Rinomina…";
+        case Label.CustomComparisonsDuplicate:
+            return "Duplica";
+        case Label.CustomComparisonsImport:
+            return "Importa…";
+        case Label.CustomComparisonsExport:
+            return "Esporta…";
+        case Label.CustomComparisonsCopyAsText:
+            return "Copia come testo";
+        case Label.CustomComparisonsPaste:
+            return "Incolla…";
+        case Label.CustomComparisonsUsedBy:
+            return "Usato da altri {0} confronti";
+        case Label.CustomComparisonsUsedByOne:
+            return "Usato da 1 altro confronto";
+        case Label.CustomComparisonsUnreadable:
+            return "Non leggibile";
+        case Label.CustomComparisonsSaveReminder:
+            return "Le modifiche vengono salvate subito, su questo dispositivo. Usa Esporta tutto per portarle su un altro.";
+        case Label.CustomComparisonsCopiedToClipboard:
+            return "Copiato. Puoi incollarlo in una chat o in un post del forum.";
+        case Label.CustomComparisonsCouldNotCopy:
+            return "Impossibile copiare negli appunti.";
+        case Label.CustomComparisonsCouldNotReadClipboard:
+            return "Impossibile leggere gli appunti. Incolla qui il testo:";
+        case Label.CustomComparisonsErrorTitle:
+            return "Non ha funzionato";
+        case Label.CustomComparisonsRenameTitle:
+            return "Rinomina confronto";
+        case Label.CustomComparisonsRenameDescription:
+            return "I confronti che usano questo vengono aggiornati con il nuovo nome.";
+        case Label.CustomComparisonsNameTakenTitle:
+            return "Scegli un altro nome";
+        case Label.CustomComparisonsNameTakenDescription:
+            return "{0} Scrivi un altro nome:";
+        case Label.CustomComparisonsRemoveTitle:
+            return "Rimuovi confronto";
+        case Label.CustomComparisonsRemoveDescription:
+            return "Rimuovere «{0}»?";
+        case Label.CustomComparisonsRemoveUsedDescription:
+            return "Rimuovere «{0}»? Altri {1} confronti lo usano e senza di esso smettono di funzionare.";
+        case Label.CustomComparisonsRemoveUsedOneDescription:
+            return "Rimuovere «{0}»? 1 altro confronto lo usa e senza di esso smette di funzionare.";
+        case Label.CustomComparisonsPasteTitle:
+            return "Incolla un confronto";
+        case Label.CustomComparisonsPasteDescription:
+            return "Incolla il testo di un confronto che qualcuno ha condiviso:";
+        case Label.CustomComparisonsCopySuffix:
+            return "{0} (copia)";
+        case Label.CustomComparisonsTemplatesTitle:
+            return "Nuovo confronto";
+        case Label.CustomComparisonsTemplatesDescription:
+            return "Scegli un punto di partenza. Ognuno è un confronto completo che puoi usare così com'è o modificare.";
+        case Label.CustomComparisonsTemplateGoalPace:
+            return "Ritmo obiettivo";
+        case Label.CustomComparisonsTemplateGoalPaceDescription:
+            return "Le tue run tipiche, allungate per finire esattamente in un tempo obiettivo.";
+        case Label.CustomComparisonsTemplateRealisticPace:
+            return "Ritmo realistico";
+        case Label.CustomComparisonsTemplateRealisticPaceDescription:
+            return "Il 70° percentile degli ultimi 30 giorni: tempi che batti circa il 70 % delle volte.";
+        case Label.CustomComparisonsTemplateRecentForm:
+            return "Forma recente";
+        case Label.CustomComparisonsTemplateRecentFormDescription:
+            return "La mediana delle tue ultime 10 run completate, ignorando il colpo di fortuna migliore e peggiore.";
+        case Label.CustomComparisonsTemplateSafePace:
+            return "Ritmo sicuro";
+        case Label.CustomComparisonsTemplateSafePaceDescription:
+            return "Il più lento tra i tuoi gold + 2 s e la tua mediana, così non è mai irrealisticamente veloce.";
+        case Label.CustomComparisonsTemplateBlank:
+            return "Vuoto";
+        case Label.CustomComparisonsTemplateBlankDescription:
+            return "Parti da zero.";
+        case Label.CustomComparisonsNewComparisonName:
+            return "Il mio confronto";
+        case Label.CustomComparisonsEditorTitle:
+            return "Confronto personalizzato";
+        case Label.CustomComparisonsName:
+            return "Nome";
+        case Label.CustomComparisonsUndo:
+            return "Annulla";
+        case Label.CustomComparisonsRedo:
+            return "Ripeti";
+        case Label.CustomComparisonsChooseBlock:
+            return "Scegli un blocco…";
+        case Label.CustomComparisonsReplaceBlock:
+            return "Sostituisci con…";
+        case Label.CustomComparisonsWrapBlock:
+            return "Metti dentro…";
+        case Label.CustomComparisonsUnwrapBlock:
+            return "Rimuovi, mantieni il contenuto";
+        case Label.CustomComparisonsPreviewBlock:
+            return "Anteprima di questo blocco";
+        case Label.CustomComparisonsBlockMenu:
+            return "Azioni del blocco";
+        case Label.CustomComparisonsFillEmptySlots:
+            return "Riempi gli spazi vuoti per vedere l'anteprima. Ogni spazio ha bisogno di un blocco.";
+        case Label.CustomComparisonsDiscardChangesDescription:
+            return "Questo confronto ha modifiche non salvate.";
+        case Label.CustomComparisonsDiscard:
+            return "Scarta";
+        case Label.CustomComparisonsKeepEditing:
+            return "Continua a modificare";
+        case Label.CustomComparisonsInvalidTime:
+            return "Scrivi un tempo come 20:00 o 1:05:30.";
+        case Label.CustomComparisonsNotFound:
+            return "{0} (non trovato)";
+        case Label.CustomComparisonsNotInSplits:
+            return "{0}. (non nei tuoi split)";
+        case Label.CustomComparisonsSegmentOption:
+            return "{0}. {1}";
+        case Label.CustomComparisonsAddRange:
+            return "Aggiungi un intervallo";
+        case Label.CustomComparisonsRemoveRange:
+            return "Rimuovi questo intervallo";
+        case Label.CustomComparisonsRangeBackwards:
+            return "I segmenti da {0} a {1} sono al contrario. Scambia i numeri.";
+        case Label.CustomComparisonsCategorySources:
+            return "Fonti";
+        case Label.CustomComparisonsCategoryFilters:
+            return "Filtri";
+        case Label.CustomComparisonsCategoryAggregates:
+            return "Aggregati";
+        case Label.CustomComparisonsCategoryMath:
+            return "Calcoli";
+        case Label.CustomComparisonsCategoryControl:
+            return "Controllo";
+        case Label.CustomComparisonsKindSamples:
+            return "Un elenco di tempi per ogni segmento";
+        case Label.CustomComparisonsKindTimes:
+            return "Un tempo per ogni segmento";
+        case Label.CustomComparisonsBlockResult:
+            return "questo confronto è";
+        case Label.CustomComparisonsBlockResultTip:
+            return "Il confronto finito. Metti qui dentro i blocchi che lo costruiscono.";
+        case Label.CustomComparisonsBlockSegmentHistory:
+            return "tutti i miei tempi per ogni segmento";
+        case Label.CustomComparisonsBlockSegmentHistoryTip:
+            return "Ogni tempo che hai registrato per ogni segmento. I segmenti saltati, e il segmento combinato subito dopo un salto, sono esclusi.";
+        case Label.CustomComparisonsBlockComparison:
+            return "confronto {name}";
+        case Label.CustomComparisonsBlockComparisonTip:
+            return "Un confronto esistente, segmento per segmento. Quelli integrati funzionano anche se sono disattivati.";
+        case Label.CustomComparisonsBlockAttempt:
+            return "tentativo n. {number}";
+        case Label.CustomComparisonsBlockAttemptTip:
+            return "I segmenti di un tentativo passato, in base al suo numero nella cronologia dei tentativi. Vuoto dove quella run ha saltato uno split o è stata resettata.";
+        case Label.CustomComparisonsBlockBestRecentRun:
+            return "la mia run migliore degli ultimi {days} giorni";
+        case Label.CustomComparisonsBlockBestRecentRunTip:
+            return "I segmenti della tua run completata più veloce degli ultimi N giorni: un «PB recente» che cambia mentre giochi. Vuoto se nessuna run è stata completata in quel periodo.";
+        case Label.CustomComparisonsBlockLastN:
+            return "ultimi {count} tempi di";
+        case Label.CustomComparisonsBlockLastNTip:
+            return "Mantiene i tempi più recenti per ogni segmento. Conta le volte in cui quel segmento è stato completato, non i tentativi.";
+        case Label.CustomComparisonsBlockCompletedRunsOnly:
+            return "solo da run completate";
+        case Label.CustomComparisonsBlockCompletedRunsOnlyTip:
+            return "Mantiene solo i tempi dei tentativi che hanno completato l'intera run.";
+        case Label.CustomComparisonsBlockRecentDays:
+            return "degli ultimi {days} giorni";
+        case Label.CustomComparisonsBlockRecentDaysTip:
+            return "Mantiene solo i tempi dei tentativi terminati negli ultimi N giorni, così i tempi vecchi smettono di contare. I tentativi senza data sono esclusi.";
+        case Label.CustomComparisonsBlockFinishedUnder:
+            return "da run finite sotto {totalSeconds}";
+        case Label.CustomComparisonsBlockFinishedUnderTip:
+            return "Mantiene solo i tempi delle run finite più velocemente di così, in modo che contino solo le tue run buone.";
+        case Label.CustomComparisonsBlockReachedSegment:
+            return "da run che hanno raggiunto {segment}";
+        case Label.CustomComparisonsBlockReachedSegmentTip:
+            return "Mantiene solo i tempi dei tentativi arrivati almeno fino a questo segmento. Come «solo da run completate», ma per i giochi in cui la maggior parte delle run viene resettata presto. Se questo segmento non è nei tuoi split, vedrai un avviso e non viene mantenuto nessun tempo.";
+        case Label.CustomComparisonsBlockTrimOutliers:
+            return "togli il {percent} % più veloce e più lento di";
+        case Label.CustomComparisonsBlockTrimOutliersTip:
+            return "Rimuove i colpi di fortuna prima della media: scarta quella parte dei tempi più veloci e più lenti di ogni segmento. Con pochi tempi non viene scartato nulla.";
+        case Label.CustomComparisonsBlockAtLeast:
+            return "solo se ci sono almeno {count} tempi in";
+        case Label.CustomComparisonsBlockAtLeastTip:
+            return "I segmenti con meno tempi diventano vuoti, così puoi riempirli con «se vuoto, usa» invece di fidarti di troppi pochi dati.";
+        case Label.CustomComparisonsBlockAggregate:
+            return "{kind} di";
+        case Label.CustomComparisonsBlockAggregateTip:
+            return "Trasforma l'elenco di tempi di ogni segmento in un solo tempo. Un segmento senza tempi resta vuoto.";
+        case Label.CustomComparisonsAggregateMedian:
+            return "mediana";
+        case Label.CustomComparisonsAggregateAverage:
+            return "media";
+        case Label.CustomComparisonsAggregateMin:
+            return "migliore (min)";
+        case Label.CustomComparisonsAggregateMax:
+            return "peggiore (max)";
+        case Label.CustomComparisonsBlockPercentile:
+            return "percentile {percent} di";
+        case Label.CustomComparisonsBlockPercentileTip:
+            return "0 è il tuo tempo più veloce, 100 il più lento, 50 la mediana. 70 significa: batti questo tempo circa il 70 % delle volte.";
+        case Label.CustomComparisonsBlockWeightedAverage:
+            return "media pesata sui recenti di";
+        case Label.CustomComparisonsBlockWeightedAverageFooter:
+            return "il peso si dimezza ogni {halfLife} tempi più vecchi";
+        case Label.CustomComparisonsBlockWeightedAverageTip:
+            return "Una media in cui i tempi recenti contano di più. Il tempo più nuovo conta per intero, uno più vecchio di N tempi conta la metà, di 2N un quarto, e così via.";
+        case Label.CustomComparisonsBlockAddTime:
+            return "aggiungi {seconds} s per segmento a";
+        case Label.CustomComparisonsBlockAddTimeTip:
+            return "Aggiunge (o, se negativo, toglie) tempo a ogni segmento. Non scende mai sotto zero.";
+        case Label.CustomComparisonsBlockScale:
+            return "{percent} % di";
+        case Label.CustomComparisonsBlockScaleTip:
+            return "Scala ogni segmento. 103 % è il 3 % più lento, 97 % è il 3 % più veloce.";
+        case Label.CustomComparisonsBlockRound:
+            return "arrotonda a {step}";
+        case Label.CustomComparisonsBlockRoundTip:
+            return "Arrotonda ogni segmento ai 0,1 s più vicini (o 1 s, 0,01 s), così anche i tempi degli split sono puliti.";
+        case Label.CustomComparisonsRoundStep:
+            return "{0} s";
+        case Label.CustomComparisonsBlockClamp:
+            return "mantieni";
+        case Label.CustomComparisonsBlockClampTip:
+            return "Tiene ogni segmento tra due limiti, per esempio mai più veloce dei tuoi gold e mai più lento del tuo PB. Se i limiti si incrociano, vince «mai più veloce di».";
+        case Label.CustomComparisonsSlotNeverFaster:
+            return "mai più veloce di";
+        case Label.CustomComparisonsSlotNeverSlower:
+            return "mai più lento di";
+        case Label.CustomComparisonsBlockStretchToTotal:
+            return "allunga per finire in {totalSeconds}";
+        case Label.CustomComparisonsBlockStretchToTotalTip:
+            return "Scala ogni segmento dello stesso fattore in modo che l'intera run corrisponda al tempo obiettivo. Se un segmento è vuoto, il risultato è vuoto: riempi prima i buchi con «se vuoto, usa».";
+        case Label.CustomComparisonsBlockBlend:
+            return "{percent} % della strada da";
+        case Label.CustomComparisonsBlockBlendTip:
+            return "Mescola due regole per segmento. 0 % è tutto la prima, 100 % tutto la seconda, 75 % è tre quarti della strada.";
+        case Label.CustomComparisonsSlotTo:
+            return "a";
+        case Label.CustomComparisonsBlockPick:
+            return "il più {kind} tra";
+        case Label.CustomComparisonsBlockPickTip:
+            return "Per ogni segmento, la più lenta (o più veloce) delle due regole. Se una non ha un tempo per un segmento, si usa l'altra.";
+        case Label.CustomComparisonsPickSlower:
+            return "lento";
+        case Label.CustomComparisonsPickFaster:
+            return "veloce";
+        case Label.CustomComparisonsSlotAnd:
+            return "e";
+        case Label.CustomComparisonsBlockFallback:
+            return "usa";
+        case Label.CustomComparisonsBlockFallbackTip:
+            return "Riempie solo i segmenti che la prima regola lascia vuoti, per esempio perché non ci sono ancora abbastanza run.";
+        case Label.CustomComparisonsSlotIfEmpty:
+            return "se vuoto, usa";
+        case Label.CustomComparisonsBlockSegmentRange:
+            return "per i segmenti … usa … altrimenti …";
+        case Label.CustomComparisonsBlockSegmentRangeTip:
+            return "Usa una regola per un intervallo di segmenti e un'altra per il resto. Aggiungi altri intervalli per altre regole: vince il primo intervallo che corrisponde. Se un intervallo va oltre la fine dei tuoi split, vedrai un avviso.";
+        case Label.CustomComparisonsBlockSegmentRangeHeader:
+            return "regole diverse per segmenti diversi (vince il primo intervallo che corrisponde)";
+        case Label.CustomComparisonsRangeCase:
+            return "per i segmenti da {from} a {to} usa";
+        case Label.CustomComparisonsSlotOtherwise:
+            return "altrimenti";
+        case Label.CustomComparisonsPreview:
+            return "Anteprima";
+        case Label.CustomComparisonsPreviewingBlock:
+            return "Anteprima di un blocco, non del confronto";
+        case Label.CustomComparisonsShowWholeComparison:
+            return "Mostra tutto il confronto";
+        case Label.CustomComparisonsSegment:
+            return "Segmento";
+        case Label.CustomComparisonsDifferenceFrom:
+            return "Differenza da";
+        case Label.CustomComparisonsFasterThanGold:
+            return "Più veloce del tuo tempo migliore per questo segmento (il tuo gold)";
+        case Label.CustomComparisonsFasterThanGoldWarning:
+            return "{0} segmenti sono più veloci dei tuoi gold. È consentito, ma questo ritmo potrebbe non essere realistico.";
+        case Label.CustomComparisonsFasterThanGoldWarningOne:
+            return "1 segmento è più veloce del tuo gold. È consentito, ma questo ritmo potrebbe non essere realistico.";
+        case Label.CustomComparisonsFinishLine:
+            return "Finisce in {0}, {1} rispetto a {2}.";
+        case Label.CustomComparisonsFinishVsSumOfBest:
+            return "La tua somma dei migliori è {0}.";
+        case Label.CustomComparisonsNoProblems:
+            return "Nessun problema.";
+        case Label.CustomComparisonsNoTimesLeft:
+            return "Nessun segmento ha un tempo. Fai clic su una riga per vedere perché, o aggiungi «usa … se vuoto, usa» con un ripiego come il tuo PB.";
+        case Label.CustomComparisonsOriginTitle:
+            return "Da dove viene questo tempo";
+        case Label.CustomComparisonsOriginEmpty:
+            return "Questo segmento non ha un tempo, quindi anche ogni split successivo è vuoto.";
+        case Label.CustomComparisonsOriginFillingGap:
+            return "riempie un buco";
+        case Label.CustomComparisonsOriginPicked:
+            return "il più {0} dei due";
+        case Label.CustomComparisonsOriginLowLimit:
+            return "tenuto al limite «mai più veloce di»";
+        case Label.CustomComparisonsOriginHighLimit:
+            return "tenuto al limite «mai più lento di»";
+        case Label.CustomComparisonsClickRowHint:
+            return "Fai clic su una riga per vedere da dove viene il suo tempo.";
+        case Label.CustomComparisonsDescYourGolds:
+            return "i tuoi gold";
+        case Label.CustomComparisonsDescYourPb:
+            return "il tuo PB";
+        case Label.CustomComparisonsDescComparison:
+            return "«{0}»";
+        case Label.CustomComparisonsDescAttempt:
+            return "il tentativo n. {0}";
+        case Label.CustomComparisonsDescBestRecentRun:
+            return "la tua run migliore degli ultimi {0} giorni";
+        case Label.CustomComparisonsDescWeightedAverage:
+            return "la media pesata sui recenti tra {0}";
+        case Label.CustomComparisonsDescClamp:
+            return "{0}, tenuto tra {1} e {2}";
+        case Label.CustomComparisonsDescRound:
+            return "{0}, arrotondato a {1}";
+        case Label.CustomComparisonsDescMedian:
+            return "la mediana tra {0}";
+        case Label.CustomComparisonsDescAverage:
+            return "la media tra {0}";
+        case Label.CustomComparisonsDescMin:
+            return "il migliore tra {0}";
+        case Label.CustomComparisonsDescMax:
+            return "il peggiore tra {0}";
+        case Label.CustomComparisonsDescPercentile:
+            return "il percentile {0} tra {1}";
+        case Label.CustomComparisonsDescAddTime:
+            return "{0} + {1}";
+        case Label.CustomComparisonsDescRemoveTime:
+            return "{0} − {1}";
+        case Label.CustomComparisonsDescScale:
+            return "{1} × {0} %";
+        case Label.CustomComparisonsDescStretch:
+            return "{0}, allungato per finire in {1}";
+        case Label.CustomComparisonsDescBlend:
+            return "{0} % del percorso tra {1} e {2}";
+        case Label.CustomComparisonsDescSlower:
+            return "il più lento tra {0} e {1}";
+        case Label.CustomComparisonsDescFaster:
+            return "il più veloce tra {0} e {1}";
+        case Label.CustomComparisonsDescFallback:
+            return "{0} (o {1} dove è vuoto)";
+        case Label.CustomComparisonsDescRangeArm:
+            return "{0} per {1}";
+        case Label.CustomComparisonsDescRangeOtherwise:
+            return "{0}, altrimenti {1}";
+        case Label.CustomComparisonsDescSomething:
+            return "qualcosa";
+        case Label.CustomComparisonsDescAllTimes:
+            return "tutti i tuoi tempi";
+        case Label.CustomComparisonsDescLastN:
+            return "i tuoi ultimi {0} tempi";
+        case Label.CustomComparisonsQualCompleted:
+            return "da run completate";
+        case Label.CustomComparisonsQualRecentDays:
+            return "degli ultimi {0} giorni";
+        case Label.CustomComparisonsQualUnder:
+            return "da run sotto {0}";
+        case Label.CustomComparisonsQualTrim:
+            return "senza il {0} % più veloce e più lento";
+        case Label.CustomComparisonsQualAtLeast:
+            return "quando ce ne sono almeno {0}";
+        case Label.CustomComparisonsQualReached:
+            return "da run che hanno raggiunto {0}";
+        case Label.CustomComparisonsSumGapsFilled:
+            return "{0} Buchi riempiti con {1}.";
+        case Label.CustomComparisonsSumRangeArm:
+            return "{0}: {1}";
+        case Label.CustomComparisonsSumOtherSegments:
+            return "Altri segmenti: {0}";
+        case Label.CustomComparisonsSegmentNumber:
+            return "segmento {0}";
+        case Label.CustomComparisonsSegmentSpan:
+            return "da {0} a {1}";
+        case Label.CustomComparisonsSeconds:
+            return "{0} s";
+        case Label.CustomComparisonsListAnd:
+            return "{0} e {1}";
+        case Label.CustomComparisonsWarnSegment:
+            return "Usa il segmento {0}, ma i tuoi split ne hanno {1}";
+        case Label.CustomComparisonsWarnSegments:
+            return "Usa i segmenti {0}, ma i tuoi split ne hanno {1}";
+        case Label.CustomComparisonsSentence:
+            return "{0}.";
     }
 }

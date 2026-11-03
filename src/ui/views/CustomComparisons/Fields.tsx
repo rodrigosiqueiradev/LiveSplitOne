@@ -7,11 +7,7 @@
 
 import React, { useEffect, useState } from "react";
 import { type Language } from "../../../livesplit-core";
-import {
-    CcLabel,
-    formatCc,
-    resolveCc,
-} from "../../../localization/custom-comparisons";
+import { Label, resolve, resolveFormat } from "../../../localization";
 import { type FieldSpec } from "./blocks";
 import { formatDuration, parseDuration } from "./time";
 import { choiceLabel } from "./BlockPicker";
@@ -101,7 +97,11 @@ export function Field({
                 >
                     {missing && (
                         <option value={name}>
-                            {formatCc(CcLabel.NotFound, ctx.lang, name)}
+                            {resolveFormat(
+                                Label.CustomComparisonsNotFound,
+                                ctx.lang,
+                                name,
+                            )}
                         </option>
                     )}
                     {ctx.comparisons.map((c) => (
@@ -193,7 +193,11 @@ function DurationField({
             inputMode="decimal"
             className={`${classes.field} ${classes.durationField} ${valid ? "" : classes.invalid}`}
             value={draft}
-            title={valid ? undefined : resolveCc(CcLabel.InvalidTime, lang)}
+            title={
+                valid
+                    ? undefined
+                    : resolve(Label.CustomComparisonsInvalidTime, lang)
+            }
             size={Math.max(4, draft.length)}
             onChange={(e) => {
                 setDraft(e.target.value);
@@ -229,12 +233,21 @@ function SegmentField({
         >
             {segmentNames.map((name, i) => (
                 <option key={i} value={i + 1}>
-                    {formatCc(CcLabel.SegmentOption, lang, i + 1, name)}
+                    {resolveFormat(
+                        Label.CustomComparisonsSegmentOption,
+                        lang,
+                        i + 1,
+                        name,
+                    )}
                 </option>
             ))}
             {missing && (
                 <option value={value}>
-                    {formatCc(CcLabel.NotInSplits, lang, value)}
+                    {resolveFormat(
+                        Label.CustomComparisonsNotInSplits,
+                        lang,
+                        value,
+                    )}
                 </option>
             )}
         </select>

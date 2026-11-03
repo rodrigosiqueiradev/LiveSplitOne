@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { type Language } from "../../../livesplit-core";
-import { CcLabel, resolveCc } from "../../../localization/custom-comparisons";
+import { Label, resolve } from "../../../localization";
 import { type BlockSpec, ALL_BLOCKS, CATEGORIES } from "./blocks";
 import { blockMatches, blockName, searchWords } from "./BlockPicker";
 import { DRAG_TYPE } from "./BlockTree";
@@ -10,8 +10,7 @@ import { KindIcon } from "./KindIcon";
 import classes from "../../../css/CustomComparisons.module.css";
 
 /**
- * All the blocks, next to the comparison, like the desktop block editor's
- * drawer. A block is dragged onto a slot to put it there, or onto a block to
+ * All the blocks, next to the comparison. A block is dragged onto a slot to put it there, or onto a block to
  * replace it (keeping what's inside it where it fits). Clicking a block puts
  * it into the first empty slot it fits, which is how a comparison is built
  * from top to bottom without dragging.
@@ -48,36 +47,36 @@ export function BlockRail({
     return (
         <aside
             className={classes.rail}
-            aria-label={resolveCc(CcLabel.RailTitle, lang)}
+            aria-label={resolve(Label.CustomComparisonsBlocks, lang)}
         >
-            <h2>{resolveCc(CcLabel.RailTitle, lang)}</h2>
+            <h2>{resolve(Label.CustomComparisonsBlocks, lang)}</h2>
             <input
                 type="search"
                 className={classes.pickerSearch}
-                placeholder={resolveCc(CcLabel.SearchBlocks, lang)}
-                aria-label={resolveCc(CcLabel.SearchBlocks, lang)}
+                placeholder={resolve(Label.CustomComparisonsSearchBlocks, lang)}
+                aria-label={resolve(Label.CustomComparisonsSearchBlocks, lang)}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
             />
             <p className={classes.railHint}>
-                {resolveCc(CcLabel.RailHint, lang)}
+                {resolve(Label.CustomComparisonsRailHint, lang)}
             </p>
             <div className={classes.railList}>
                 {groups.length === 0 && (
                     <p className={classes.railHint}>
-                        {resolveCc(CcLabel.NoBlocksFound, lang)}
+                        {resolve(Label.CustomComparisonsNoBlocksFound, lang)}
                     </p>
                 )}
                 {groups.map((group) => (
                     <section key={group.label}>
-                        <h3>{resolveCc(group.label, lang)}</h3>
+                        <h3>{resolve(group.label, lang)}</h3>
                         {group.blocks.map((spec) => {
                             const fits = canAdd(spec);
                             return (
                                 <button
                                     key={spec.type}
                                     className={`${classes.railEntry} ${classes[spec.category]} ${fits ? "" : classes.railEntryNoSlot}`}
-                                    title={resolveCc(spec.tip, lang)}
+                                    title={resolve(spec.tip, lang)}
                                     draggable
                                     onDragStart={(e) => {
                                         e.dataTransfer.setData(

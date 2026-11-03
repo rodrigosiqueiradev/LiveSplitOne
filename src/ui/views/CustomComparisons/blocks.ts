@@ -3,7 +3,7 @@
  * and texts. See `model.ts` for how they fit together.
  */
 
-import { CcLabel } from "../../../localization/custom-comparisons";
+import { Label } from "../../../localization";
 import { type Kind, type Slot } from "./model";
 
 export const PERSONAL_BEST = "Personal Best";
@@ -38,7 +38,7 @@ export type FieldSpec =
     | {
           key: string;
           type: "choice";
-          choices: { value: string | number; label: CcLabel }[];
+          choices: { value: string | number; label: Label }[];
           default: string | number;
       }
     | { key: string; type: "segment"; default: number }
@@ -50,7 +50,7 @@ export interface SlotSpec {
     key: string;
     kind: Kind;
     /** The text shown in front of the slot, if any. */
-    label?: CcLabel | undefined;
+    label?: Label | undefined;
 }
 
 export interface BlockSpec {
@@ -61,28 +61,26 @@ export interface BlockSpec {
      * The block's title. Its `{key}` placeholders are replaced by the input of
      * the field with that key.
      */
-    title: CcLabel;
+    title: Label;
     /** A text shown below the slots, which may contain fields like the title. */
-    footer?: CcLabel;
-    tip: CcLabel;
+    footer?: Label;
+    tip: Label;
     fields: FieldSpec[];
     slots: SlotSpec[];
-    /** The format version that introduced the block, see `requiredVersion`. */
-    version: number;
 }
 
 /** The largest segment number a range or "reached segment" can name. */
 export const MAX_SEGMENT = 10_000;
 
-const source = (kind: Kind, label?: CcLabel): SlotSpec => ({
+const source = (kind: Kind, label?: Label): SlotSpec => ({
     key: "source",
     kind,
     label,
 });
 
 /**
- * Every block, in the order they are offered. The keys, limits and defaults
- * match the desktop block editor, so a comparison behaves the same in both.
+ * Every block, in the order they are offered. The keys and limits match
+ * livesplit-core's custom comparison format.
  * The segment range block isn't listed: its ranges are a list, so the block
  * editor handles it on its own (see `RANGE`).
  */
@@ -92,28 +90,26 @@ export const BLOCKS: BlockSpec[] = [
         type: "segmentHistory",
         kind: "samples",
         category: "sources",
-        title: CcLabel.BlockSegmentHistory,
-        tip: CcLabel.BlockSegmentHistoryTip,
+        title: Label.CustomComparisonsBlockSegmentHistory,
+        tip: Label.CustomComparisonsBlockSegmentHistoryTip,
         fields: [],
         slots: [],
-        version: 1,
     },
     {
         type: "comparison",
         kind: "times",
         category: "sources",
-        title: CcLabel.BlockComparison,
-        tip: CcLabel.BlockComparisonTip,
+        title: Label.CustomComparisonsBlockComparison,
+        tip: Label.CustomComparisonsBlockComparisonTip,
         fields: [{ key: "name", type: "comparison", default: PERSONAL_BEST }],
         slots: [],
-        version: 1,
     },
     {
         type: "attempt",
         kind: "times",
         category: "sources",
-        title: CcLabel.BlockAttempt,
-        tip: CcLabel.BlockAttemptTip,
+        title: Label.CustomComparisonsBlockAttempt,
+        tip: Label.CustomComparisonsBlockAttemptTip,
         fields: [
             {
                 key: "number",
@@ -125,14 +121,13 @@ export const BLOCKS: BlockSpec[] = [
             },
         ],
         slots: [],
-        version: 3,
     },
     {
         type: "bestRecentRun",
         kind: "times",
         category: "sources",
-        title: CcLabel.BlockBestRecentRun,
-        tip: CcLabel.BlockBestRecentRunTip,
+        title: Label.CustomComparisonsBlockBestRecentRun,
+        tip: Label.CustomComparisonsBlockBestRecentRunTip,
         fields: [
             {
                 key: "days",
@@ -144,15 +139,14 @@ export const BLOCKS: BlockSpec[] = [
             },
         ],
         slots: [],
-        version: 4,
     },
     // Filters.
     {
         type: "lastN",
         kind: "samples",
         category: "filters",
-        title: CcLabel.BlockLastN,
-        tip: CcLabel.BlockLastNTip,
+        title: Label.CustomComparisonsBlockLastN,
+        tip: Label.CustomComparisonsBlockLastNTip,
         fields: [
             {
                 key: "count",
@@ -164,24 +158,22 @@ export const BLOCKS: BlockSpec[] = [
             },
         ],
         slots: [source("samples")],
-        version: 1,
     },
     {
         type: "completedRunsOnly",
         kind: "samples",
         category: "filters",
-        title: CcLabel.BlockCompletedRunsOnly,
-        tip: CcLabel.BlockCompletedRunsOnlyTip,
+        title: Label.CustomComparisonsBlockCompletedRunsOnly,
+        tip: Label.CustomComparisonsBlockCompletedRunsOnlyTip,
         fields: [],
         slots: [source("samples")],
-        version: 1,
     },
     {
         type: "recentDays",
         kind: "samples",
         category: "filters",
-        title: CcLabel.BlockRecentDays,
-        tip: CcLabel.BlockRecentDaysTip,
+        title: Label.CustomComparisonsBlockRecentDays,
+        tip: Label.CustomComparisonsBlockRecentDaysTip,
         fields: [
             {
                 key: "days",
@@ -193,34 +185,31 @@ export const BLOCKS: BlockSpec[] = [
             },
         ],
         slots: [source("samples")],
-        version: 2,
     },
     {
         type: "finishedUnder",
         kind: "samples",
         category: "filters",
-        title: CcLabel.BlockFinishedUnder,
-        tip: CcLabel.BlockFinishedUnderTip,
+        title: Label.CustomComparisonsBlockFinishedUnder,
+        tip: Label.CustomComparisonsBlockFinishedUnderTip,
         fields: [{ key: "totalSeconds", type: "duration", default: 20 * 60 }],
         slots: [source("samples")],
-        version: 3,
     },
     {
         type: "reachedSegment",
         kind: "samples",
         category: "filters",
-        title: CcLabel.BlockReachedSegment,
-        tip: CcLabel.BlockReachedSegmentTip,
+        title: Label.CustomComparisonsBlockReachedSegment,
+        tip: Label.CustomComparisonsBlockReachedSegmentTip,
         fields: [{ key: "segment", type: "segment", default: 2 }],
         slots: [source("samples")],
-        version: 4,
     },
     {
         type: "trimOutliers",
         kind: "samples",
         category: "filters",
-        title: CcLabel.BlockTrimOutliers,
-        tip: CcLabel.BlockTrimOutliersTip,
+        title: Label.CustomComparisonsBlockTrimOutliers,
+        tip: Label.CustomComparisonsBlockTrimOutliersTip,
         fields: [
             {
                 key: "percent",
@@ -232,14 +221,13 @@ export const BLOCKS: BlockSpec[] = [
             },
         ],
         slots: [source("samples")],
-        version: 3,
     },
     {
         type: "atLeast",
         kind: "samples",
         category: "filters",
-        title: CcLabel.BlockAtLeast,
-        tip: CcLabel.BlockAtLeastTip,
+        title: Label.CustomComparisonsBlockAtLeast,
+        tip: Label.CustomComparisonsBlockAtLeastTip,
         fields: [
             {
                 key: "count",
@@ -251,37 +239,47 @@ export const BLOCKS: BlockSpec[] = [
             },
         ],
         slots: [source("samples")],
-        version: 3,
     },
     // Aggregates.
     {
         type: "aggregate",
         kind: "times",
         category: "aggregates",
-        title: CcLabel.BlockAggregate,
-        tip: CcLabel.BlockAggregateTip,
+        title: Label.CustomComparisonsBlockAggregate,
+        tip: Label.CustomComparisonsBlockAggregateTip,
         fields: [
             {
                 key: "kind",
                 type: "choice",
                 choices: [
-                    { value: "median", label: CcLabel.AggregateMedian },
-                    { value: "average", label: CcLabel.AggregateAverage },
-                    { value: "min", label: CcLabel.AggregateMin },
-                    { value: "max", label: CcLabel.AggregateMax },
+                    {
+                        value: "median",
+                        label: Label.CustomComparisonsAggregateMedian,
+                    },
+                    {
+                        value: "average",
+                        label: Label.CustomComparisonsAggregateAverage,
+                    },
+                    {
+                        value: "min",
+                        label: Label.CustomComparisonsAggregateMin,
+                    },
+                    {
+                        value: "max",
+                        label: Label.CustomComparisonsAggregateMax,
+                    },
                 ],
                 default: "median",
             },
         ],
         slots: [source("samples")],
-        version: 1,
     },
     {
         type: "percentile",
         kind: "times",
         category: "aggregates",
-        title: CcLabel.BlockPercentile,
-        tip: CcLabel.BlockPercentileTip,
+        title: Label.CustomComparisonsBlockPercentile,
+        tip: Label.CustomComparisonsBlockPercentileTip,
         fields: [
             {
                 key: "percent",
@@ -293,15 +291,14 @@ export const BLOCKS: BlockSpec[] = [
             },
         ],
         slots: [source("samples")],
-        version: 2,
     },
     {
         type: "weightedAverage",
         kind: "times",
         category: "aggregates",
-        title: CcLabel.BlockWeightedAverage,
-        footer: CcLabel.BlockWeightedAverageFooter,
-        tip: CcLabel.BlockWeightedAverageTip,
+        title: Label.CustomComparisonsBlockWeightedAverage,
+        footer: Label.CustomComparisonsBlockWeightedAverageFooter,
+        tip: Label.CustomComparisonsBlockWeightedAverageTip,
         fields: [
             {
                 key: "halfLife",
@@ -313,15 +310,14 @@ export const BLOCKS: BlockSpec[] = [
             },
         ],
         slots: [source("samples")],
-        version: 4,
     },
     // Math.
     {
         type: "addTime",
         kind: "times",
         category: "math",
-        title: CcLabel.BlockAddTime,
-        tip: CcLabel.BlockAddTimeTip,
+        title: Label.CustomComparisonsBlockAddTime,
+        tip: Label.CustomComparisonsBlockAddTimeTip,
         fields: [
             {
                 key: "seconds",
@@ -333,14 +329,13 @@ export const BLOCKS: BlockSpec[] = [
             },
         ],
         slots: [source("times")],
-        version: 1,
     },
     {
         type: "scale",
         kind: "times",
         category: "math",
-        title: CcLabel.BlockScale,
-        tip: CcLabel.BlockScaleTip,
+        title: Label.CustomComparisonsBlockScale,
+        tip: Label.CustomComparisonsBlockScaleTip,
         fields: [
             {
                 key: "percent",
@@ -352,14 +347,13 @@ export const BLOCKS: BlockSpec[] = [
             },
         ],
         slots: [source("times")],
-        version: 1,
     },
     {
         type: "round",
         kind: "times",
         category: "math",
-        title: CcLabel.BlockRound,
-        tip: CcLabel.BlockRoundTip,
+        title: Label.CustomComparisonsBlockRound,
+        tip: Label.CustomComparisonsBlockRoundTip,
         fields: [
             {
                 key: "step",
@@ -367,46 +361,51 @@ export const BLOCKS: BlockSpec[] = [
                 // The labels are filled in with the number by the block
                 // editor, see `choiceLabel`.
                 choices: [
-                    { value: 0.1, label: CcLabel.RoundStep },
-                    { value: 1, label: CcLabel.RoundStep },
-                    { value: 0.01, label: CcLabel.RoundStep },
+                    { value: 0.1, label: Label.CustomComparisonsRoundStep },
+                    { value: 1, label: Label.CustomComparisonsRoundStep },
+                    { value: 0.01, label: Label.CustomComparisonsRoundStep },
                 ],
                 default: 0.1,
             },
         ],
         slots: [source("times")],
-        version: 4,
     },
     {
         type: "clamp",
         kind: "times",
         category: "math",
-        title: CcLabel.BlockClamp,
-        tip: CcLabel.BlockClampTip,
+        title: Label.CustomComparisonsBlockClamp,
+        tip: Label.CustomComparisonsBlockClampTip,
         fields: [],
         slots: [
             source("times"),
-            { key: "low", kind: "times", label: CcLabel.SlotNeverFaster },
-            { key: "high", kind: "times", label: CcLabel.SlotNeverSlower },
+            {
+                key: "low",
+                kind: "times",
+                label: Label.CustomComparisonsSlotNeverFaster,
+            },
+            {
+                key: "high",
+                kind: "times",
+                label: Label.CustomComparisonsSlotNeverSlower,
+            },
         ],
-        version: 4,
     },
     {
         type: "stretchToTotal",
         kind: "times",
         category: "math",
-        title: CcLabel.BlockStretchToTotal,
-        tip: CcLabel.BlockStretchToTotalTip,
+        title: Label.CustomComparisonsBlockStretchToTotal,
+        tip: Label.CustomComparisonsBlockStretchToTotalTip,
         fields: [{ key: "totalSeconds", type: "duration", default: 20 * 60 }],
         slots: [source("times")],
-        version: 2,
     },
     {
         type: "blend",
         kind: "times",
         category: "math",
-        title: CcLabel.BlockBlend,
-        tip: CcLabel.BlockBlendTip,
+        title: Label.CustomComparisonsBlockBlend,
+        tip: Label.CustomComparisonsBlockBlendTip,
         fields: [
             {
                 key: "percent",
@@ -419,64 +418,79 @@ export const BLOCKS: BlockSpec[] = [
         ],
         slots: [
             { key: "from", kind: "times" },
-            { key: "to", kind: "times", label: CcLabel.SlotTo },
+            { key: "to", kind: "times", label: Label.CustomComparisonsSlotTo },
         ],
-        version: 2,
     },
     // Control.
     {
         type: "fallback",
         kind: "times",
         category: "control",
-        title: CcLabel.BlockFallback,
-        tip: CcLabel.BlockFallbackTip,
+        title: Label.CustomComparisonsBlockFallback,
+        tip: Label.CustomComparisonsBlockFallbackTip,
         fields: [],
         slots: [
             { key: "primary", kind: "times" },
-            { key: "fallback", kind: "times", label: CcLabel.SlotIfEmpty },
+            {
+                key: "fallback",
+                kind: "times",
+                label: Label.CustomComparisonsSlotIfEmpty,
+            },
         ],
-        version: 1,
     },
     {
         type: "pick",
         kind: "times",
         category: "control",
-        title: CcLabel.BlockPick,
-        tip: CcLabel.BlockPickTip,
+        title: Label.CustomComparisonsBlockPick,
+        tip: Label.CustomComparisonsBlockPickTip,
         fields: [
             {
                 key: "kind",
                 type: "choice",
                 choices: [
-                    { value: "slower", label: CcLabel.PickSlower },
-                    { value: "faster", label: CcLabel.PickFaster },
+                    {
+                        value: "slower",
+                        label: Label.CustomComparisonsPickSlower,
+                    },
+                    {
+                        value: "faster",
+                        label: Label.CustomComparisonsPickFaster,
+                    },
                 ],
                 default: "slower",
             },
         ],
         slots: [
             { key: "first", kind: "times" },
-            { key: "second", kind: "times", label: CcLabel.SlotAnd },
+            {
+                key: "second",
+                kind: "times",
+                label: Label.CustomComparisonsSlotAnd,
+            },
         ],
-        version: 2,
     },
 ];
 
 /**
  * The segment range block. Unlike the other blocks it holds a list of
  * ranges, each with its own segments and rule, plus the rule for the other
- * segments. The desktop block editor shows several ranges as nested range
- * blocks, but stores them as this one list, which is what is edited here.
+ * segments.
  */
 export const RANGE: BlockSpec = {
     type: "segmentRange",
     kind: "times",
     category: "control",
-    title: CcLabel.BlockSegmentRange,
-    tip: CcLabel.BlockSegmentRangeTip,
+    title: Label.CustomComparisonsBlockSegmentRange,
+    tip: Label.CustomComparisonsBlockSegmentRangeTip,
     fields: [],
-    slots: [{ key: "otherwise", kind: "times", label: CcLabel.SlotOtherwise }],
-    version: 1,
+    slots: [
+        {
+            key: "otherwise",
+            kind: "times",
+            label: Label.CustomComparisonsSlotOtherwise,
+        },
+    ],
 };
 
 /** The largest number of ranges in a segment range block. */
@@ -490,12 +504,15 @@ export interface RangeCase {
 
 export const ALL_BLOCKS: BlockSpec[] = [...BLOCKS, RANGE];
 
-export const CATEGORIES: { category: Category; label: CcLabel }[] = [
-    { category: "sources", label: CcLabel.CategorySources },
-    { category: "filters", label: CcLabel.CategoryFilters },
-    { category: "aggregates", label: CcLabel.CategoryAggregates },
-    { category: "math", label: CcLabel.CategoryMath },
-    { category: "control", label: CcLabel.CategoryControl },
+export const CATEGORIES: { category: Category; label: Label }[] = [
+    { category: "sources", label: Label.CustomComparisonsCategorySources },
+    { category: "filters", label: Label.CustomComparisonsCategoryFilters },
+    {
+        category: "aggregates",
+        label: Label.CustomComparisonsCategoryAggregates,
+    },
+    { category: "math", label: Label.CustomComparisonsCategoryMath },
+    { category: "control", label: Label.CustomComparisonsCategoryControl },
 ];
 
 export function blockSpec(type: string): BlockSpec | undefined {

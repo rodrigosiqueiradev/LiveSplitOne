@@ -1,19 +1,14 @@
 /**
  * Plain-English descriptions of comparisons, for the summary under the name
- * and for "where does this time come from" in the preview. They are a port
- * of the desktop block editor's descriptions, with the sentences moved into
- * the localization, so they read the same in both.
+ * and for "where does this time come from" in the preview. The sentences
+ * are in the localization.
  *
  * Segment numbers are shown as the run's segment names where possible,
  * since that's how the runner thinks about them.
  */
 
 import { type Language } from "../../../livesplit-core";
-import {
-    CcLabel,
-    formatCc,
-    resolveCc,
-} from "../../../localization/custom-comparisons";
+import { Label, resolve, resolveFormat } from "../../../localization";
 import { type Block } from "./model";
 import { type RangeCase, BEST_SEGMENTS, PERSONAL_BEST, RANGE } from "./blocks";
 import { formatDuration } from "./time";
@@ -25,7 +20,8 @@ export interface DescribeContext {
 
 function segmentLabel(n: number, ctx: DescribeContext): string {
     return (
-        ctx.segmentNames[n - 1] || formatCc(CcLabel.SegmentNumber, ctx.lang, n)
+        ctx.segmentNames[n - 1] ||
+        resolveFormat(Label.CustomComparisonsSegmentNumber, ctx.lang, n)
     );
 }
 
@@ -38,7 +34,7 @@ function rangeLabel(from: number, to: number, ctx: DescribeContext): string {
 /** A number without needless digits: 0.5 s, 2 s, 0.125 s. */
 function seconds(n: number, ctx: DescribeContext): string {
     const text = Number.isInteger(n) ? String(n) : String(Number(n.toFixed(3)));
-    return formatCc(CcLabel.Seconds, ctx.lang, text);
+    return resolveFormat(Label.CustomComparisonsSeconds, ctx.lang, text);
 }
 
 function capitalize(text: string): string {
@@ -46,9 +42,11 @@ function capitalize(text: string): string {
 }
 
 /** Turns a phrase into a sentence. */
-function sentence(text: string): string {
+export function sentence(text: string, lang: Language | undefined): string {
     const trimmed = capitalize(text);
-    return /[.!?]$/.test(trimmed) ? trimmed : trimmed + ".";
+    return /[.!?。！？]$/.test(trimmed)
+        ? trimmed
+        : resolveFormat(Label.CustomComparisonsSentence, lang, trimmed);
 }
 
 /**
@@ -72,12 +70,14 @@ export function describeSamples(
                 lastN ??= Number(current["count"]);
                 break;
             case "completedRunsOnly":
-                qualifiers.push(resolveCc(CcLabel.QualCompleted, lang));
+                qualifiers.push(
+                    resolve(Label.CustomComparisonsQualCompleted, lang),
+                );
                 break;
             case "recentDays":
                 qualifiers.push(
-                    formatCc(
-                        CcLabel.QualRecentDays,
+                    resolveFormat(
+                        Label.CustomComparisonsQualRecentDays,
                         lang,
                         Number(current["days"]),
                     ),
@@ -85,8 +85,8 @@ export function describeSamples(
                 break;
             case "finishedUnder":
                 qualifiers.push(
-                    formatCc(
-                        CcLabel.QualUnder,
+                    resolveFormat(
+                        Label.CustomComparisonsQualUnder,
                         lang,
                         formatDuration(Number(current["totalSeconds"])),
                     ),
@@ -94,8 +94,8 @@ export function describeSamples(
                 break;
             case "trimOutliers":
                 qualifiers.push(
-                    formatCc(
-                        CcLabel.QualTrim,
+                    resolveFormat(
+                        Label.CustomComparisonsQualTrim,
                         lang,
                         Number(current["percent"]),
                     ),
@@ -103,8 +103,8 @@ export function describeSamples(
                 break;
             case "atLeast":
                 qualifiers.push(
-                    formatCc(
-                        CcLabel.QualAtLeast,
+                    resolveFormat(
+                        Label.CustomComparisonsQualAtLeast,
                         lang,
                         Number(current["count"]),
                     ),
@@ -112,8 +112,8 @@ export function describeSamples(
                 break;
             case "reachedSegment":
                 qualifiers.push(
-                    formatCc(
-                        CcLabel.QualReached,
+                    resolveFormat(
+                        Label.CustomComparisonsQualReached,
                         lang,
                         segmentLabel(Number(current["segment"]), ctx),
                     ),
@@ -125,8 +125,8 @@ export function describeSamples(
 
     const head =
         lastN !== null
-            ? formatCc(CcLabel.DescLastN, lang, lastN)
-            : resolveCc(CcLabel.DescAllTimes, lang);
+            ? resolveFormat(Label.CustomComparisonsDescLastN, lang, lastN)
+            : resolve(Label.CustomComparisonsDescAllTimes, lang);
     return [head, ...qualifiers].join(" ");
 }
 
@@ -137,7 +137,7 @@ export function describeTimes(
 ): string {
     const { lang } = ctx;
     if (node === null) {
-        return resolveCc(CcLabel.DescSomething, lang);
+        return resolve(Label.CustomComparisonsDescSomething, lang);
     }
     const times = (key: string) =>
         describeTimes((node[key] as Block | null) ?? null, ctx);
@@ -147,39 +147,43 @@ export function describeTimes(
     switch (node.type) {
         case "comparison":
             return node["name"] === BEST_SEGMENTS
-                ? resolveCc(CcLabel.DescYourGolds, lang)
+                ? resolve(Label.CustomComparisonsDescYourGolds, lang)
                 : node["name"] === PERSONAL_BEST
-                  ? resolveCc(CcLabel.DescYourPb, lang)
-                  : formatCc(
-                        CcLabel.DescComparison,
+                  ? resolve(Label.CustomComparisonsDescYourPb, lang)
+                  : resolveFormat(
+                        Label.CustomComparisonsDescComparison,
                         lang,
                         String(node["name"]),
                     );
         case "attempt":
-            return formatCc(CcLabel.DescAttempt, lang, Number(node["number"]));
+            return resolveFormat(
+                Label.CustomComparisonsDescAttempt,
+                lang,
+                Number(node["number"]),
+            );
         case "bestRecentRun":
-            return formatCc(
-                CcLabel.DescBestRecentRun,
+            return resolveFormat(
+                Label.CustomComparisonsDescBestRecentRun,
                 lang,
                 Number(node["days"]),
             );
         case "weightedAverage":
-            return formatCc(
-                CcLabel.DescWeightedAverage,
+            return resolveFormat(
+                Label.CustomComparisonsDescWeightedAverage,
                 lang,
                 samples("source"),
             );
         case "clamp":
-            return formatCc(
-                CcLabel.DescClamp,
+            return resolveFormat(
+                Label.CustomComparisonsDescClamp,
                 lang,
                 times("source"),
                 times("low"),
                 times("high"),
             );
         case "round":
-            return formatCc(
-                CcLabel.DescRound,
+            return resolveFormat(
+                Label.CustomComparisonsDescRound,
                 lang,
                 times("source"),
                 seconds(Number(node["step"]), ctx),
@@ -187,85 +191,87 @@ export function describeTimes(
         case "aggregate": {
             const label =
                 {
-                    median: CcLabel.DescMedian,
-                    average: CcLabel.DescAverage,
-                    min: CcLabel.DescMin,
-                    max: CcLabel.DescMax,
-                }[String(node["kind"])] ?? CcLabel.DescMedian;
-            return formatCc(label, lang, samples("source"));
+                    median: Label.CustomComparisonsDescMedian,
+                    average: Label.CustomComparisonsDescAverage,
+                    min: Label.CustomComparisonsDescMin,
+                    max: Label.CustomComparisonsDescMax,
+                }[String(node["kind"])] ?? Label.CustomComparisonsDescMedian;
+            return resolveFormat(label, lang, samples("source"));
         }
         case "percentile":
-            return formatCc(
-                CcLabel.DescPercentile,
+            return resolveFormat(
+                Label.CustomComparisonsDescPercentile,
                 lang,
                 Number(node["percent"]),
                 samples("source"),
             );
         case "addTime": {
             const amount = Number(node["seconds"]);
-            return formatCc(
-                amount < 0 ? CcLabel.DescRemoveTime : CcLabel.DescAddTime,
+            return resolveFormat(
+                amount < 0
+                    ? Label.CustomComparisonsDescRemoveTime
+                    : Label.CustomComparisonsDescAddTime,
                 lang,
                 times("source"),
                 seconds(Math.abs(amount), ctx),
             );
         }
         case "scale":
-            return formatCc(
-                CcLabel.DescScale,
+            return resolveFormat(
+                Label.CustomComparisonsDescScale,
                 lang,
                 Number(node["percent"]),
                 times("source"),
             );
         case "stretchToTotal":
-            return formatCc(
-                CcLabel.DescStretch,
+            return resolveFormat(
+                Label.CustomComparisonsDescStretch,
                 lang,
                 times("source"),
                 formatDuration(Number(node["totalSeconds"])),
             );
         case "blend":
-            return formatCc(
-                CcLabel.DescBlend,
+            return resolveFormat(
+                Label.CustomComparisonsDescBlend,
                 lang,
                 Number(node["percent"]),
                 times("from"),
                 times("to"),
             );
         case "pick":
-            return formatCc(
+            return resolveFormat(
                 node["kind"] === "faster"
-                    ? CcLabel.DescFaster
-                    : CcLabel.DescSlower,
+                    ? Label.CustomComparisonsDescFaster
+                    : Label.CustomComparisonsDescSlower,
                 lang,
                 times("first"),
                 times("second"),
             );
         case "fallback":
-            return formatCc(
-                CcLabel.DescFallback,
+            return resolveFormat(
+                Label.CustomComparisonsDescFallback,
                 lang,
                 times("primary"),
                 times("fallback"),
             );
         case RANGE.type: {
             const arms = (node["cases"] as RangeCase[]).map((c) =>
-                formatCc(
-                    CcLabel.DescRangeArm,
+                resolveFormat(
+                    Label.CustomComparisonsDescRangeArm,
                     lang,
                     describeTimes(c.times, ctx),
                     rangeLabel(c.from, c.to, ctx),
                 ),
             );
-            return formatCc(
-                CcLabel.DescRangeOtherwise,
+            return resolveFormat(
+                Label.CustomComparisonsDescRangeOtherwise,
                 lang,
                 arms.join(", "),
                 times("otherwise"),
             );
         }
         default:
-            return resolveCc(CcLabel.DescSomething, lang);
+            return resolve(Label.CustomComparisonsDescSomething, lang);
     }
 }
 
@@ -279,11 +285,14 @@ export function summarize(root: Block, ctx: DescribeContext): string {
     const { lang } = ctx;
     if (root.type === "fallback") {
         const primary = (root["primary"] as Block | null) ?? null;
-        return formatCc(
-            CcLabel.SumGapsFilled,
+        return resolveFormat(
+            Label.CustomComparisonsSumGapsFilled,
             lang,
             primary === null
-                ? sentence(resolveCc(CcLabel.DescSomething, lang))
+                ? sentence(
+                      resolve(Label.CustomComparisonsDescSomething, lang),
+                      lang,
+                  )
                 : summarize(primary, ctx),
             describeTimes((root["fallback"] as Block | null) ?? null, ctx),
         );
@@ -291,29 +300,31 @@ export function summarize(root: Block, ctx: DescribeContext): string {
     if (root.type === RANGE.type) {
         const parts = (root["cases"] as RangeCase[]).map((c) =>
             sentence(
-                formatCc(
-                    CcLabel.SumRangeArm,
+                resolveFormat(
+                    Label.CustomComparisonsSumRangeArm,
                     lang,
                     capitalize(rangeLabel(c.from, c.to, ctx)),
                     describeTimes(c.times, ctx),
                 ),
+                lang,
             ),
         );
         parts.push(
             sentence(
-                formatCc(
-                    CcLabel.SumOtherSegments,
+                resolveFormat(
+                    Label.CustomComparisonsSumOtherSegments,
                     lang,
                     describeTimes(
                         (root["otherwise"] as Block | null) ?? null,
                         ctx,
                     ),
                 ),
+                lang,
             ),
         );
         return parts.join(" ");
     }
-    return sentence(describeTimes(root, ctx));
+    return sentence(describeTimes(root, ctx), lang);
 }
 
 /**
@@ -338,27 +349,27 @@ export function describeOrigin(
     for (const step of steps) {
         const parent = node as Block;
         if (parent.type === "fallback" && step === "fallback") {
-            notes.push(resolveCc(CcLabel.OriginFillingGap, lang));
+            notes.push(resolve(Label.CustomComparisonsOriginFillingGap, lang));
         }
         if (parent.type === "pick") {
             notes.push(
-                formatCc(
-                    CcLabel.OriginPicked,
+                resolveFormat(
+                    Label.CustomComparisonsOriginPicked,
                     lang,
-                    resolveCc(
+                    resolve(
                         parent["kind"] === "faster"
-                            ? CcLabel.PickFaster
-                            : CcLabel.PickSlower,
+                            ? Label.CustomComparisonsPickFaster
+                            : Label.CustomComparisonsPickSlower,
                         lang,
                     ),
                 ),
             );
         }
         if (parent.type === "clamp" && step === "low") {
-            notes.push(resolveCc(CcLabel.OriginLowLimit, lang));
+            notes.push(resolve(Label.CustomComparisonsOriginLowLimit, lang));
         }
         if (parent.type === "clamp" && step === "high") {
-            notes.push(resolveCc(CcLabel.OriginHighLimit, lang));
+            notes.push(resolve(Label.CustomComparisonsOriginHighLimit, lang));
         }
         node = Array.isArray(node)
             ? (node as unknown[])[Number(step)]
@@ -388,8 +399,7 @@ interface SegmentSpan {
 
 /**
  * The warning for segment ranges and "reached" segments that point past the
- * end of the splits, like "Uses segment 9, but your splits have 6". It's the
- * same sentence as the desktop component shows in its settings. A range that
+ * end of the splits, like "Uses segment 9, but your splits have 6". A range that
  * still overlaps the splits reports only the end it names, a range that
  * starts past the end reports the whole range, and adjacent numbers are
  * joined. Returns null if every segment exists.
@@ -422,20 +432,27 @@ export function segmentWarning(
     const parts = merged.map((s) =>
         s.from === s.to
             ? String(s.from)
-            : formatCc(CcLabel.SegmentSpan, lang, s.from, s.to),
+            : resolveFormat(
+                  Label.CustomComparisonsSegmentSpan,
+                  lang,
+                  s.from,
+                  s.to,
+              ),
     );
     const list =
         parts.length === 1
             ? (parts[0] ?? "")
-            : formatCc(
-                  CcLabel.ListAnd,
+            : resolveFormat(
+                  Label.CustomComparisonsListAnd,
                   lang,
                   parts.slice(0, -1).join(", "),
                   parts[parts.length - 1] ?? "",
               );
     const single = merged.length === 1 && merged[0]?.from === merged[0]?.to;
-    return formatCc(
-        single ? CcLabel.WarnSegment : CcLabel.WarnSegments,
+    return resolveFormat(
+        single
+            ? Label.CustomComparisonsWarnSegment
+            : Label.CustomComparisonsWarnSegments,
         lang,
         list,
         segmentCount,

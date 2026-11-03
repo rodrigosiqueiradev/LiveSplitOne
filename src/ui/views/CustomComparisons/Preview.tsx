@@ -1,6 +1,6 @@
 /**
  * The preview of a comparison being edited: what it would be for the open
- * splits, segment by segment, like on the desktop.
+ * splits, segment by segment.
  *
  * - The segment time is how long each segment should take, the split time is
  *   the running total at the end of each segment.
@@ -24,15 +24,10 @@ import {
     type RunRef,
     TimingMethod,
 } from "../../../livesplit-core";
-import { Label, resolve } from "../../../localization";
-import {
-    CcLabel,
-    formatCc,
-    resolveCc,
-} from "../../../localization/custom-comparisons";
+import { Label, resolve, resolveFormat } from "../../../localization";
 import { type Block } from "./model";
 import { formatDelta, formatTime } from "./time";
-import { describeOrigin, segmentWarning } from "./describe";
+import { describeOrigin, segmentWarning, sentence } from "./describe";
 
 import classes from "../../../css/CustomComparisons.module.css";
 import tableClasses from "../../../css/Table.module.css";
@@ -96,18 +91,25 @@ export function Preview(props: PreviewProps) {
         messages.push(preview.error);
     } else if (preview !== null) {
         if (!rows.some((r) => r.segment_time !== null)) {
-            messages.push(resolveCc(CcLabel.NoTimesLeft, lang));
+            messages.push(resolve(Label.CustomComparisonsNoTimesLeft, lang));
         }
         if (goldRows > 0) {
             messages.push(
                 goldRows === 1
-                    ? resolveCc(CcLabel.FasterThanGoldWarningOne, lang)
-                    : formatCc(CcLabel.FasterThanGoldWarning, lang, goldRows),
+                    ? resolve(
+                          Label.CustomComparisonsFasterThanGoldWarningOne,
+                          lang,
+                      )
+                    : resolveFormat(
+                          Label.CustomComparisonsFasterThanGoldWarning,
+                          lang,
+                          goldRows,
+                      ),
             );
         }
         const warning = segmentWarning(props.root, run.length, lang);
         if (warning !== null) {
-            messages.push(warning + ".");
+            messages.push(sentence(warning, lang));
         }
     }
 
@@ -120,7 +122,7 @@ export function Preview(props: PreviewProps) {
     return (
         <div className={classes.preview}>
             <div className={classes.previewControls}>
-                <h2>{resolveCc(CcLabel.Preview, lang)}</h2>
+                <h2>{resolve(Label.CustomComparisonsPreview, lang)}</h2>
                 <select
                     className={classes.field}
                     value={method}
@@ -136,7 +138,7 @@ export function Preview(props: PreviewProps) {
                     </option>
                 </select>
                 <label>
-                    {resolveCc(CcLabel.DifferenceFrom, lang)}{" "}
+                    {resolve(Label.CustomComparisonsDifferenceFrom, lang)}{" "}
                     <select
                         className={classes.field}
                         value={props.compareTo}
@@ -155,9 +157,14 @@ export function Preview(props: PreviewProps) {
 
             {props.isBlockPreview && (
                 <div className={classes.blockPreviewBanner}>
-                    <span>{resolveCc(CcLabel.PreviewingBlock, lang)}</span>
+                    <span>
+                        {resolve(Label.CustomComparisonsPreviewingBlock, lang)}
+                    </span>
                     <button onClick={props.onShowWhole}>
-                        {resolveCc(CcLabel.ShowWholeComparison, lang)}
+                        {resolve(
+                            Label.CustomComparisonsShowWholeComparison,
+                            lang,
+                        )}
                     </button>
                 </div>
             )}
@@ -165,9 +172,9 @@ export function Preview(props: PreviewProps) {
             <table className={`${tableClasses.table} ${classes.previewTable}`}>
                 <thead>
                     <tr>
-                        <th>{resolveCc(CcLabel.Segment, lang)}</th>
-                        <th>{resolveCc(CcLabel.SegmentTime, lang)}</th>
-                        <th>{resolveCc(CcLabel.SplitTime, lang)}</th>
+                        <th>{resolve(Label.CustomComparisonsSegment, lang)}</th>
+                        <th>{resolve(Label.SegmentTime, lang)}</th>
+                        <th>{resolve(Label.SplitTime, lang)}</th>
                     </tr>
                 </thead>
                 <tbody className={tableClasses.tableBody}>
@@ -198,8 +205,8 @@ export function Preview(props: PreviewProps) {
                                     className={`${classes.previewRow} ${fasterThanGold ? classes.fasterThanGold : ""} ${selected ? classes.selectedRow : ""}`}
                                     title={
                                         fasterThanGold
-                                            ? resolveCc(
-                                                  CcLabel.FasterThanGold,
+                                            ? resolve(
+                                                  Label.CustomComparisonsFasterThanGold,
                                                   lang,
                                               )
                                             : undefined
@@ -233,8 +240,8 @@ export function Preview(props: PreviewProps) {
                                     <tr className={classes.originRow}>
                                         <td colSpan={3}>
                                             <strong>
-                                                {resolveCc(
-                                                    CcLabel.OriginTitle,
+                                                {resolve(
+                                                    Label.CustomComparisonsOriginTitle,
                                                     lang,
                                                 )}
                                                 :
@@ -256,8 +263,8 @@ export function Preview(props: PreviewProps) {
 
             {finish !== null && (
                 <p className={classes.previewNote}>
-                    {formatCc(
-                        CcLabel.FinishLine,
+                    {resolveFormat(
+                        Label.CustomComparisonsFinishLine,
                         lang,
                         formatTime(finish),
                         reference !== null
@@ -267,8 +274,8 @@ export function Preview(props: PreviewProps) {
                     )}
                     {sumOfBest !== null &&
                         " " +
-                            formatCc(
-                                CcLabel.FinishVsSumOfBest,
+                            resolveFormat(
+                                Label.CustomComparisonsFinishVsSumOfBest,
                                 lang,
                                 formatTime(sumOfBest),
                             )}
@@ -276,7 +283,7 @@ export function Preview(props: PreviewProps) {
             )}
             {rows.length > 0 && (
                 <p className={classes.previewHint}>
-                    {resolveCc(CcLabel.ClickRowHint, lang)}
+                    {resolve(Label.CustomComparisonsClickRowHint, lang)}
                 </p>
             )}
             <div
@@ -286,7 +293,7 @@ export function Preview(props: PreviewProps) {
             >
                 {messages.length > 0
                     ? messages.map((m, i) => <p key={i}>{m}</p>)
-                    : resolveCc(CcLabel.NoProblems, lang)}
+                    : resolve(Label.CustomComparisonsNoProblems, lang)}
             </div>
         </div>
     );
@@ -299,11 +306,11 @@ function originText(
     lang: Language | undefined,
 ): string {
     if (origin === null || root === null) {
-        return resolveCc(CcLabel.OriginEmpty, lang);
+        return resolve(Label.CustomComparisonsOriginEmpty, lang);
     }
     return (
         describeOrigin(root, origin, { lang, segmentNames }) ||
-        resolveCc(CcLabel.OriginEmpty, lang)
+        resolve(Label.CustomComparisonsOriginEmpty, lang)
     );
 }
 

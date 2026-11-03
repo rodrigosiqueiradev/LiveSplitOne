@@ -1,24 +1,18 @@
 /**
- * The list of custom comparisons stored in the selected Custom Comparisons
- * component, shown in the Layout Editor instead of the component's settings.
- * It offers the same actions as the desktop component's settings: new,
- * edit, rename, duplicate, remove, move up and down (which is the order they
+ * The runner's list of custom comparisons, one list for all their splits.
+ * It offers new, edit, rename, duplicate, remove, move up and down (which is the order they
  * are offered in), import and export as files, and copy and paste as text
  * for sharing in a chat.
  */
 
 import React, { useState } from "react";
 import {
+    CustomComparisonsEditor,
     type Language,
     type RunRef,
     type TimingMethod,
 } from "../../../livesplit-core";
-import { Label, resolve } from "../../../localization";
-import {
-    CcLabel,
-    formatCc,
-    resolveCc,
-} from "../../../localization/custom-comparisons";
+import { Label, resolve, resolveFormat } from "../../../localization";
 import { showDialog } from "../../components/Dialog";
 import {
     ContextMenu,
@@ -69,7 +63,7 @@ export function ComparisonList({
         index: number;
         position: Position;
     } | null>(null);
-    // The comparisons live in the layout, not in React's state, so the list
+    // The comparisons live in the library, not in React's state, so the list
     // is told to read them again after every change.
     const [, setVersion] = useState(0);
     const refresh = () => setVersion((v) => v + 1);
@@ -83,7 +77,7 @@ export function ComparisonList({
 
     const showError = async (message: string) => {
         await showDialog({
-            title: resolveCc(CcLabel.ErrorTitle, lang),
+            title: resolve(Label.CustomComparisonsErrorTitle, lang),
             description: message,
             buttons: [resolve(Label.Ok, lang)],
         });
@@ -91,10 +85,9 @@ export function ComparisonList({
 
     /**
      * Adds a comparison from its text. If its name is taken, the runner is
-     * asked for another one until it works or they give up, like on the
-     * desktop.
+     * asked for another one until it works or they give up.
      */
-    const addText = async (text: string) => {
+    const addText = async (text: string): Promise<boolean> => {
         let name: string | null = null;
         try {
             const json = JSON.parse(text);
@@ -108,15 +101,15 @@ export function ComparisonList({
             const error = library.write((e) => e.add(text));
             if (error !== "") {
                 await showError(error);
-                return;
+                return false;
             }
         } else {
             let newName = library.read((e) => e.suggestName(name ?? "")) ?? "";
             while (problem !== "") {
                 const [choice, input] = await showDialog({
-                    title: resolveCc(CcLabel.NameTakenTitle, lang),
-                    description: formatCc(
-                        CcLabel.NameTakenDescription,
+                    title: resolve(Label.CustomComparisonsNameTakenTitle, lang),
+                    description: resolveFormat(
+                        Label.CustomComparisonsNameTakenDescription,
                         lang,
                         problem,
                     ),
@@ -128,14 +121,15 @@ export function ComparisonList({
                     ],
                 });
                 if (choice !== 0) {
-                    return;
+                    return false;
                 }
                 newName = input;
                 problem = library.write((e) => e.addAs(text, input));
             }
         }
-        setSelected(library.read((e) => e.len() - 1) ?? 0);
+        setSelected(library.read((e) => e.len() - 1));
         refresh();
+        return true;
     };
 
     const newComparison = (templateIndex: number) => {
@@ -151,8 +145,8 @@ export function ComparisonList({
         const root = template.build(defaultGoal(personalBest, sumOfBest));
         const baseName =
             root === null
-                ? resolveCc(CcLabel.NewComparisonName, lang)
-                : capitalizeWords(resolveCc(template.title, lang));
+                ? resolve(Label.CustomComparisonsNewComparisonName, lang)
+                : capitalizeWords(resolve(template.title, lang));
         onEdit({
             index: null,
             name: library.read((e) => e.suggestName(baseName)) ?? baseName,
@@ -170,7 +164,6 @@ export function ComparisonList({
             index,
             name: document.name,
             root: document.root,
-            workspace: document.workspace,
         });
     };
 
@@ -178,8 +171,11 @@ export function ComparisonList({
         let input = name;
         while (true) {
             const [choice, typed] = await showDialog({
-                title: resolveCc(CcLabel.RenameTitle, lang),
-                description: resolveCc(CcLabel.RenameDescription, lang),
+                title: resolve(Label.CustomComparisonsRenameTitle, lang),
+                description: resolve(
+                    Label.CustomComparisonsRenameDescription,
+                    lang,
+                ),
                 textInput: true,
                 defaultText: input,
                 buttons: [resolve(Label.Ok, lang), resolve(Label.Cancel, lang)],
@@ -206,7 +202,11 @@ export function ComparisonList({
         const name =
             library.read((e) =>
                 e.suggestName(
-                    formatCc(CcLabel.CopySuffix, lang, document.name),
+                    resolveFormat(
+                        Label.CustomComparisonsCopySuffix,
+                        lang,
+                        document.name,
+                    ),
                 ),
             ) ?? document.name;
         const error = library.write((e) => e.addAs(text, name));
@@ -224,26 +224,23 @@ export function ComparisonList({
             return;
         }
         const [choice] = await showDialog({
-            title: resolveCc(CcLabel.RemoveTitle, lang),
+            title: resolve(Label.CustomComparisonsRemoveTitle, lang),
             description:
                 comparison.used_by > 0
-                    ? formatCc(
+                    ? resolveFormat(
                           comparison.used_by === 1
-                              ? CcLabel.RemoveUsedOneDescription
-                              : CcLabel.RemoveUsedDescription,
+                              ? Label.CustomComparisonsRemoveUsedOneDescription
+                              : Label.CustomComparisonsRemoveUsedDescription,
                           lang,
                           comparison.name,
                           comparison.used_by,
                       )
-                    : formatCc(
-                          CcLabel.RemoveDescription,
+                    : resolveFormat(
+                          Label.CustomComparisonsRemoveDescription,
                           lang,
                           comparison.name,
                       ),
-            buttons: [
-                resolveCc(CcLabel.Remove, lang),
-                resolve(Label.Cancel, lang),
-            ],
+            buttons: [resolve(Label.Remove, lang), resolve(Label.Cancel, lang)],
         });
         if (choice !== 0) {
             return;
@@ -267,6 +264,10 @@ export function ComparisonList({
         refresh();
     };
 
+    /**
+     * Imports comparisons from a file: a single exported comparison or a
+     * whole list exported with Export All.
+     */
     const importFile = async () => {
         const result = await openFileAsString(".json,application/json");
         if (result === undefined) {
@@ -276,7 +277,26 @@ export function ComparisonList({
             await showError(result.message);
             return;
         }
-        await addText(result[0]);
+        const [text] = result;
+        const texts = isList(text) ? readSettings(text) : null;
+        for (const comparison of texts ?? [text]) {
+            if (!(await addText(comparison))) {
+                return;
+            }
+        }
+    };
+
+    const exportAll = () => {
+        let text = library.getSettings();
+        try {
+            text = JSON.stringify(JSON.parse(text), null, 2);
+        } catch {
+            // It's exported as it is then.
+        }
+        exportFile(
+            `${resolve(Label.CustomComparisonsExportAllFileName, lang)}.json`,
+            text,
+        );
     };
 
     const exportComparison = (index: number) => {
@@ -293,9 +313,9 @@ export function ComparisonList({
         const text = library.read((e) => e.exportCompact(index));
         try {
             await navigator.clipboard.writeText(text ?? "");
-            toast.info(resolveCc(CcLabel.CopiedToClipboard, lang));
+            toast.info(resolve(Label.CustomComparisonsCopiedToClipboard, lang));
         } catch {
-            toast.error(resolveCc(CcLabel.CouldNotCopy, lang));
+            toast.error(resolve(Label.CustomComparisonsCouldNotCopy, lang));
         }
     };
 
@@ -304,8 +324,8 @@ export function ComparisonList({
         // only allow that after asking for permission, if at all. The text is
         // a single line, which fits into the dialog's text field.
         const [choice, text] = await showDialog({
-            title: resolveCc(CcLabel.PasteTitle, lang),
-            description: resolveCc(CcLabel.PasteDescription, lang),
+            title: resolve(Label.CustomComparisonsPasteTitle, lang),
+            description: resolve(Label.CustomComparisonsPasteDescription, lang),
             textInput: true,
             buttons: [resolve(Label.Ok, lang), resolve(Label.Cancel, lang)],
         });
@@ -317,7 +337,7 @@ export function ComparisonList({
     return (
         <div className={classes.list}>
             <p className={classes.listHint}>
-                {resolveCc(CcLabel.OpenEditorHint, lang)}
+                {resolve(Label.CustomComparisonsOpenEditorHint, lang)}
             </p>
             {/*
              * Only what adds comparisons is in the toolbar. What works on one
@@ -327,21 +347,25 @@ export function ComparisonList({
             <div className={classes.listToolbar}>
                 <button onClick={() => setChoosingTemplate(true)}>
                     <Plus strokeWidth={2.5} />
-                    {resolveCc(CcLabel.New, lang)}
+                    {resolve(Label.CustomComparisonsNew, lang)}
                 </button>
                 <button onClick={importFile}>
                     <Upload strokeWidth={2.5} />
-                    {resolveCc(CcLabel.Import, lang)}
+                    {resolve(Label.CustomComparisonsImport, lang)}
                 </button>
                 <button onClick={paste}>
                     <ClipboardPaste strokeWidth={2.5} />
-                    {resolveCc(CcLabel.Paste, lang)}
+                    {resolve(Label.CustomComparisonsPaste, lang)}
+                </button>
+                <button onClick={exportAll} disabled={comparisons.length === 0}>
+                    <Download strokeWidth={2.5} />
+                    {resolve(Label.CustomComparisonsExportAll, lang)}
                 </button>
             </div>
 
             {comparisons.length === 0 ? (
                 <p className={classes.listEmpty}>
-                    {resolveCc(CcLabel.NoComparisons, lang)}
+                    {resolve(Label.CustomComparisonsNoComparisons, lang)}
                 </p>
             ) : (
                 <table className={`${tableClasses.table} ${classes.listTable}`}>
@@ -362,7 +386,7 @@ export function ComparisonList({
                                     {(!c.readable || c.problem !== null) && (
                                         <div className={classes.listProblem}>
                                             {!c.readable
-                                                ? `${resolveCc(CcLabel.Unreadable, lang)}: `
+                                                ? `${resolve(Label.CustomComparisonsUnreadable, lang)}: `
                                                 : ""}
                                             {c.problem}
                                         </div>
@@ -370,12 +394,12 @@ export function ComparisonList({
                                     {c.used_by > 0 && (
                                         <div className={classes.listUsedBy}>
                                             {c.used_by === 1
-                                                ? resolveCc(
-                                                      CcLabel.UsedByOne,
+                                                ? resolve(
+                                                      Label.CustomComparisonsUsedByOne,
                                                       lang,
                                                   )
-                                                : formatCc(
-                                                      CcLabel.UsedBy,
+                                                : resolveFormat(
+                                                      Label.CustomComparisonsUsedBy,
                                                       lang,
                                                       c.used_by,
                                                   )}
@@ -385,11 +409,14 @@ export function ComparisonList({
                                 <td className={classes.listActions}>
                                     <button
                                         disabled={!c.readable}
-                                        aria-label={resolveCc(
-                                            CcLabel.Edit,
+                                        aria-label={resolve(
+                                            Label.CustomComparisonsEdit,
                                             lang,
                                         )}
-                                        title={resolveCc(CcLabel.Edit, lang)}
+                                        title={resolve(
+                                            Label.CustomComparisonsEdit,
+                                            lang,
+                                        )}
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             edit(i);
@@ -398,12 +425,12 @@ export function ComparisonList({
                                         <Pencil size={16} strokeWidth={2.5} />
                                     </button>
                                     <button
-                                        aria-label={resolveCc(
-                                            CcLabel.ComparisonMenu,
+                                        aria-label={resolve(
+                                            Label.CustomComparisonsComparisonMenu,
                                             lang,
                                         )}
-                                        title={resolveCc(
-                                            CcLabel.ComparisonMenu,
+                                        title={resolve(
+                                            Label.CustomComparisonsComparisonMenu,
                                             lang,
                                         )}
                                         onClick={(e) => {
@@ -430,7 +457,7 @@ export function ComparisonList({
                 </table>
             )}
             <p className={classes.listHint}>
-                {resolveCc(CcLabel.SaveReminder, lang)}
+                {resolve(Label.CustomComparisonsSaveReminder, lang)}
             </p>
 
             {menu !== null && (
@@ -502,42 +529,47 @@ function ComparisonMenu({
     onClose: () => void;
     actions: ComparisonActions;
 }) {
-    const item = (
-        icon: React.ReactNode,
-        label: CcLabel,
-        onClick: () => void,
-    ) => (
+    const item = (icon: React.ReactNode, label: Label, onClick: () => void) => (
         <MenuItem lang={lang} onClick={onClick}>
-            {icon} {resolveCc(label, lang)}
+            {icon} {resolve(label, lang)}
         </MenuItem>
     );
     const icon = { size: 14, strokeWidth: 2.5 };
     return (
         <ContextMenu position={position} onClose={onClose}>
-            {readable && item(<Pencil {...icon} />, CcLabel.Edit, actions.edit)}
+            {readable &&
+                item(
+                    <Pencil {...icon} />,
+                    Label.CustomComparisonsEdit,
+                    actions.edit,
+                )}
             {readable &&
                 item(
                     <TextCursorInput {...icon} />,
-                    CcLabel.Rename,
+                    Label.CustomComparisonsRename,
                     actions.rename,
                 )}
             {readable &&
-                item(<Copy {...icon} />, CcLabel.Duplicate, actions.duplicate)}
-            {!isFirst &&
-                item(<ArrowUp {...icon} />, CcLabel.MoveUp, actions.moveUp)}
-            {!isLast &&
                 item(
-                    <ArrowDown {...icon} />,
-                    CcLabel.MoveDown,
-                    actions.moveDown,
+                    <Copy {...icon} />,
+                    Label.CustomComparisonsDuplicate,
+                    actions.duplicate,
                 )}
-            {item(<Download {...icon} />, CcLabel.Export, actions.exportFile)}
+            {!isFirst &&
+                item(<ArrowUp {...icon} />, Label.MoveUp, actions.moveUp)}
+            {!isLast &&
+                item(<ArrowDown {...icon} />, Label.MoveDown, actions.moveDown)}
+            {item(
+                <Download {...icon} />,
+                Label.CustomComparisonsExport,
+                actions.exportFile,
+            )}
             {item(
                 <ClipboardCopy {...icon} />,
-                CcLabel.CopyAsText,
+                Label.CustomComparisonsCopyAsText,
                 actions.copy,
             )}
-            {item(<Trash {...icon} />, CcLabel.Remove, actions.remove)}
+            {item(<Trash {...icon} />, Label.Remove, actions.remove)}
         </ContextMenu>
     );
 }
@@ -556,11 +588,16 @@ function TemplatePicker({
             <div
                 className={classes.picker}
                 role="dialog"
-                aria-label={resolveCc(CcLabel.TemplatesTitle, lang)}
+                aria-label={resolve(
+                    Label.CustomComparisonsTemplatesTitle,
+                    lang,
+                )}
                 onClick={(e) => e.stopPropagation()}
             >
-                <h2>{resolveCc(CcLabel.TemplatesTitle, lang)}</h2>
-                <p>{resolveCc(CcLabel.TemplatesDescription, lang)}</p>
+                <h2>{resolve(Label.CustomComparisonsTemplatesTitle, lang)}</h2>
+                <p>
+                    {resolve(Label.CustomComparisonsTemplatesDescription, lang)}
+                </p>
                 <div className={classes.pickerList}>
                     {TEMPLATES.map((t, i) => (
                         <button
@@ -572,10 +609,10 @@ function TemplatePicker({
                             }}
                         >
                             <span className={classes.pickerName}>
-                                {resolveCc(t.title, lang)}
+                                {resolve(t.title, lang)}
                             </span>
                             <span className={classes.pickerTip}>
-                                {resolveCc(t.description, lang)}
+                                {resolve(t.description, lang)}
                             </span>
                         </button>
                     ))}
@@ -593,4 +630,22 @@ function capitalizeWords(text: string): string {
 /** Removes characters that file names can't have. */
 function safeFileName(name: string): string {
     return name.replace(/[\\/:*?"<>|]/g, "_").trim() || "comparison";
+}
+
+/**
+ * Whether the text is a whole list of comparisons, as exported with Export
+ * All, rather than a single comparison.
+ */
+function isList(text: string): boolean {
+    try {
+        const json = JSON.parse(text);
+        return Array.isArray(json?.comparisons);
+    } catch {
+        return false;
+    }
+}
+
+/** Reads a list of comparisons into the text of each one. */
+function readSettings(settings: string): string[] | null {
+    return CustomComparisonsEditor.readSettings(settings) as string[] | null;
 }

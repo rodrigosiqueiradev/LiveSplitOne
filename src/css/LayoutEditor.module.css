@@ -69,10 +69,3 @@
         margin-top: var(--ui-large-margin);
     }
 }
-
-.sidebarHint {
-    margin: var(--ui-margin) 0 0;
-    font-size: 14px;
-    color: var(--field-label-color);
-    text-align: center;
-}
