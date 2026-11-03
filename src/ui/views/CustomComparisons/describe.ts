@@ -1,8 +1,7 @@
 /**
  * Plain-English descriptions of comparisons, for the summary under the name
- * and for "where does this time come from" in the preview. They are a port
- * of the desktop block editor's descriptions, with the sentences moved into
- * the localization, so they read the same in both.
+ * and for "where does this time come from" in the preview. The sentences
+ * are in the localization.
  *
  * Segment numbers are shown as the run's segment names where possible,
  * since that's how the runner thinks about them.
@@ -388,8 +387,7 @@ interface SegmentSpan {
 
 /**
  * The warning for segment ranges and "reached" segments that point past the
- * end of the splits, like "Uses segment 9, but your splits have 6". It's the
- * same sentence as the desktop component shows in its settings. A range that
+ * end of the splits, like "Uses segment 9, but your splits have 6". A range that
  * still overlaps the splits reports only the end it names, a range that
  * starts past the end reports the whole range, and adjacent numbers are
  * joined. Returns null if every segment exists.

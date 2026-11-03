@@ -8,8 +8,7 @@ import { KindIcon } from "./KindIcon";
 import classes from "../../../css/CustomComparisons.module.css";
 
 /**
- * Lets the runner pick a block, grouped like the desktop block editor's
- * drawer. Every block shows its tip right under its name instead of in a
+ * Lets the runner pick a block, grouped by category. Every block shows its tip right under its name instead of in a
  * tooltip, as there are a lot of blocks, a tooltip doesn't work on touch
  * screens, and the tips are what tells the blocks apart.
  *

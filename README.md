@@ -11,6 +11,9 @@ The web version of LiveSplit One is available [here](https://one.livesplit.org/)
 
 The latest desktop version of LiveSplit One, with support for global hotkeys, can be downloaded [here](https://github.com/LiveSplit/LiveSplitOne/releases/latest).
 
+Custom comparisons, which you build yourself out of blocks, are explained in
+the [Custom Comparisons guide](docs/custom-comparisons.md).
+
 > [!NOTE]
 > This is not yet optimized for desktop usage. It's mostly the same as the web version and there is no update mechanism.
 

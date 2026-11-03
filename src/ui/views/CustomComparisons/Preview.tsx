@@ -1,6 +1,6 @@
 /**
  * The preview of a comparison being edited: what it would be for the open
- * splits, segment by segment, like on the desktop.
+ * splits, segment by segment.
  *
  * - The segment time is how long each segment should take, the split time is
  *   the running total at the end of each segment.

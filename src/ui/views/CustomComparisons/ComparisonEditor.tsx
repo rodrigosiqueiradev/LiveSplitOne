@@ -1,9 +1,8 @@
 /**
  * The editor for one custom comparison: its name, a plain-English summary of
- * what it does, its blocks and a preview, like the desktop block editor.
+ * what it does, its blocks and a preview.
  *
- * The comparison is only stored when the runner clicks Save, and then the
- * same way the desktop stores it: a new comparison is added, and a renamed
+ * The comparison is only stored when the runner clicks Save: a new comparison is added, and a renamed
  * comparison is renamed first, which updates the other comparisons that use
  * it, before its blocks are replaced. Both happen in one step, so either
  * both are stored or, if livesplit-core refuses the comparison, neither is.
@@ -51,8 +50,6 @@ export interface EditedComparison {
     index: number | null;
     name: string;
     root: Slot;
-    /** The desktop block editor's layout of the blocks, if there was one. */
-    workspace?: unknown;
 }
 
 export interface Props {
@@ -237,13 +234,7 @@ export function ComparisonEditor({
             onClose();
             return;
         }
-        // The desktop's layout of the blocks is only kept if the blocks are
-        // the same, as it would show the old blocks otherwise. Without it,
-        // the desktop lays out the blocks on its own.
-        const workspace = sameTree(root, comparison.root)
-            ? comparison.workspace
-            : undefined;
-        const text = writeComparison(name, root, workspace);
+        const text = writeComparison(name, root);
         const index = comparison.index;
         const error = library.write((e) => {
             if (index === null) {
@@ -290,7 +281,7 @@ export function ComparisonEditor({
         <div
             className={classes.editor}
             onKeyDown={(e) => {
-                // Undo and redo like on the desktop, but not while typing in
+                // Undo and redo, but not while typing in
                 // a text field, which has its own undo.
                 const target = e.target as HTMLElement;
                 if (
