@@ -57,6 +57,7 @@ interface Callbacks {
     loadDefaultLayout(): void;
     onResize(width: number, height: number): void;
     openAboutView(): void;
+    openCustomComparisons(): void;
     openLayoutEditor(): void;
     openLayoutView(): void;
     openSplitsView(): void;

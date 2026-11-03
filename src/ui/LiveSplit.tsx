@@ -43,6 +43,12 @@ import { TimerView } from "./views/TimerView";
 import { About } from "./views/About";
 import { SplitsSelection, type EditingInfo } from "./views/SplitsSelection";
 import { LayoutView } from "./views/LayoutView";
+import { CustomComparisonsView } from "./views/CustomComparisonsView";
+import {
+    NO_CUSTOM_COMPARISONS,
+    loadCustomComparisonsPlugin,
+} from "../util/CustomComparisonsPlugin";
+import { CcLabel, formatCc } from "../localization/custom-comparisons";
 import { ToastContainer, toast } from "react-toastify";
 import * as Storage from "../storage";
 import { UrlCache } from "../util/UrlCache";
@@ -103,6 +109,7 @@ export enum MenuKind {
     LayoutEditor,
     MainSettings,
     About,
+    CustomComparisons,
 }
 
 function isMenuLocked(menuKind: MenuKind) {
@@ -126,7 +133,8 @@ type Menu =
     | { kind: MenuKind.Layout }
     | { kind: MenuKind.LayoutEditor; editor: LayoutEditor }
     | { kind: MenuKind.MainSettings; config: HotkeyConfig }
-    | { kind: MenuKind.About };
+    | { kind: MenuKind.About }
+    | { kind: MenuKind.CustomComparisons };
 
 export interface Props {
     splits?: Uint8Array;
@@ -138,6 +146,7 @@ export interface Props {
     layoutHeight: number;
     generalSettings: GeneralSettings;
     splitsKey?: number;
+    customComparisons?: string;
 }
 
 export interface State {
@@ -169,6 +178,10 @@ export interface State {
     allVariables: Set<string>;
     splitsModified: boolean;
     layoutModified: boolean;
+    /** The custom comparisons, as the settings of their plugin. */
+    customComparisons: string;
+    /** Why the custom comparisons can't be calculated, if they can't. */
+    customComparisonsProblem: string | null;
 }
 
 export let hotkeySystem: Option<HotkeyImplementation> = null;
@@ -187,6 +200,7 @@ export class LiveSplit extends React.Component<Props, State> {
         const hotkeys = await Storage.loadHotkeys();
         const [layoutWidth, layoutHeight] = await Storage.loadLayoutDims();
         const generalSettings = await Storage.loadGeneralSettings();
+        const customComparisons = await Storage.loadCustomComparisons();
 
         return {
             splits,
@@ -198,6 +212,7 @@ export class LiveSplit extends React.Component<Props, State> {
             layoutWidth,
             layoutHeight,
             generalSettings,
+            customComparisons,
         };
     }
 
@@ -250,10 +265,25 @@ export class LiveSplit extends React.Component<Props, State> {
             );
         }
 
-        // The layout's custom comparisons need to be installed before the
-        // stored comparison is selected again, as the runner may have been
-        // comparing against one of them.
-        timer.setCustomComparisons(layout);
+        // The custom comparisons need to be installed before the stored
+        // comparison is selected again, as the runner may have been comparing
+        // against one of them. Before LiveSplit One kept them itself, they
+        // were stored in the layout's Custom Comparisons component, so those
+        // are taken over the first time.
+        let customComparisons: string;
+        if (props.customComparisons !== undefined) {
+            customComparisons = props.customComparisons;
+        } else {
+            customComparisons = layout.customComparisonsSettings();
+            if (customComparisons !== NO_CUSTOM_COMPARISONS) {
+                Storage.storeCustomComparisons(customComparisons);
+            }
+        }
+        const customComparisonsProblem = this.installCustomComparisons(
+            commandSink,
+            customComparisons,
+            false,
+        );
 
         if (props.comparison !== undefined) {
             timer.setCurrentComparison(props.comparison);
@@ -296,6 +326,8 @@ export class LiveSplit extends React.Component<Props, State> {
             allVariables: commandSink.getAllCustomVariables(),
             splitsModified: commandSink.hasBeenModified(),
             layoutModified: false,
+            customComparisons,
+            customComparisonsProblem,
         };
 
         window.__TAURI__?.event.listen("command", (event) => {
@@ -468,6 +500,18 @@ export class LiveSplit extends React.Component<Props, State> {
                     serverConnection={this.state.serverConnection}
                     allComparisons={this.state.allComparisons}
                     allVariables={this.state.allVariables}
+                />
+            );
+        } else if (this.state.menu.kind === MenuKind.CustomComparisons) {
+            view = (
+                <CustomComparisonsView
+                    settings={this.state.customComparisons}
+                    onChange={(settings) => this.setCustomComparisons(settings)}
+                    problem={this.state.customComparisonsProblem}
+                    commandSink={this.state.commandSink}
+                    allComparisons={this.state.allComparisons}
+                    generalSettings={this.state.generalSettings}
+                    callbacks={this}
                 />
             );
         } else if (this.state.menu.kind === MenuKind.About) {
@@ -647,6 +691,45 @@ export class LiveSplit extends React.Component<Props, State> {
 
     public openAboutView() {
         this.changeMenu({ kind: MenuKind.About });
+    }
+
+    public openCustomComparisons() {
+        this.changeMenu({ kind: MenuKind.CustomComparisons });
+    }
+
+    /**
+     * Loads the plugin with these custom comparisons and installs it.
+     * Returns why it can't be loaded, if it can't.
+     */
+    private installCustomComparisons(
+        commandSink: LSOCommandSink,
+        settings: string,
+        notify: boolean,
+    ): string | null {
+        const plugin = loadCustomComparisonsPlugin(settings);
+        if (typeof plugin === "string") {
+            commandSink.setCustomComparisons(null, notify);
+            return formatCc(
+                CcLabel.PluginUnavailable,
+                this.props.generalSettings.lang,
+                plugin,
+            );
+        }
+        commandSink.setCustomComparisons(plugin, notify);
+        return null;
+    }
+
+    private setCustomComparisons(settings: string) {
+        Storage.storeCustomComparisons(settings);
+        const problem = this.installCustomComparisons(
+            this.state.commandSink,
+            settings,
+            true,
+        );
+        this.setState({
+            customComparisons: settings,
+            customComparisonsProblem: problem,
+        });
     }
 
     private lockTimerInteraction() {
@@ -991,7 +1074,6 @@ export class LiveSplit extends React.Component<Props, State> {
 
     private setLayout(layout: Layout) {
         this.state.layout[Symbol.dispose]();
-        this.state.commandSink.setCustomComparisons(layout);
         this.setState(
             {
                 layout,
@@ -1159,12 +1241,6 @@ export class LiveSplit extends React.Component<Props, State> {
                 allVariables: this.state.commandSink.getAllCustomVariables(),
             });
         }
-    }
-
-    customComparisonsLayout(): Layout | null {
-        // The command sink is created in the constructor before the state
-        // exists. The constructor installs the custom comparisons itself.
-        return this.state?.layout ?? null;
     }
 
     runNotModifiedAnymore(): void {

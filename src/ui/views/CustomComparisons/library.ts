@@ -1,22 +1,20 @@
 /**
- * Access to the custom comparisons stored in the Custom Comparisons component
- * that is selected in the Layout Editor.
+ * Access to the runner's custom comparisons: one list for all their splits,
+ * kept by LiveSplit One as the settings of the Custom Comparisons plugin.
  *
  * livesplit-core's Custom Comparisons Editor holds the rules for the list of
  * comparisons (unique names, renames that update the comparisons using the
  * renamed one, unreadable comparisons kept as they are, ...). It's created
- * from the selected component and stores the comparisons back into it when
- * it's closed.
+ * from the settings and turns back into settings when it's closed.
  *
  * Instead of keeping one open while the list is shown, every action opens a
- * new one, applies the change and closes it right away, which stores the
- * result in the component. That keeps the component the only place the
- * comparisons live in, so nothing is lost when the runner selects another
- * component or closes the Layout Editor, and no wasm object can be leaked by
- * React unmounting the list at the wrong time. Opening one is cheap: it only
- * reads the few comparisons of the component. If an action fails, the
- * editor is dropped instead of closed, so a failed action never changes
- * anything, even if it consists of several steps.
+ * new one, applies the change and closes it right away, which hands the new
+ * settings to `onChange`. That keeps the settings the only place the
+ * comparisons live in, and no wasm object can be leaked by React unmounting
+ * the list at the wrong time. Opening one is cheap: it only reads the
+ * comparisons. If an action fails, the editor is dropped instead of closed,
+ * so a failed action never changes anything, even if it consists of several
+ * steps.
  */
 
 import {
@@ -24,63 +22,65 @@ import {
     type CustomComparisonsEditorRefMut,
     type CustomComparisonsEditorStateJson,
     type CustomComparisonPreviewJson,
-    type LayoutEditorRefMut,
     type RunRef,
     type TimingMethod,
 } from "../../../livesplit-core";
 
 export class ComparisonLibrary {
     constructor(
-        private layoutEditor: LayoutEditorRefMut,
+        private settings: string,
         private run: RunRef,
+        private onChange: (settings: string) => void,
     ) {}
 
-    /**
-     * Whether the selected component is a Custom Comparisons component. The
-     * Layout Editor's state doesn't say which kind of component is selected,
-     * but livesplit-core only opens the editor for this one.
-     */
-    public isSelected(): boolean {
-        return this.read(() => true) ?? false;
+    /** The comparisons, as the settings of the Custom Comparisons plugin. */
+    public getSettings(): string {
+        return this.settings;
     }
 
-    /**
-     * Reads from the comparisons. Returns null if the selected component
-     * isn't a Custom Comparisons component.
-     */
-    public read<T>(f: (editor: CustomComparisonsEditorRefMut) => T): T | null {
-        using editor = CustomComparisonsEditor.new(this.layoutEditor, this.run);
-        if (editor === null) {
-            return null;
-        }
+    /** Reads from the comparisons. */
+    public read<T>(f: (editor: CustomComparisonsEditorRefMut) => T): T {
+        using editor = this.open();
         return f(editor);
     }
 
     /**
      * Changes the comparisons. The change returns an error message for the
      * runner, or an empty string if it worked, like livesplit-core's
-     * functions do. Only a change that worked is stored.
+     * functions do. Only a change that worked is kept.
      */
     public write(f: (editor: CustomComparisonsEditorRefMut) => string): string {
-        using editor = CustomComparisonsEditor.new(this.layoutEditor, this.run);
-        if (editor === null) {
-            return "";
-        }
+        using editor = this.open();
         const error = f(editor);
         if (error === "") {
-            // Closing stores the comparisons and disposes the editor, so the
-            // `using` above has nothing left to dispose.
-            editor.close(this.layoutEditor);
+            // Turning it into settings disposes the editor, so the `using`
+            // above has nothing left to dispose.
+            this.settings = editor.intoSettings();
+            this.onChange(this.settings);
         }
         return error;
     }
 
+    private open(): CustomComparisonsEditor {
+        const editor = CustomComparisonsEditor.fromSettings(
+            this.settings,
+            this.run,
+        );
+        if (editor === null) {
+            // The settings are only ever written by livesplit-core, so this
+            // means they were damaged. Starting over beats being stuck.
+            this.settings = '{"comparisons":[]}';
+            return CustomComparisonsEditor.fromSettings(
+                this.settings,
+                this.run,
+            )!;
+        }
+        return editor;
+    }
+
     public state(): CustomComparisonsEditorStateJson {
-        return (
-            this.read(
-                (e) =>
-                    e.stateAsJson(this.run) as CustomComparisonsEditorStateJson,
-            ) ?? { comparisons: [] }
+        return this.read(
+            (e) => e.stateAsJson(this.run) as CustomComparisonsEditorStateJson,
         );
     }
 
@@ -92,7 +92,7 @@ export class ComparisonLibrary {
         text: string,
         index: number | null,
         method: TimingMethod,
-    ): CustomComparisonPreviewJson | null {
+    ): CustomComparisonPreviewJson {
         return this.read(
             (e) =>
                 e.previewAsJson(

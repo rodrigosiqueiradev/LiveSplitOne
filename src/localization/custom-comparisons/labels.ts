@@ -27,6 +27,14 @@ export enum CcLabel {
     RailHint,
     DragBlock,
     OpenEditorHint,
+    SidebarButton,
+    ViewTitle,
+    Back,
+    ExportAll,
+    ExportAllFileName,
+    LayoutUnreadable,
+    LayoutHasNoComparisons,
+    PluginUnavailable,
 
     // The list of comparisons.
     ListHeading,

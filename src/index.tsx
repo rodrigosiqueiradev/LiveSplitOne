@@ -21,6 +21,7 @@ try {
         layoutWidth,
         layoutHeight,
         generalSettings,
+        customComparisons,
     } = await LiveSplit.loadStoredData();
 
     async function requestWakeLock() {
@@ -64,6 +65,7 @@ try {
             timingMethod={timingMethod}
             {...(hotkeys === undefined ? {} : { hotkeys })}
             {...(splitsKey === undefined ? {} : { splitsKey })}
+            {...(customComparisons === undefined ? {} : { customComparisons })}
             layoutWidth={layoutWidth}
             layoutHeight={layoutHeight}
             generalSettings={generalSettings}

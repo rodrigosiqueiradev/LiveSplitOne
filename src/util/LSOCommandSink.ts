@@ -3,11 +3,11 @@ import {
     type CommandResult,
     CommandSink,
     type CommandSinkRef,
+    ComparisonPlugin,
     Event,
     type ImageCacheRefMut,
     type Language,
     type LayoutEditorRefMut,
-    type LayoutRef,
     type LayoutRefMut,
     type LayoutStateRefMut,
     type Run,
@@ -23,18 +23,12 @@ import { WebCommandSink } from "../livesplit-core/livesplit_core";
 import { assert } from "./OptionUtil";
 import { showDialog } from "../ui/components/Dialog";
 import { Label, orAutoLang, resolve } from "../localization";
+import { CUSTOM_COMPARISONS_PLUGIN_ID } from "./CustomComparisonsPlugin";
 
 interface Callbacks {
     handleEvent(event: Event): void;
     runChanged(): void;
     runNotModifiedAnymore(): void;
-    /**
-     * The layout whose Custom Comparisons components provide the custom
-     * comparisons to install on every run the timer gets. This is null while
-     * the layout isn't known yet, which is only the case while LiveSplit One
-     * starts up. It then installs them itself once the layout is loaded.
-     */
-    customComparisonsLayout(): LayoutRef | null;
     encounteredCustomVariable(name: string): void;
     getLang(): Language | undefined;
 }
@@ -47,6 +41,9 @@ export class LSOCommandSink {
     // Multiple of these conditions can be true at the same time, so we count
     // them.
     private locked = 0;
+    // The plugin with the runner's custom comparisons. It's installed on
+    // every run the timer gets.
+    private customComparisons: ComparisonPlugin | null = null;
 
     constructor(
         private timer: Timer,
@@ -58,6 +55,7 @@ export class LSOCommandSink {
     }
 
     public [Symbol.dispose](): void {
+        this.customComparisons?.[Symbol.dispose]();
         this.commandSink[Symbol.dispose]();
         this.timer[Symbol.dispose]();
     }
@@ -398,17 +396,14 @@ export class LSOCommandSink {
     public setRun(run: Run): Run | null {
         const result = this.timer.setRun(run);
 
-        // The custom comparisons are stored in the layout, not in the splits,
-        // just like in the desktop LiveSplit. A new run only has the
-        // comparisons stored in its splits and the built-in ones, so the
-        // layout's custom comparisons need to be installed on it again.
-        // Installing them here, rather than at every place that loads splits,
-        // means no way of changing the run can forget about them.
-        if (result === null) {
-            const layout = this.callbacks.customComparisonsLayout();
-            if (layout !== null) {
-                this.timer.setCustomComparisons(layout);
-            }
+        // The custom comparisons aren't stored in the splits but in LiveSplit
+        // One, as one list for all splits. A new run only has the comparisons
+        // stored in its splits and the built-in ones, so they need to be
+        // installed on it again. Installing them here, rather than at every
+        // place that loads splits, means no way of changing the run can
+        // forget about them.
+        if (result === null && this.customComparisons !== null) {
+            this.customComparisons.install(this.timer);
         }
 
         this.callbacks.runChanged();
@@ -417,20 +412,33 @@ export class LSOCommandSink {
     }
 
     /**
-     * Installs the custom comparisons stored in the layout on the run,
-     * replacing the ones installed before. This needs to be called whenever
-     * the layout changes. Changes of the run are handled by `setRun`. If the
-     * current comparison was a custom comparison that no longer exists, the
-     * timer switches to the Personal Best.
+     * Installs the plugin with the runner's custom comparisons on the run,
+     * replacing the ones installed before, and keeps it for every run the
+     * timer gets from now on. The command sink takes ownership of the plugin.
+     * `null` removes the custom comparisons. If the current comparison was a
+     * custom comparison that no longer exists, the timer switches to the
+     * Personal Best.
      *
      * A custom comparison named like a comparison stored in the splits isn't
      * installed, like in the desktop LiveSplit. The Custom Comparisons editor
      * shows that problem next to the comparison, so the names that were left
-     * out aren't reported here.
+     * out aren't reported here. `notify` is false only while LiveSplit One
+     * starts up, before anything could be told about the change.
      */
-    public setCustomComparisons(layout: LayoutRef): void {
-        this.timer.setCustomComparisons(layout);
-        this.callbacks.runChanged();
+    public setCustomComparisons(
+        plugin: ComparisonPlugin | null,
+        notify: boolean = true,
+    ): void {
+        this.customComparisons?.[Symbol.dispose]();
+        this.customComparisons = plugin;
+        if (plugin !== null) {
+            plugin.install(this.timer);
+        } else {
+            ComparisonPlugin.uninstall(CUSTOM_COMPARISONS_PLUGIN_ID, this.timer);
+        }
+        if (notify) {
+            this.callbacks.runChanged();
+        }
     }
 
     public hasBeenModified(): boolean {
