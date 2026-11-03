@@ -6,10 +6,6 @@ filled from my PB". Once saved, they show up next to the Personal Best, Best
 Segments and the other comparisons, and every component that works with a
 comparison works with them.
 
-They use the same file format as the desktop LiveSplit component *Custom
-Comparisons*, so a comparison made in one opens in the other and gives the
-same times.
-
 This guide is for runners. How the feature is built is described in
 livesplit-core's [`CUSTOM-COMPARISONS.md`](https://github.com/rodrigosiqueiradev/livesplit-core/blob/comparison-plugins/CUSTOM-COMPARISONS.md).
 
@@ -24,9 +20,8 @@ livesplit-core's [`CUSTOM-COMPARISONS.md`](https://github.com/rodrigosiqueiradev
 7. [Every block](#7-every-block)
 8. [The preview](#8-the-preview)
 9. [Import, export and sharing](#9-import-export-and-sharing)
-10. [Coming from the desktop LiveSplit or an older LiveSplit One](#10-coming-from-the-desktop-livesplit-or-an-older-livesplit-one)
-11. [Rules worth knowing](#11-rules-worth-knowing)
-12. [Troubleshooting](#12-troubleshooting)
+10. [Rules worth knowing](#10-rules-worth-knowing)
+11. [Troubleshooting](#11-troubleshooting)
 
 ## 1. Where to find them
 
@@ -124,12 +119,11 @@ Below a comparison's name you may see:
 A name has to be unique (ignoring upper and lower case), at most 64
 characters, can't start with `[Race]`, and can't be one of LiveSplit's own
 comparisons: Personal Best, None, Best Segments, Best Split Times, Average
-Segments, Median Segments, Worst Segments, Balanced PB, Latest Run, and Golf
-HCP (which the desktop LiveSplit has).
+Segments, Median Segments, Worst Segments, Balanced PB and Latest Run.
 
 A custom comparison named like a comparison stored in the splits you have
 open (say, a "World Record" you typed into the Splits Editor) isn't added to
-those splits, just like on the desktop. The list shows that problem next to
+those splits. The list shows that problem next to
 it. It still works with other splits that don't have such a comparison.
 
 ## 5. The block editor
@@ -210,58 +204,57 @@ at the very end.
 ## 7. Every block
 
 Blocks are grouped the way the picker shows them. The block's text is what
-you see in the editor. The version is the file format version that
-introduced the block (see [section 11](#11-rules-worth-knowing)).
+you see in the editor.
 
 ### Sources: where the times come from
 
-| Block | Gives | What it does | Version |
-| --- | --- | --- | --- |
-| **all my times for each segment** | list | Every time you've recorded for each segment. Skipped segments, and the combined segment right after a skip, are left out. | 1 |
-| **comparison** *name* | one time | An existing comparison, segment by segment: your PB, a built-in one like Best Segments (your golds), one stored in your splits like a World Record, or another custom comparison. Built-ins work even if they're switched off. | 1 |
-| **attempt #** *number* | one time | The segments of one past attempt, by its number in the attempt history. Empty where that run skipped a split or reset. | 3 |
-| **my best run from the last** *N* **days** | one time | The segments of your fastest finished run from the last N days: a "recent PB" that moves as you play. Empty if no run finished in that time. | 4 |
+| Block | Gives | What it does |
+| --- | --- | --- |
+| **all my times for each segment** | list | Every time you've recorded for each segment. Skipped segments, and the combined segment right after a skip, are left out. |
+| **comparison** *name* | one time | An existing comparison, segment by segment: your PB, a built-in one like Best Segments (your golds), one stored in your splits like a World Record, or another custom comparison. Built-ins work even if they're switched off. |
+| **attempt #** *number* | one time | The segments of one past attempt, by its number in the attempt history. Empty where that run skipped a split or reset. |
+| **my best run from the last** *N* **days** | one time | The segments of your fastest finished run from the last N days: a "recent PB" that moves as you play. Empty if no run finished in that time. |
 
 ### Filters: which runs count (list in, list out)
 
-| Block | What it does | Version |
-| --- | --- | --- |
-| **last** *N* **times of** | Keeps the N most recent times of each segment. Counts times that segment was completed, not attempts. | 1 |
-| **from completed runs only** | Keeps only times from attempts that finished the whole run. | 1 |
-| **from the last** *N* **days** | Keeps only times from attempts that ended in the last N days, so old times stop counting. Attempts without a date are left out. | 2 |
-| **drop the fastest and slowest** *P* **% of** | Drops that share (up to 45 %) of each segment's fastest and slowest times, to remove flukes. Rounded down, so with few times nothing is dropped. The remaining times stay in order, so a "last N" around it still means the most recent ones. | 3 |
-| **from runs that finished under** *time* | Keeps only times from runs that finished faster than this, so only your good runs count. | 3 |
-| **only if there are at least** *N* **times in** | Makes a segment empty if it has fewer than N times, so you can fill it with "if empty, use" instead of trusting too little data. | 3 |
-| **from runs that reached** *segment* | Keeps only times from attempts that got at least as far as this segment (a time for it, or a skip). Like "completed runs only", for games where most runs reset early. | 4 |
+| Block | What it does |
+| --- | --- |
+| **last** *N* **times of** | Keeps the N most recent times of each segment. Counts times that segment was completed, not attempts. |
+| **from completed runs only** | Keeps only times from attempts that finished the whole run. |
+| **from the last** *N* **days** | Keeps only times from attempts that ended in the last N days, so old times stop counting. Attempts without a date are left out. |
+| **drop the fastest and slowest** *P* **% of** | Drops that share (up to 45 %) of each segment's fastest and slowest times, to remove flukes. Rounded down, so with few times nothing is dropped. The remaining times stay in order, so a "last N" around it still means the most recent ones. |
+| **from runs that finished under** *time* | Keeps only times from runs that finished faster than this, so only your good runs count. |
+| **only if there are at least** *N* **times in** | Makes a segment empty if it has fewer than N times, so you can fill it with "if empty, use" instead of trusting too little data. |
+| **from runs that reached** *segment* | Keeps only times from attempts that got at least as far as this segment (a time for it, or a skip). Like "completed runs only", for games where most runs reset early. |
 
 ### Aggregates: a list into one time
 
 A segment without any times stays empty.
 
-| Block | What it does | Version |
-| --- | --- | --- |
-| **median / average / best (min) / worst (max) of** | The middle, mean, fastest or slowest time. For an even number of times, the median is the mean of the two middle ones. | 1 |
-| **percentile** *P* **of** | 0 is your fastest time, 100 your slowest and 50 the median, interpolating between neighbouring times. 70 means: you beat this about 70 % of the time. | 2 |
-| **recent-weighted average of** … **weight halves every** *N* **older times** | An average where recent times count more. The newest time counts fully, one N times older counts half, 2N times older a quarter, and so on. | 4 |
+| Block | What it does |
+| --- | --- |
+| **median / average / best (min) / worst (max) of** | The middle, mean, fastest or slowest time. For an even number of times, the median is the mean of the two middle ones. |
+| **percentile** *P* **of** | 0 is your fastest time, 100 your slowest and 50 the median, interpolating between neighbouring times. 70 means: you beat this about 70 % of the time. |
+| **recent-weighted average of** … **weight halves every** *N* **older times** | An average where recent times count more. The newest time counts fully, one N times older counts half, 2N times older a quarter, and so on. |
 
 ### Math: adjust one time per segment
 
-| Block | What it does | Version |
-| --- | --- | --- |
-| **add** *S* **s per segment to** | Adds (or, if negative, removes) up to an hour from every segment. Never goes below zero. | 1 |
-| *P* **% of** | Scales every segment (1 % to 1000 %). 103 % is 3 % slower, 97 % is 3 % faster. | 1 |
-| **stretch to finish in** *time* | Scales every segment by the same amount so the whole run adds up to exactly the goal time. If any segment is empty the whole result is empty, so fill gaps first. | 2 |
-| **round to** *step* | Rounds every segment to the nearest step (like 0.1 s or 1 s; halves round up), so the split times are tidy too. | 4 |
+| Block | What it does |
+| --- | --- |
+| **add** *S* **s per segment to** | Adds (or, if negative, removes) up to an hour from every segment. Never goes below zero. |
+| *P* **% of** | Scales every segment (1 % to 1000 %). 103 % is 3 % slower, 97 % is 3 % faster. |
+| **stretch to finish in** *time* | Scales every segment by the same amount so the whole run adds up to exactly the goal time. If any segment is empty the whole result is empty, so fill gaps first. |
+| **round to** *step* | Rounds every segment to the nearest step (like 0.1 s or 1 s; halves round up), so the split times are tidy too. |
 
 ### Control: combine rules
 
-| Block | What it does | Version |
-| --- | --- | --- |
-| **use** … **if empty, use** … | Uses the first rule, and fills only the segments it leaves empty from the second one. | 1 |
-| **for segments … use … otherwise …** | Different rules for different ranges of segments. Add as many ranges as you need (up to 100); the first range that contains a segment wins, and "otherwise" covers the rest. | 1 |
-| *P* **% of the way from** … **to** … | Mixes two rules per segment. 0 % is all the first, 100 % all the second. Empty where either side is empty. | 2 |
-| **the slower / faster of** … **and** … | Per segment, whichever of the two is slower (or faster). If one has no time for a segment, the other is used. Ties go to the first. | 2 |
-| **keep** … **never faster than** … **never slower than** … | Holds each segment between two limits, like never faster than your golds and never slower than your PB. A limit that has no time for a segment doesn't apply there. If the limits cross, "never faster than" wins. | 4 |
+| Block | What it does |
+| --- | --- |
+| **use** … **if empty, use** … | Uses the first rule, and fills only the segments it leaves empty from the second one. |
+| **for segments … use … otherwise …** | Different rules for different ranges of segments. Add as many ranges as you need (up to 100); the first range that contains a segment wins, and "otherwise" covers the rest. |
+| *P* **% of the way from** … **to** … | Mixes two rules per segment. 0 % is all the first, 100 % all the second. Empty where either side is empty. |
+| **the slower / faster of** … **and** … | Per segment, whichever of the two is slower (or faster). If one has no time for a segment, the other is used. Ties go to the first. |
+| **keep** … **never faster than** … **never slower than** … | Holds each segment between two limits, like never faster than your golds and never slower than your PB. A limit that has no time for a segment doesn't apply there. If the limits cross, "never faster than" wins. |
 
 ## 8. The preview
 
@@ -296,19 +289,18 @@ slots.
 - **Export All…** saves your whole list as `Custom Comparisons.json`. This is
   the file to keep as a backup or to move your comparisons to another device.
 - **Export…** in a comparison's ⋮ menu saves just that one, as
-  `<name>.json`. The desktop LiveSplit can import this file too.
+  `<name>.json`.
 - **Copy as Text** copies one comparison as a single line, which survives
   being pasted into Discord or a forum post.
 
 ### Import
 
-**Import…** accepts three kinds of files:
+**Import…** accepts two kinds of `.json` files:
 
 | File | What is added |
 | --- | --- |
 | A list made with **Export All** (`{"comparisons": [...]}`) | Every comparison in it. |
-| A single comparison (`.json`), from LiveSplit One or the desktop LiveSplit | That comparison. |
-| A desktop LiveSplit layout (`.lsl`) with the Custom Comparisons component | Every comparison stored in that component (in all of them, if the layout has more than one). |
+| A single comparison made with **Export…** | That comparison. |
 
 **Paste…** adds a single comparison from text.
 
@@ -318,42 +310,9 @@ suggested). Cancel to stop importing the rest of the file.
 
 A comparison that can't be read (made with a newer version, say) is rejected
 with a message that says exactly where the problem is, like
-`root.source.count: must be a whole number from 1 to 10000.` An `.lsl` file
-without custom comparisons, or one that isn't a layout, is reported as such.
+`root.source.count: must be a whole number from 1 to 10000.`
 
-## 10. Coming from the desktop LiveSplit or an older LiveSplit One
-
-### From the desktop LiveSplit
-
-On the desktop, custom comparisons live in the layout's Custom Comparisons
-component. To bring them over, either:
-
-- import your `.lsl` layout file with **Import…** in Custom Comparisons, or
-- export each comparison on the desktop and import the `.json` files.
-
-Importing an `.lsl` there doesn't change your LiveSplit One layout; only the
-custom comparisons are taken. The desktop editor's block positions are kept
-in the file, so a comparison you don't change opens on the desktop exactly as
-it was. Once you change a comparison's blocks in LiveSplit One, the desktop
-editor arranges them itself.
-
-### From an older LiveSplit One build with the Custom Comparisons component
-
-Earlier builds of this feature kept custom comparisons in a Custom
-Comparisons layout component. That component no longer exists. Nothing is
-lost:
-
-- The first time LiveSplit One starts with a stored layout that still has
-  the component, its comparisons become your list, and the component is
-  taken out of the layout. This only happens if you don't have a list yet.
-- Importing a LiveSplit One layout (`.ls1l`) that has the component works
-  too: the component is left out, so the layout loads. To get its
-  comparisons, import its exported list or the single comparisons.
-
-## 11. Rules worth knowing
-
-These rules are the same as on the desktop, so a comparison gives the same
-times in both:
+## 10. Rules worth knowing
 
 - **Nothing is made up.** An empty segment stays empty unless "if empty,
   use" fills it. Once a segment is empty, every later split time is empty
@@ -369,12 +328,11 @@ times in both:
   error and leaves the comparisons involved empty.
 - **A broken comparison never affects the timer.** If a comparison can't be
   calculated, it's simply empty.
-- **File versions.** A comparison is saved with the lowest format version
-  that has all its blocks (see the tables above), so comparisons that don't
-  use newer blocks still open in older releases of the desktop component.
-  LiveSplit One reads versions 1 to 4.
+- **File versions.** Exported comparisons carry a format version. A
+  comparison made with a newer version of LiveSplit One than yours is
+  refused with a message asking you to update, instead of being misread.
 
-## 12. Troubleshooting
+## 11. Troubleshooting
 
 **My comparison isn't listed under Compare Against.**
 Look at the list in Custom Comparisons. A problem under its name says why:

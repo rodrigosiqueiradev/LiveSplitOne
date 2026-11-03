@@ -420,9 +420,9 @@ export class LSOCommandSink {
      * Personal Best.
      *
      * A custom comparison named like a comparison stored in the splits isn't
-     * installed, like in the desktop LiveSplit. The Custom Comparisons editor
-     * shows that problem next to the comparison, so the names that were left
-     * out aren't reported here. `notify` is false only while LiveSplit One
+     * installed. The Custom Comparisons editor shows that problem next to the
+     * comparison, so the names that were left out aren't reported here.
+     * `notify` is false only while LiveSplit One
      * starts up, before anything could be told about the change.
      */
     public setCustomComparisons(

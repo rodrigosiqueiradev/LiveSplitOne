@@ -4,8 +4,7 @@ import { type Kind } from "./model";
 import classes from "../../../css/CustomComparisons.module.css";
 
 /**
- * The shape that tells the two kinds of blocks apart, like the shapes of the
- * desktop block editor's connectors: a hexagon for a list of times for each
+ * The shape that tells the two kinds of blocks apart: a hexagon for a list of times for each
  * segment, a rounded bar for one time for each segment. A block only fits a
  * slot with the same shape.
  */

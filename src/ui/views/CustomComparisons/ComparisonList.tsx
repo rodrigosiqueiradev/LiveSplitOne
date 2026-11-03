@@ -1,7 +1,6 @@
 /**
  * The runner's list of custom comparisons, one list for all their splits.
- * It offers the same actions as the desktop component's settings: new,
- * edit, rename, duplicate, remove, move up and down (which is the order they
+ * It offers new, edit, rename, duplicate, remove, move up and down (which is the order they
  * are offered in), import and export as files, and copy and paste as text
  * for sharing in a chat.
  */
@@ -91,8 +90,7 @@ export function ComparisonList({
 
     /**
      * Adds a comparison from its text. If its name is taken, the runner is
-     * asked for another one until it works or they give up, like on the
-     * desktop.
+     * asked for another one until it works or they give up.
      */
     const addText = async (text: string): Promise<boolean> => {
         let name: string | null = null;
@@ -171,7 +169,6 @@ export function ComparisonList({
             index,
             name: document.name,
             root: document.root,
-            workspace: document.workspace,
         });
     };
 
@@ -269,15 +266,11 @@ export function ComparisonList({
     };
 
     /**
-     * Imports comparisons from a file: a single comparison exported by
-     * LiveSplit One or the desktop LiveSplit, a whole list exported with
-     * Export All, or a desktop LiveSplit layout (.lsl) with the Custom
-     * Comparisons component.
+     * Imports comparisons from a file: a single exported comparison or a
+     * whole list exported with Export All.
      */
     const importFile = async () => {
-        const result = await openFileAsString(
-            ".json,.lsl,application/json,application/xml",
-        );
+        const result = await openFileAsString(".json,application/json");
         if (result === undefined) {
             return;
         }
@@ -285,24 +278,8 @@ export function ComparisonList({
             await showError(result.message);
             return;
         }
-        const [text, file] = result;
-        let texts: string[] | null = null;
-        if (file.name.toLowerCase().endsWith(".lsl")) {
-            const settings = CustomComparisonsEditor.readLayout(text);
-            if (settings === "") {
-                await showError(resolveCc(CcLabel.LayoutUnreadable, lang));
-                return;
-            }
-            texts = readSettings(settings);
-            if (texts === null || texts.length === 0) {
-                await showError(
-                    resolveCc(CcLabel.LayoutHasNoComparisons, lang),
-                );
-                return;
-            }
-        } else if (isList(text)) {
-            texts = readSettings(text);
-        }
+        const [text] = result;
+        const texts = isList(text) ? readSettings(text) : null;
         for (const comparison of texts ?? [text]) {
             if (!(await addText(comparison))) {
                 return;

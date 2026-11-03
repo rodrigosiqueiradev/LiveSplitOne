@@ -1,6 +1,5 @@
 /**
- * The starting points offered when making a new comparison. They are the
- * same as in the desktop block editor.
+ * The starting points offered when making a new comparison.
  */
 
 import { CcLabel } from "../../../localization/custom-comparisons";
@@ -117,7 +116,7 @@ export const TEMPLATES: Template[] = [
  * The goal time "Goal pace" starts with: just under the PB, rounded down to
  * 10 seconds, but never faster than the sum of best, so a new comparison
  * doesn't start out with segments faster than the golds. Without a PB it's
- * 20 minutes, like on the desktop.
+ * 20 minutes.
  */
 export function defaultGoal(
     personalBest: number | null,

@@ -46,7 +46,6 @@ import { LayoutView } from "./views/LayoutView";
 import { CustomComparisonsView } from "./views/CustomComparisonsView";
 import {
     NO_CUSTOM_COMPARISONS,
-    takeCustomComparisonsOutOfLayout,
     loadCustomComparisonsPlugin,
 } from "../util/CustomComparisonsPlugin";
 import { CcLabel, formatCc } from "../localization/custom-comparisons";
@@ -252,13 +251,10 @@ export class LiveSplit extends React.Component<Props, State> {
         }
 
         let layout: Option<Layout> = null;
-        let layoutComparisons: string | undefined;
         try {
             const data = props.layout;
             if (data !== undefined) {
-                const taken = takeCustomComparisonsOutOfLayout(data);
-                layoutComparisons = taken.customComparisons;
-                layout = Layout.parseJson(taken.layout);
+                layout = Layout.parseJson(data);
             }
         } catch (_) {
             /* Looks like the storage has no valid data */
@@ -271,18 +267,9 @@ export class LiveSplit extends React.Component<Props, State> {
 
         // The custom comparisons need to be installed before the stored
         // comparison is selected again, as the runner may have been comparing
-        // against one of them. Before LiveSplit One kept them itself, they
-        // were stored in the layout's Custom Comparisons component, so those
-        // are taken over the first time.
-        let customComparisons: string;
-        if (props.customComparisons !== undefined) {
-            customComparisons = props.customComparisons;
-        } else if (layoutComparisons !== undefined) {
-            customComparisons = layoutComparisons;
-            Storage.storeCustomComparisons(customComparisons);
-        } else {
-            customComparisons = NO_CUSTOM_COMPARISONS;
-        }
+        // against one of them.
+        const customComparisons =
+            props.customComparisons ?? NO_CUSTOM_COMPARISONS;
         const customComparisonsProblem = this.installCustomComparisons(
             commandSink,
             customComparisons,
@@ -1057,9 +1044,7 @@ export class LiveSplit extends React.Component<Props, State> {
     private importLayoutFromString(file: string) {
         let layout = null;
         try {
-            layout = Layout.parseJson(
-                takeCustomComparisonsOutOfLayout(JSON.parse(file)).layout,
-            );
+            layout = Layout.parseJson(JSON.parse(file));
         } catch (_) {
             /* Failed to load the layout */
         }

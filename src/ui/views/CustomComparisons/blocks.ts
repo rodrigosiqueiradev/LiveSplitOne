@@ -67,8 +67,6 @@ export interface BlockSpec {
     tip: CcLabel;
     fields: FieldSpec[];
     slots: SlotSpec[];
-    /** The format version that introduced the block, see `requiredVersion`. */
-    version: number;
 }
 
 /** The largest segment number a range or "reached segment" can name. */
@@ -81,8 +79,8 @@ const source = (kind: Kind, label?: CcLabel): SlotSpec => ({
 });
 
 /**
- * Every block, in the order they are offered. The keys, limits and defaults
- * match the desktop block editor, so a comparison behaves the same in both.
+ * Every block, in the order they are offered. The keys and limits match
+ * livesplit-core's custom comparison format.
  * The segment range block isn't listed: its ranges are a list, so the block
  * editor handles it on its own (see `RANGE`).
  */
@@ -96,7 +94,6 @@ export const BLOCKS: BlockSpec[] = [
         tip: CcLabel.BlockSegmentHistoryTip,
         fields: [],
         slots: [],
-        version: 1,
     },
     {
         type: "comparison",
@@ -106,7 +103,6 @@ export const BLOCKS: BlockSpec[] = [
         tip: CcLabel.BlockComparisonTip,
         fields: [{ key: "name", type: "comparison", default: PERSONAL_BEST }],
         slots: [],
-        version: 1,
     },
     {
         type: "attempt",
@@ -125,7 +121,6 @@ export const BLOCKS: BlockSpec[] = [
             },
         ],
         slots: [],
-        version: 3,
     },
     {
         type: "bestRecentRun",
@@ -144,7 +139,6 @@ export const BLOCKS: BlockSpec[] = [
             },
         ],
         slots: [],
-        version: 4,
     },
     // Filters.
     {
@@ -164,7 +158,6 @@ export const BLOCKS: BlockSpec[] = [
             },
         ],
         slots: [source("samples")],
-        version: 1,
     },
     {
         type: "completedRunsOnly",
@@ -174,7 +167,6 @@ export const BLOCKS: BlockSpec[] = [
         tip: CcLabel.BlockCompletedRunsOnlyTip,
         fields: [],
         slots: [source("samples")],
-        version: 1,
     },
     {
         type: "recentDays",
@@ -193,7 +185,6 @@ export const BLOCKS: BlockSpec[] = [
             },
         ],
         slots: [source("samples")],
-        version: 2,
     },
     {
         type: "finishedUnder",
@@ -203,7 +194,6 @@ export const BLOCKS: BlockSpec[] = [
         tip: CcLabel.BlockFinishedUnderTip,
         fields: [{ key: "totalSeconds", type: "duration", default: 20 * 60 }],
         slots: [source("samples")],
-        version: 3,
     },
     {
         type: "reachedSegment",
@@ -213,7 +203,6 @@ export const BLOCKS: BlockSpec[] = [
         tip: CcLabel.BlockReachedSegmentTip,
         fields: [{ key: "segment", type: "segment", default: 2 }],
         slots: [source("samples")],
-        version: 4,
     },
     {
         type: "trimOutliers",
@@ -232,7 +221,6 @@ export const BLOCKS: BlockSpec[] = [
             },
         ],
         slots: [source("samples")],
-        version: 3,
     },
     {
         type: "atLeast",
@@ -251,7 +239,6 @@ export const BLOCKS: BlockSpec[] = [
             },
         ],
         slots: [source("samples")],
-        version: 3,
     },
     // Aggregates.
     {
@@ -274,7 +261,6 @@ export const BLOCKS: BlockSpec[] = [
             },
         ],
         slots: [source("samples")],
-        version: 1,
     },
     {
         type: "percentile",
@@ -293,7 +279,6 @@ export const BLOCKS: BlockSpec[] = [
             },
         ],
         slots: [source("samples")],
-        version: 2,
     },
     {
         type: "weightedAverage",
@@ -313,7 +298,6 @@ export const BLOCKS: BlockSpec[] = [
             },
         ],
         slots: [source("samples")],
-        version: 4,
     },
     // Math.
     {
@@ -333,7 +317,6 @@ export const BLOCKS: BlockSpec[] = [
             },
         ],
         slots: [source("times")],
-        version: 1,
     },
     {
         type: "scale",
@@ -352,7 +335,6 @@ export const BLOCKS: BlockSpec[] = [
             },
         ],
         slots: [source("times")],
-        version: 1,
     },
     {
         type: "round",
@@ -375,7 +357,6 @@ export const BLOCKS: BlockSpec[] = [
             },
         ],
         slots: [source("times")],
-        version: 4,
     },
     {
         type: "clamp",
@@ -389,7 +370,6 @@ export const BLOCKS: BlockSpec[] = [
             { key: "low", kind: "times", label: CcLabel.SlotNeverFaster },
             { key: "high", kind: "times", label: CcLabel.SlotNeverSlower },
         ],
-        version: 4,
     },
     {
         type: "stretchToTotal",
@@ -399,7 +379,6 @@ export const BLOCKS: BlockSpec[] = [
         tip: CcLabel.BlockStretchToTotalTip,
         fields: [{ key: "totalSeconds", type: "duration", default: 20 * 60 }],
         slots: [source("times")],
-        version: 2,
     },
     {
         type: "blend",
@@ -421,7 +400,6 @@ export const BLOCKS: BlockSpec[] = [
             { key: "from", kind: "times" },
             { key: "to", kind: "times", label: CcLabel.SlotTo },
         ],
-        version: 2,
     },
     // Control.
     {
@@ -435,7 +413,6 @@ export const BLOCKS: BlockSpec[] = [
             { key: "primary", kind: "times" },
             { key: "fallback", kind: "times", label: CcLabel.SlotIfEmpty },
         ],
-        version: 1,
     },
     {
         type: "pick",
@@ -458,15 +435,13 @@ export const BLOCKS: BlockSpec[] = [
             { key: "first", kind: "times" },
             { key: "second", kind: "times", label: CcLabel.SlotAnd },
         ],
-        version: 2,
     },
 ];
 
 /**
  * The segment range block. Unlike the other blocks it holds a list of
  * ranges, each with its own segments and rule, plus the rule for the other
- * segments. The desktop block editor shows several ranges as nested range
- * blocks, but stores them as this one list, which is what is edited here.
+ * segments.
  */
 export const RANGE: BlockSpec = {
     type: "segmentRange",
@@ -476,7 +451,6 @@ export const RANGE: BlockSpec = {
     tip: CcLabel.BlockSegmentRangeTip,
     fields: [],
     slots: [{ key: "otherwise", kind: "times", label: CcLabel.SlotOtherwise }],
-    version: 1,
 };
 
 /** The largest number of ranges in a segment range block. */

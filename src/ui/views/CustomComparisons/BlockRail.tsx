@@ -10,8 +10,7 @@ import { KindIcon } from "./KindIcon";
 import classes from "../../../css/CustomComparisons.module.css";
 
 /**
- * All the blocks, next to the comparison, like the desktop block editor's
- * drawer. A block is dragged onto a slot to put it there, or onto a block to
+ * All the blocks, next to the comparison. A block is dragged onto a slot to put it there, or onto a block to
  * replace it (keeping what's inside it where it fits). Clicking a block puts
  * it into the first empty slot it fits, which is how a comparison is built
  * from top to bottom without dragging.

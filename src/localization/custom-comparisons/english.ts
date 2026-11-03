@@ -1,14 +1,7 @@
 import { CcLabel, type CcTexts } from "./labels";
 
-/**
- * The English texts of the Custom Comparisons editor. The block titles, tips
- * and descriptions are the same as in the desktop LiveSplit component *Custom
- * Comparisons*, so its user guide applies to LiveSplit One too.
- */
+/** The English texts of the Custom Comparisons editor. */
 export const english: CcTexts = {
-    [CcLabel.ComponentName]: "Custom Comparisons",
-    [CcLabel.ComponentDescription]:
-        "Doesn't show anything. Custom comparisons are now kept by LiveSplit One itself, under Custom Comparisons in the menu.",
     [CcLabel.SidebarEditingHint]:
         "Save or cancel the comparison you're editing first.",
     [CcLabel.ComparisonMenu]: "More actions",
@@ -27,9 +20,6 @@ export const english: CcTexts = {
     [CcLabel.Back]: "Back",
     [CcLabel.ExportAll]: "Export All…",
     [CcLabel.ExportAllFileName]: "Custom Comparisons",
-    [CcLabel.LayoutUnreadable]: "This layout file couldn't be read.",
-    [CcLabel.LayoutHasNoComparisons]:
-        "This layout has no custom comparisons. They are in its Custom Comparisons component, if it has one.",
     [CcLabel.PluginUnavailable]:
         "The custom comparisons couldn't be loaded, so they don't show up as comparisons right now: {0}",
 

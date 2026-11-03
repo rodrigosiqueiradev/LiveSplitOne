@@ -3,8 +3,7 @@
  *
  * They are kept apart from the main `Label` enum on purpose. The editor has a
  * lot of texts (every block, its tip and the pieces of the plain-English
- * summaries), and they were written for the desktop LiveSplit component
- * *Custom Comparisons* first. Keeping them in their own table means a
+ * summaries). Keeping them in their own table means a
  * translation can be added one language at a time: a language without its
  * own table, or a text missing from it, falls back to English instead of
  * failing to compile like the main `Label` switch statements do.
@@ -15,8 +14,6 @@
  * fields wherever its grammar needs them.
  */
 export enum CcLabel {
-    ComponentName,
-    ComponentDescription,
     SidebarEditingHint,
     ComparisonMenu,
     NameRequired,
@@ -32,8 +29,6 @@ export enum CcLabel {
     Back,
     ExportAll,
     ExportAllFileName,
-    LayoutUnreadable,
-    LayoutHasNoComparisons,
     PluginUnavailable,
 
     // The list of comparisons.

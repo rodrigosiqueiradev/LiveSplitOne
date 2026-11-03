@@ -1,6 +1,6 @@
 /**
- * The blocks of a comparison, shown as nested rows instead of the desktop's
- * drag and drop canvas. Every block is a row with its title and its values;
+ * The blocks of a comparison, shown as nested rows instead of on a free
+ * canvas. Every block is a row with its title and its values;
  * the blocks in its slots are indented below it, with the slot's label in
  * front, so a comparison reads top to bottom like the recipes in the user
  * guide:
@@ -20,8 +20,8 @@
  * small screens. Instead of dragging blocks around, every block has a menu
  * to replace it, to put it inside another block, or to remove it, either
  * with or without what's inside it. Empty slots ask for a block, and only
- * offer the blocks that fit, so like on the desktop a comparison can't be
- * put together the wrong way.
+ * offer the blocks that fit, so a comparison can't be put together the
+ * wrong way.
  */
 
 import React, { useEffect, useRef, useState } from "react";

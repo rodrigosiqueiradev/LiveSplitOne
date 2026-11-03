@@ -1,20 +1,17 @@
 /**
  * The model of the Custom Comparisons block editor: the blocks a comparison is
- * made of, how they nest, and how a comparison is turned into the JSON format
- * shared with the desktop LiveSplit component *Custom Comparisons*.
+ * made of, how they nest, and how a comparison is turned into the custom comparison JSON format.
  *
  * The block editor works directly on that format's tree (the "root" of a
- * comparison file), instead of on a model of its own. That way nothing is
- * lost or changed when a comparison made on the desktop is opened here, and
+ * comparison file), instead of on a model of its own. That way
  * livesplit-core, which reads and validates every comparison anyway, stays
  * the only place that knows what a valid comparison is. The only addition is
  * that a slot may be `null` while the runner hasn't put a block into it yet.
  * Such a comparison can't be saved or previewed until every slot is filled.
  *
- * Blocks come in two kinds, like on the desktop, where they have different
- * shapes: "samples" blocks pass along a list of times for each segment
- * (hexagons on the desktop), "times" blocks one time for each segment (round
- * on the desktop). A slot only accepts blocks of its kind, which keeps every
+ * Blocks come in two kinds, shown with different shapes: "samples" blocks
+ * pass along a list of times for each segment (hexagons), "times" blocks one
+ * time for each segment (rounded bars). A slot only accepts blocks of its kind, which keeps every
  * comparison valid by construction.
  */
 
@@ -29,6 +26,9 @@ import {
 
 /** The `format` value of a comparison file. */
 export const FORMAT_ID = "livesplit-custom-comparison";
+
+/** The format version comparisons are written with. */
+export const FORMAT_VERSION = 1;
 
 /** A block, exactly as stored in the comparison file format. */
 export interface Block {
@@ -46,8 +46,8 @@ export type Kind = "times" | "samples";
 export type Path = (string | number)[];
 
 /**
- * Creates a block with its default values. Like the desktop block editor's
- * drawer, some blocks come with blocks already in their slots, so a new
+ * Creates a block with its default values. Some blocks come with blocks
+ * already in their slots, so a new
  * block is useful right away: lists of times start out as all the runner's
  * times, and the blocks that compare against something start with the golds
  * and the PB.
@@ -100,9 +100,8 @@ export function createBlock(type: string, segmentCount: number): Block {
 }
 
 /**
- * A default segment number that exists in the run, like the desktop block
- * editor picks the last segment if the default is past the end of short
- * splits.
+ * A default segment number that exists in the run: the last segment if the
+ * default is past the end of short splits.
  */
 function clampSegment(segment: number, segmentCount: number): number {
     return segmentCount > 0 ? Math.min(segment, segmentCount) : segment;
@@ -351,57 +350,22 @@ export function findBackwardsRange(slot: Slot): [number, number] | null {
     return null;
 }
 
-/**
- * The lowest format version that can hold the blocks, so a comparison that
- * doesn't use newer blocks still opens in older releases of the desktop
- * component. livesplit-core rewrites the version the same way when it stores
- * a comparison. This is only needed for the version written into the text
- * given to the preview, which livesplit-core refuses if it's too low.
- */
-export function requiredVersion(slot: Slot): number {
-    if (slot === null) {
-        return 1;
-    }
-    let version = blockSpec(slot.type)?.version ?? 1;
-    for (const child of slotsOf(slot)) {
-        version = Math.max(version, requiredVersion(child.value));
-    }
-    return version;
-}
-
 /** A comparison as stored, see the module documentation. */
 export interface ComparisonDocument {
     format: typeof FORMAT_ID;
     version: number;
     name: string;
     root: Block;
-    /**
-     * The desktop block editor's layout of the blocks. It's only kept for
-     * the desktop, which reopens the blocks where they were.
-     */
-    workspace?: unknown;
 }
 
-/**
- * Writes the text of a comparison. `workspace` is the desktop block editor's
- * layout of the blocks. It should only be passed if the blocks didn't
- * change, as it would show the old blocks otherwise. Without it, the desktop
- * lays out the blocks on its own.
- */
-export function writeComparison(
-    name: string,
-    root: Block,
-    workspace?: unknown,
-): string {
+/** Writes the text of a comparison. */
+export function writeComparison(name: string, root: Block): string {
     const document: ComparisonDocument = {
         format: FORMAT_ID,
-        version: requiredVersion(root),
+        version: FORMAT_VERSION,
         name: name.trim(),
         root,
     };
-    if (workspace !== undefined && workspace !== null) {
-        document.workspace = workspace;
-    }
     return JSON.stringify(document);
 }
 
