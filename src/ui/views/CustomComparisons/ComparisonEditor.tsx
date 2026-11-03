@@ -14,12 +14,7 @@ import {
     type RunRef,
     type TimingMethod,
 } from "../../../livesplit-core";
-import { Label, resolve } from "../../../localization";
-import {
-    CcLabel,
-    formatCc,
-    resolveCc,
-} from "../../../localization/custom-comparisons";
+import { Label, resolve, resolveFormat } from "../../../localization";
 import {
     type Block,
     type Path,
@@ -173,11 +168,15 @@ export function ComparisonEditor({
     // Why the blocks can't be calculated yet, if they can't.
     const incomplete = (() => {
         if (root === null || findEmptySlot(root) !== null) {
-            return resolveCc(CcLabel.FillEmptySlots, lang);
+            return resolve(Label.CustomComparisonsFillEmptySlots, lang);
         }
         const backwards = findBackwardsRange(root);
         if (backwards !== null) {
-            return formatCc(CcLabel.RangeBackwards, lang, ...backwards);
+            return resolveFormat(
+                Label.CustomComparisonsRangeBackwards,
+                lang,
+                ...backwards,
+            );
         }
         return null;
     })();
@@ -190,7 +189,8 @@ export function ComparisonEditor({
         }
         // The preview needs a name, even while the runner hasn't typed one.
         const previewName =
-            name.trim() || resolveCc(CcLabel.NewComparisonName, lang);
+            name.trim() ||
+            resolve(Label.CustomComparisonsNewComparisonName, lang);
         return library.preview(
             writeComparison(previewName, previewRoot),
             comparison.index,
@@ -220,7 +220,7 @@ export function ComparisonEditor({
     const cantSave =
         incomplete ??
         (name.trim() === ""
-            ? resolveCc(CcLabel.NameRequired, lang)
+            ? resolve(Label.CustomComparisonsNameRequired, lang)
             : nameProblem);
 
     const isChanged =
@@ -258,11 +258,14 @@ export function ComparisonEditor({
     const cancel = async () => {
         if (isChanged) {
             const [choice] = await showDialog({
-                title: resolveCc(CcLabel.DiscardChangesTitle, lang),
-                description: resolveCc(CcLabel.DiscardChangesDescription, lang),
+                title: resolve(Label.DiscardChangesTitle, lang),
+                description: resolve(
+                    Label.CustomComparisonsDiscardChangesDescription,
+                    lang,
+                ),
                 buttons: [
-                    resolveCc(CcLabel.Discard, lang),
-                    resolveCc(CcLabel.KeepEditing, lang),
+                    resolve(Label.CustomComparisonsDiscard, lang),
+                    resolve(Label.CustomComparisonsKeepEditing, lang),
                 ],
             });
             if (choice !== 0) {
@@ -311,7 +314,7 @@ export function ComparisonEditor({
                     title={cantSave ?? undefined}
                 >
                     <Check strokeWidth={2.5} />
-                    {resolveCc(CcLabel.Save, lang)}
+                    {resolve(Label.Save, lang)}
                 </button>
                 <button onClick={cancel}>
                     <X strokeWidth={2.5} />
@@ -320,16 +323,16 @@ export function ComparisonEditor({
                 <button
                     onClick={undo}
                     disabled={!canUndo}
-                    aria-label={resolveCc(CcLabel.Undo, lang)}
-                    title={resolveCc(CcLabel.Undo, lang)}
+                    aria-label={resolve(Label.CustomComparisonsUndo, lang)}
+                    title={resolve(Label.CustomComparisonsUndo, lang)}
                 >
                     <Undo2 strokeWidth={2.5} />
                 </button>
                 <button
                     onClick={redo}
                     disabled={!canRedo}
-                    aria-label={resolveCc(CcLabel.Redo, lang)}
-                    title={resolveCc(CcLabel.Redo, lang)}
+                    aria-label={resolve(Label.CustomComparisonsRedo, lang)}
+                    title={resolve(Label.CustomComparisonsRedo, lang)}
                 >
                     <Redo2 strokeWidth={2.5} />
                 </button>
@@ -365,7 +368,9 @@ export function ComparisonEditor({
                 />
                 <div className={classes.editorMain}>
                     <label className={classes.nameField}>
-                        <span>{resolveCc(CcLabel.Name, lang)}</span>
+                        <span>
+                            {resolve(Label.CustomComparisonsName, lang)}
+                        </span>
                         <input
                             type="text"
                             value={name}

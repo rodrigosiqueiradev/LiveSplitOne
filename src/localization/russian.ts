@@ -656,5 +656,423 @@ export function resolveRussian(text: Label): string {
             return "Не удалось загрузить LiveSplit One.\nВозможно, вы используете режим приватного просмотра.\nLiveSplit One не может сохранять сплиты, раскладки или другие настройки из‑за ограничений приватного режима браузера.\nЭти ограничения могут быть сняты в будущем.\nЧтобы использовать LiveSplit One сейчас, отключите приватный режим в настройках.";
         case Label.LoadFailedOutdatedBrowser:
             return "Не удалось загрузить LiveSplit One.\nВозможно, вы используете устаревший браузер.\nОбновите браузер или версию iOS и попробуйте снова.\nДругая причина может быть в расширении браузера, например блокировщике рекламы, которое блокирует доступ к важным скриптам.";
+        case Label.CustomComparisonsSidebarEditingHint:
+            return "Сначала сохраните или отмените сравнение, которое вы редактируете.";
+        case Label.CustomComparisonsComparisonMenu:
+            return "Другие действия";
+        case Label.CustomComparisonsNameRequired:
+            return "Дайте сравнению название.";
+        case Label.CustomComparisonsSearchBlocks:
+            return "Поиск блоков";
+        case Label.CustomComparisonsNoBlocksFound:
+            return "Подходящих блоков нет. Попробуйте другое слово.";
+        case Label.CustomComparisonsAboutBlock:
+            return "Что делает этот блок?";
+        case Label.CustomComparisonsBlocks:
+            return "Блоки";
+        case Label.CustomComparisonsRailHint:
+            return "Перетащите блок в слот или на другой блок, чтобы заменить его. Нажмите на блок, чтобы поставить его в первый подходящий пустой слот.";
+        case Label.CustomComparisonsDragBlock:
+            return "Перетащите, чтобы переместить этот блок";
+        case Label.CustomComparisonsOpenEditorHint:
+            return "Ваши собственные сравнения работают со всеми вашими сплитами и показываются рядом с остальными сравнениями.";
+        case Label.CustomComparisons:
+            return "Свои сравнения";
+        case Label.CustomComparisonsExportAll:
+            return "Экспортировать всё…";
+        case Label.CustomComparisonsExportAllFileName:
+            return "Свои сравнения";
+        case Label.CustomComparisonsPluginUnavailable:
+            return "Не удалось загрузить собственные сравнения, поэтому сейчас они не отображаются как сравнения: {0}";
+        case Label.CustomComparisonsListHeading:
+            return "Сравнения";
+        case Label.CustomComparisonsNoComparisons:
+            return "Собственных сравнений пока нет. Нажмите «Новое», чтобы создать первое.";
+        case Label.CustomComparisonsNew:
+            return "Новое…";
+        case Label.CustomComparisonsEdit:
+            return "Редактировать…";
+        case Label.CustomComparisonsRename:
+            return "Переименовать…";
+        case Label.CustomComparisonsDuplicate:
+            return "Дублировать";
+        case Label.CustomComparisonsImport:
+            return "Импорт…";
+        case Label.CustomComparisonsExport:
+            return "Экспорт…";
+        case Label.CustomComparisonsCopyAsText:
+            return "Копировать как текст";
+        case Label.CustomComparisonsPaste:
+            return "Вставить…";
+        case Label.CustomComparisonsUsedBy:
+            return "Используется другими сравнениями: {0}";
+        case Label.CustomComparisonsUsedByOne:
+            return "Используется 1 другим сравнением";
+        case Label.CustomComparisonsUnreadable:
+            return "Не удаётся прочитать";
+        case Label.CustomComparisonsSaveReminder:
+            return "Изменения сохраняются сразу, на этом устройстве. Используйте «Экспортировать всё», чтобы перенести их на другое.";
+        case Label.CustomComparisonsCopiedToClipboard:
+            return "Скопировано. Можно вставить в чат или сообщение на форуме.";
+        case Label.CustomComparisonsCouldNotCopy:
+            return "Не удалось скопировать в буфер обмена.";
+        case Label.CustomComparisonsCouldNotReadClipboard:
+            return "Не удалось прочитать буфер обмена. Вставьте текст сюда:";
+        case Label.CustomComparisonsErrorTitle:
+            return "Не получилось";
+        case Label.CustomComparisonsRenameTitle:
+            return "Переименовать сравнение";
+        case Label.CustomComparisonsRenameDescription:
+            return "Сравнения, которые используют это, получат новое название.";
+        case Label.CustomComparisonsNameTakenTitle:
+            return "Выберите другое название";
+        case Label.CustomComparisonsNameTakenDescription:
+            return "{0} Введите другое название:";
+        case Label.CustomComparisonsRemoveTitle:
+            return "Удалить сравнение";
+        case Label.CustomComparisonsRemoveDescription:
+            return "Удалить «{0}»?";
+        case Label.CustomComparisonsRemoveUsedDescription:
+            return "Удалить «{0}»? Его используют другие сравнения ({1}), и без него они перестанут работать.";
+        case Label.CustomComparisonsRemoveUsedOneDescription:
+            return "Удалить «{0}»? Его использует 1 другое сравнение, и без него оно перестанет работать.";
+        case Label.CustomComparisonsPasteTitle:
+            return "Вставить сравнение";
+        case Label.CustomComparisonsPasteDescription:
+            return "Вставьте текст сравнения, которым кто-то поделился:";
+        case Label.CustomComparisonsCopySuffix:
+            return "{0} (копия)";
+        case Label.CustomComparisonsTemplatesTitle:
+            return "Новое сравнение";
+        case Label.CustomComparisonsTemplatesDescription:
+            return "Выберите отправную точку. Каждая — готовое сравнение, которое можно использовать как есть или изменить.";
+        case Label.CustomComparisonsTemplateGoalPace:
+            return "Целевой темп";
+        case Label.CustomComparisonsTemplateGoalPaceDescription:
+            return "Ваши типичные забеги, растянутые так, чтобы закончиться ровно в целевое время.";
+        case Label.CustomComparisonsTemplateRealisticPace:
+            return "Реалистичный темп";
+        case Label.CustomComparisonsTemplateRealisticPaceDescription:
+            return "70-й процентиль за последние 30 дней: время, которое вы обгоняете примерно в 70 % случаев.";
+        case Label.CustomComparisonsTemplateRecentForm:
+            return "Текущая форма";
+        case Label.CustomComparisonsTemplateRecentFormDescription:
+            return "Медиана ваших последних 10 завершённых забегов без лучшей и худшей случайности.";
+        case Label.CustomComparisonsTemplateSafePace:
+            return "Безопасный темп";
+        case Label.CustomComparisonsTemplateSafePaceDescription:
+            return "Более медленное из ваших лучших сегментов + 2 с и вашей медианы, чтобы темп никогда не был нереально быстрым.";
+        case Label.CustomComparisonsTemplateBlank:
+            return "Пустое";
+        case Label.CustomComparisonsTemplateBlankDescription:
+            return "Начать с нуля.";
+        case Label.CustomComparisonsNewComparisonName:
+            return "Моё сравнение";
+        case Label.CustomComparisonsEditorTitle:
+            return "Своё сравнение";
+        case Label.CustomComparisonsName:
+            return "Название";
+        case Label.CustomComparisonsUndo:
+            return "Отменить";
+        case Label.CustomComparisonsRedo:
+            return "Повторить";
+        case Label.CustomComparisonsChooseBlock:
+            return "Выберите блок…";
+        case Label.CustomComparisonsReplaceBlock:
+            return "Заменить на…";
+        case Label.CustomComparisonsWrapBlock:
+            return "Поместить в…";
+        case Label.CustomComparisonsUnwrapBlock:
+            return "Удалить, оставить содержимое";
+        case Label.CustomComparisonsPreviewBlock:
+            return "Предпросмотр этого блока";
+        case Label.CustomComparisonsBlockMenu:
+            return "Действия с блоком";
+        case Label.CustomComparisonsFillEmptySlots:
+            return "Заполните пустые слоты, чтобы увидеть предпросмотр. В каждом слоте должен быть блок.";
+        case Label.CustomComparisonsDiscardChangesDescription:
+            return "В этом сравнении есть несохранённые изменения.";
+        case Label.CustomComparisonsDiscard:
+            return "Отбросить";
+        case Label.CustomComparisonsKeepEditing:
+            return "Продолжить редактирование";
+        case Label.CustomComparisonsInvalidTime:
+            return "Введите время, например 20:00 или 1:05:30.";
+        case Label.CustomComparisonsNotFound:
+            return "{0} (не найдено)";
+        case Label.CustomComparisonsNotInSplits:
+            return "{0}. (нет в ваших сплитах)";
+        case Label.CustomComparisonsSegmentOption:
+            return "{0}. {1}";
+        case Label.CustomComparisonsAddRange:
+            return "Добавить диапазон";
+        case Label.CustomComparisonsRemoveRange:
+            return "Удалить этот диапазон";
+        case Label.CustomComparisonsRangeBackwards:
+            return "Сегменты с {0} по {1} идут в обратном порядке. Поменяйте числа местами.";
+        case Label.CustomComparisonsCategorySources:
+            return "Источники";
+        case Label.CustomComparisonsCategoryFilters:
+            return "Фильтры";
+        case Label.CustomComparisonsCategoryAggregates:
+            return "Сводки";
+        case Label.CustomComparisonsCategoryMath:
+            return "Вычисления";
+        case Label.CustomComparisonsCategoryControl:
+            return "Управление";
+        case Label.CustomComparisonsKindSamples:
+            return "Список времён для каждого сегмента";
+        case Label.CustomComparisonsKindTimes:
+            return "Одно время для каждого сегмента";
+        case Label.CustomComparisonsBlockResult:
+            return "это сравнение —";
+        case Label.CustomComparisonsBlockResultTip:
+            return "Готовое сравнение. Поместите сюда блоки, из которых оно строится.";
+        case Label.CustomComparisonsBlockSegmentHistory:
+            return "все мои времена по каждому сегменту";
+        case Label.CustomComparisonsBlockSegmentHistoryTip:
+            return "Каждое время, записанное для каждого сегмента. Пропущенные сегменты и объединённый сегмент сразу после пропуска не учитываются.";
+        case Label.CustomComparisonsBlockComparison:
+            return "сравнение {name}";
+        case Label.CustomComparisonsBlockComparisonTip:
+            return "Существующее сравнение, сегмент за сегментом. Встроенные работают, даже если они выключены.";
+        case Label.CustomComparisonsBlockAttempt:
+            return "попытка № {number}";
+        case Label.CustomComparisonsBlockAttemptTip:
+            return "Сегменты одной прошлой попытки по её номеру в истории попыток. Пусто там, где этот забег пропустил сплит или был сброшен.";
+        case Label.CustomComparisonsBlockBestRecentRun:
+            return "мой лучший забег за последние {days} дн.";
+        case Label.CustomComparisonsBlockBestRecentRunTip:
+            return "Сегменты вашего самого быстрого завершённого забега за последние N дней: «свежий PB», который меняется по мере игры. Пусто, если за это время ни один забег не был завершён.";
+        case Label.CustomComparisonsBlockLastN:
+            return "последние {count} времён из";
+        case Label.CustomComparisonsBlockLastNTip:
+            return "Оставляет самые свежие времена каждого сегмента. Считаются прохождения этого сегмента, а не попытки.";
+        case Label.CustomComparisonsBlockCompletedRunsOnly:
+            return "только из завершённых забегов";
+        case Label.CustomComparisonsBlockCompletedRunsOnlyTip:
+            return "Оставляет только времена из попыток, в которых забег был пройден целиком.";
+        case Label.CustomComparisonsBlockRecentDays:
+            return "за последние {days} дн.";
+        case Label.CustomComparisonsBlockRecentDaysTip:
+            return "Оставляет только времена из попыток, закончившихся за последние N дней, чтобы старые времена больше не учитывались. Попытки без даты не учитываются.";
+        case Label.CustomComparisonsBlockFinishedUnder:
+            return "из забегов, завершённых быстрее {totalSeconds}";
+        case Label.CustomComparisonsBlockFinishedUnderTip:
+            return "Оставляет только времена из забегов, завершённых быстрее этого времени, чтобы учитывались только ваши хорошие забеги.";
+        case Label.CustomComparisonsBlockReachedSegment:
+            return "из забегов, дошедших до {segment}";
+        case Label.CustomComparisonsBlockReachedSegmentTip:
+            return "Оставляет только времена из попыток, дошедших хотя бы до этого сегмента. Как «только из завершённых забегов», но для игр, где большинство забегов сбрасывается рано. Если этого сегмента нет в ваших сплитах, вы увидите предупреждение, и никакие времена не останутся.";
+        case Label.CustomComparisonsBlockTrimOutliers:
+            return "без самых быстрых и медленных {percent} % из";
+        case Label.CustomComparisonsBlockTrimOutliersTip:
+            return "Убирает случайности перед усреднением: отбрасывает эту долю самых быстрых и самых медленных времён каждого сегмента. Если времён мало, ничего не отбрасывается.";
+        case Label.CustomComparisonsBlockAtLeast:
+            return "только если есть хотя бы {count} времён в";
+        case Label.CustomComparisonsBlockAtLeastTip:
+            return "Сегменты с меньшим числом времён становятся пустыми, чтобы их можно было заполнить через «если пусто, взять», а не полагаться на слишком мало данных.";
+        case Label.CustomComparisonsBlockAggregate:
+            return "{kind} из";
+        case Label.CustomComparisonsBlockAggregateTip:
+            return "Превращает список времён каждого сегмента в одно время. Сегмент без времён остаётся пустым.";
+        case Label.CustomComparisonsAggregateMedian:
+            return "медиана";
+        case Label.CustomComparisonsAggregateAverage:
+            return "среднее";
+        case Label.CustomComparisonsAggregateMin:
+            return "лучшее (мин.)";
+        case Label.CustomComparisonsAggregateMax:
+            return "худшее (макс.)";
+        case Label.CustomComparisonsBlockPercentile:
+            return "процентиль {percent} из";
+        case Label.CustomComparisonsBlockPercentileTip:
+            return "0 — ваше самое быстрое время, 100 — самое медленное, 50 — медиана. 70 означает: вы обгоняете это время примерно в 70 % случаев.";
+        case Label.CustomComparisonsBlockWeightedAverage:
+            return "среднее с упором на свежие из";
+        case Label.CustomComparisonsBlockWeightedAverageFooter:
+            return "вес уменьшается вдвое каждые {halfLife} более старых времён";
+        case Label.CustomComparisonsBlockWeightedAverageTip:
+            return "Среднее, в котором свежие времена весят больше. Самое новое время учитывается полностью, на N времён старше — наполовину, на 2N старше — на четверть, и так далее.";
+        case Label.CustomComparisonsBlockAddTime:
+            return "добавить {seconds} с на сегмент к";
+        case Label.CustomComparisonsBlockAddTimeTip:
+            return "Добавляет (или, если значение отрицательное, убирает) время к каждому сегменту. Никогда не опускается ниже нуля.";
+        case Label.CustomComparisonsBlockScale:
+            return "{percent} % от";
+        case Label.CustomComparisonsBlockScaleTip:
+            return "Масштабирует каждый сегмент. 103 % — на 3 % медленнее, 97 % — на 3 % быстрее.";
+        case Label.CustomComparisonsBlockRound:
+            return "округлить до {step}";
+        case Label.CustomComparisonsBlockRoundTip:
+            return "Округляет каждый сегмент до ближайших 0,1 с (или 1 с, 0,01 с), чтобы и времена сплитов были ровными.";
+        case Label.CustomComparisonsRoundStep:
+            return "{0} с";
+        case Label.CustomComparisonsBlockClamp:
+            return "держать";
+        case Label.CustomComparisonsBlockClampTip:
+            return "Держит каждый сегмент между двумя границами, например не быстрее ваших лучших сегментов и не медленнее вашего PB. Если границы пересекаются, побеждает «не быстрее чем».";
+        case Label.CustomComparisonsSlotNeverFaster:
+            return "не быстрее чем";
+        case Label.CustomComparisonsSlotNeverSlower:
+            return "не медленнее чем";
+        case Label.CustomComparisonsBlockStretchToTotal:
+            return "растянуть до финиша за {totalSeconds}";
+        case Label.CustomComparisonsBlockStretchToTotalTip:
+            return "Масштабирует все сегменты одинаково, чтобы весь забег в сумме дал целевое время. Если какой-то сегмент пуст, результат пуст: сначала заполните пробелы через «если пусто, взять».";
+        case Label.CustomComparisonsBlockBlend:
+            return "{percent} % пути от";
+        case Label.CustomComparisonsBlockBlendTip:
+            return "Смешивает два правила для каждого сегмента. 0 % — полностью первое, 100 % — полностью второе, 75 % — три четверти пути.";
+        case Label.CustomComparisonsSlotTo:
+            return "до";
+        case Label.CustomComparisonsBlockPick:
+            return "{kind} из";
+        case Label.CustomComparisonsBlockPickTip:
+            return "Для каждого сегмента более медленное (или быстрое) из двух правил. Если у одного нет времени для сегмента, берётся другое.";
+        case Label.CustomComparisonsPickSlower:
+            return "более медленное";
+        case Label.CustomComparisonsPickFaster:
+            return "более быстрое";
+        case Label.CustomComparisonsSlotAnd:
+            return "и";
+        case Label.CustomComparisonsBlockFallback:
+            return "взять";
+        case Label.CustomComparisonsBlockFallbackTip:
+            return "Заполняет только сегменты, которые первое правило оставляет пустыми, например потому что забегов ещё недостаточно.";
+        case Label.CustomComparisonsSlotIfEmpty:
+            return "если пусто, взять";
+        case Label.CustomComparisonsBlockSegmentRange:
+            return "для сегментов … взять … иначе …";
+        case Label.CustomComparisonsBlockSegmentRangeTip:
+            return "Использует одно правило для диапазона сегментов и другое для остальных. Добавьте диапазоны для новых правил: побеждает первый подходящий диапазон. Если диапазон выходит за конец ваших сплитов, вы увидите предупреждение.";
+        case Label.CustomComparisonsBlockSegmentRangeHeader:
+            return "разные правила для разных сегментов (побеждает первый подходящий диапазон)";
+        case Label.CustomComparisonsRangeCase:
+            return "для сегментов с {from} по {to} взять";
+        case Label.CustomComparisonsSlotOtherwise:
+            return "иначе";
+        case Label.CustomComparisonsPreview:
+            return "Предпросмотр";
+        case Label.CustomComparisonsPreviewingBlock:
+            return "Предпросмотр блока, а не сравнения";
+        case Label.CustomComparisonsShowWholeComparison:
+            return "Показать всё сравнение";
+        case Label.CustomComparisonsSegment:
+            return "Сегмент";
+        case Label.CustomComparisonsDifferenceFrom:
+            return "Разница с";
+        case Label.CustomComparisonsFasterThanGold:
+            return "Быстрее вашего лучшего времени на этом сегменте (вашего голда)";
+        case Label.CustomComparisonsFasterThanGoldWarning:
+            return "Сегментов быстрее ваших голдов: {0}. Это допустимо, но такой темп может быть нереалистичным.";
+        case Label.CustomComparisonsFasterThanGoldWarningOne:
+            return "1 сегмент быстрее вашего голда. Это допустимо, но такой темп может быть нереалистичным.";
+        case Label.CustomComparisonsFinishLine:
+            return "Финиш за {0}, {1} относительно {2}.";
+        case Label.CustomComparisonsFinishVsSumOfBest:
+            return "Ваша сумма лучших сегментов — {0}.";
+        case Label.CustomComparisonsNoProblems:
+            return "Проблем нет.";
+        case Label.CustomComparisonsNoTimesLeft:
+            return "Ни у одного сегмента нет времени. Нажмите на строку, чтобы узнать почему, или добавьте «взять … если пусто, взять» с запасным вариантом, например вашим PB.";
+        case Label.CustomComparisonsOriginTitle:
+            return "Откуда это время";
+        case Label.CustomComparisonsOriginEmpty:
+            return "У этого сегмента нет времени, поэтому все сплиты после него тоже пусты.";
+        case Label.CustomComparisonsOriginFillingGap:
+            return "заполняет пробел";
+        case Label.CustomComparisonsOriginPicked:
+            return "{0} из двух";
+        case Label.CustomComparisonsOriginLowLimit:
+            return "удержано на границе «не быстрее чем»";
+        case Label.CustomComparisonsOriginHighLimit:
+            return "удержано на границе «не медленнее чем»";
+        case Label.CustomComparisonsClickRowHint:
+            return "Нажмите на строку, чтобы увидеть, откуда её время.";
+        case Label.CustomComparisonsDescYourGolds:
+            return "ваши голды";
+        case Label.CustomComparisonsDescYourPb:
+            return "ваш PB";
+        case Label.CustomComparisonsDescComparison:
+            return "«{0}»";
+        case Label.CustomComparisonsDescAttempt:
+            return "попытка № {0}";
+        case Label.CustomComparisonsDescBestRecentRun:
+            return "ваш лучший забег за последние {0} дн.";
+        case Label.CustomComparisonsDescWeightedAverage:
+            return "среднее с упором на свежие: {0}";
+        case Label.CustomComparisonsDescClamp:
+            return "{0} (не быстрее чем: {1}; не медленнее чем: {2})";
+        case Label.CustomComparisonsDescRound:
+            return "{0}, округлённое до {1}";
+        case Label.CustomComparisonsDescMedian:
+            return "медиана: {0}";
+        case Label.CustomComparisonsDescAverage:
+            return "среднее: {0}";
+        case Label.CustomComparisonsDescMin:
+            return "лучшее: {0}";
+        case Label.CustomComparisonsDescMax:
+            return "худшее: {0}";
+        case Label.CustomComparisonsDescPercentile:
+            return "процентиль {0}: {1}";
+        case Label.CustomComparisonsDescAddTime:
+            return "{0} + {1}";
+        case Label.CustomComparisonsDescRemoveTime:
+            return "{0} − {1}";
+        case Label.CustomComparisonsDescScale:
+            return "{1} × {0} %";
+        case Label.CustomComparisonsDescStretch:
+            return "{0}, растянутое до финиша за {1}";
+        case Label.CustomComparisonsDescBlend:
+            return "{0} % пути: {1} → {2}";
+        case Label.CustomComparisonsDescSlower:
+            return "более медленное из двух: {0} и {1}";
+        case Label.CustomComparisonsDescFaster:
+            return "более быстрое из двух: {0} и {1}";
+        case Label.CustomComparisonsDescFallback:
+            return "{0} (где пусто: {1})";
+        case Label.CustomComparisonsDescRangeArm:
+            return "{1}: {0}";
+        case Label.CustomComparisonsDescRangeOtherwise:
+            return "{0}, иначе {1}";
+        case Label.CustomComparisonsDescSomething:
+            return "что-то";
+        case Label.CustomComparisonsDescAllTimes:
+            return "все ваши времена";
+        case Label.CustomComparisonsDescLastN:
+            return "ваши последние времена ({0})";
+        case Label.CustomComparisonsQualCompleted:
+            return "из завершённых забегов";
+        case Label.CustomComparisonsQualRecentDays:
+            return "за последние {0} дн.";
+        case Label.CustomComparisonsQualUnder:
+            return "из забегов быстрее {0}";
+        case Label.CustomComparisonsQualTrim:
+            return "без самых быстрых и медленных {0} %";
+        case Label.CustomComparisonsQualAtLeast:
+            return "если их не меньше {0}";
+        case Label.CustomComparisonsQualReached:
+            return "из забегов, дошедших до {0}";
+        case Label.CustomComparisonsSumGapsFilled:
+            return "{0} Пробелы заполнены из: {1}.";
+        case Label.CustomComparisonsSumRangeArm:
+            return "{0}: {1}";
+        case Label.CustomComparisonsSumOtherSegments:
+            return "Остальные сегменты: {0}";
+        case Label.CustomComparisonsSegmentNumber:
+            return "сегмент {0}";
+        case Label.CustomComparisonsSegmentSpan:
+            return "с {0} по {1}";
+        case Label.CustomComparisonsSeconds:
+            return "{0} с";
+        case Label.CustomComparisonsListAnd:
+            return "{0} и {1}";
+        case Label.CustomComparisonsWarnSegment:
+            return "Использует сегмент {0}, но в ваших сплитах их {1}";
+        case Label.CustomComparisonsWarnSegments:
+            return "Использует сегменты {0}, но в ваших сплитах их {1}";
+        case Label.CustomComparisonsSentence:
+            return "{0}.";
     }
 }

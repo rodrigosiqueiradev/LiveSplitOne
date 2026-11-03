@@ -25,7 +25,7 @@
  */
 
 import React, { useEffect, useRef, useState } from "react";
-import { CcLabel, resolveCc } from "../../../localization/custom-comparisons";
+import { Label, resolve } from "../../../localization";
 import {
     type Block,
     type Kind,
@@ -112,11 +112,11 @@ export function BlockTree({ root, ctx }: { root: Slot; ctx: TreeContext }) {
         <div className={classes.tree}>
             <div
                 className={`${classes.block} ${classes.result}`}
-                title={resolveCc(CcLabel.BlockResultTip, ctx.lang)}
+                title={resolve(Label.CustomComparisonsBlockResultTip, ctx.lang)}
             >
                 <div className={classes.blockHeader}>
                     <span className={classes.blockTitle}>
-                        {resolveCc(CcLabel.BlockResult, ctx.lang)}
+                        {resolve(Label.CustomComparisonsBlockResult, ctx.lang)}
                     </span>
                 </div>
                 <div className={classes.slots}>
@@ -137,7 +137,7 @@ function SlotView({
     slot: Slot;
     path: Path;
     kind: Kind;
-    label?: CcLabel | undefined;
+    label?: Label | undefined;
     ctx: TreeContext;
 }) {
     const [picking, setPicking] = useState(false);
@@ -197,7 +197,7 @@ function SlotView({
         >
             {label !== undefined && (
                 <div className={classes.slotLabel}>
-                    {resolveCc(label, ctx.lang)}
+                    {resolve(label, ctx.lang)}
                 </div>
             )}
             {slot !== null ? (
@@ -209,15 +209,15 @@ function SlotView({
                 >
                     <Plus size={16} strokeWidth={2.5} />
                     <KindIcon kind={kind} />
-                    {resolveCc(CcLabel.ChooseBlock, ctx.lang)}
+                    {resolve(Label.CustomComparisonsChooseBlock, ctx.lang)}
                 </button>
             )}
             {picking && (
                 <BlockPicker
-                    title={resolveCc(
+                    title={resolve(
                         kind === "samples"
-                            ? CcLabel.KindSamples
-                            : CcLabel.KindTimes,
+                            ? Label.CustomComparisonsKindSamples
+                            : Label.CustomComparisonsKindTimes,
                         ctx.lang,
                     )}
                     filter={(spec) => spec.kind === kind}
@@ -283,7 +283,7 @@ function BlockView({
         >
             <div
                 className={classes.blockHeader}
-                title={resolveCc(spec.tip, lang)}
+                title={resolve(spec.tip, lang)}
             >
                 {/*
                  * Only the handle starts a drag, so selecting text in the
@@ -293,7 +293,7 @@ function BlockView({
                     className={classes.dragHandle}
                     draggable
                     aria-hidden
-                    title={resolveCc(CcLabel.DragBlock, lang)}
+                    title={resolve(Label.CustomComparisonsDragBlock, lang)}
                     onDragStart={(e) => {
                         e.dataTransfer.setData(DRAG_TYPE, block.type);
                         e.dataTransfer.effectAllowed = "move";
@@ -313,11 +313,14 @@ function BlockView({
                 <KindIcon kind={spec.kind} />
                 {block.type === RANGE.type ? (
                     <span className={classes.blockTitle}>
-                        {resolveCc(CcLabel.BlockSegmentRangeHeader, lang)}
+                        {resolve(
+                            Label.CustomComparisonsBlockSegmentRangeHeader,
+                            lang,
+                        )}
                     </span>
                 ) : (
                     <Title
-                        template={resolveCc(spec.title, lang)}
+                        template={resolve(spec.title, lang)}
                         block={block}
                         onChange={setField}
                         ctx={ctx}
@@ -330,23 +333,26 @@ function BlockView({
                  */}
                 <button
                     className={`${classes.blockMenuButton} ${showTip ? classes.active : ""}`}
-                    aria-label={resolveCc(CcLabel.AboutBlock, lang)}
+                    aria-label={resolve(
+                        Label.CustomComparisonsAboutBlock,
+                        lang,
+                    )}
                     aria-expanded={showTip}
-                    title={resolveCc(CcLabel.AboutBlock, lang)}
+                    title={resolve(Label.CustomComparisonsAboutBlock, lang)}
                     onClick={() => setShowTip(!showTip)}
                 >
                     <Info size={16} strokeWidth={2.5} />
                 </button>
                 <button
                     className={classes.blockMenuButton}
-                    aria-label={resolveCc(CcLabel.BlockMenu, lang)}
+                    aria-label={resolve(Label.CustomComparisonsBlockMenu, lang)}
                     onClick={(e) => setMenu({ x: e.clientX, y: e.clientY })}
                 >
                     <EllipsisVertical size={16} strokeWidth={2.5} />
                 </button>
             </div>
             {showTip && (
-                <p className={classes.blockTip}>{resolveCc(spec.tip, lang)}</p>
+                <p className={classes.blockTip}>{resolve(spec.tip, lang)}</p>
             )}
 
             {block.type === RANGE.type && (
@@ -371,7 +377,7 @@ function BlockView({
             {spec.footer !== undefined && (
                 <div className={classes.blockFooter}>
                     <Title
-                        template={resolveCc(spec.footer, lang)}
+                        template={resolve(spec.footer, lang)}
                         block={block}
                         onChange={setField}
                         ctx={ctx}
@@ -387,20 +393,20 @@ function BlockView({
                             onClick={() => ctx.onPreview(path)}
                         >
                             <Eye size={14} strokeWidth={2.5} />{" "}
-                            {resolveCc(CcLabel.PreviewBlock, lang)}
+                            {resolve(Label.CustomComparisonsPreviewBlock, lang)}
                         </MenuItem>
                     )}
                     <MenuItem
                         lang={lang}
                         onClick={() => setPicking({ mode: "replace", block })}
                     >
-                        {resolveCc(CcLabel.ReplaceBlock, lang)}
+                        {resolve(Label.CustomComparisonsReplaceBlock, lang)}
                     </MenuItem>
                     <MenuItem
                         lang={lang}
                         onClick={() => setPicking({ mode: "wrap", block })}
                     >
-                        {resolveCc(CcLabel.WrapBlock, lang)}
+                        {resolve(Label.CustomComparisonsWrapBlock, lang)}
                     </MenuItem>
                     {canUnwrap(block) && (
                         <MenuItem
@@ -409,7 +415,7 @@ function BlockView({
                                 ctx.onChange(path, unwrapBlock(block))
                             }
                         >
-                            {resolveCc(CcLabel.UnwrapBlock, lang)}
+                            {resolve(Label.CustomComparisonsUnwrapBlock, lang)}
                         </MenuItem>
                     )}
                     <MenuItem
@@ -417,17 +423,17 @@ function BlockView({
                         onClick={() => ctx.onChange(path, null)}
                     >
                         <Trash size={14} strokeWidth={2.5} />{" "}
-                        {resolveCc(CcLabel.RemoveBlock, lang)}
+                        {resolve(Label.Remove, lang)}
                     </MenuItem>
                 </ContextMenu>
             )}
 
             {picking && (
                 <BlockPicker
-                    title={resolveCc(
+                    title={resolve(
                         picking.mode === "replace"
-                            ? CcLabel.ReplaceBlock
-                            : CcLabel.WrapBlock,
+                            ? Label.CustomComparisonsReplaceBlock
+                            : Label.CustomComparisonsWrapBlock,
                         lang,
                     )}
                     filter={(candidate) =>
@@ -489,7 +495,10 @@ function RangeCases({
                 <div key={i} className={classes.rangeCase}>
                     <div className={classes.slotLabel}>
                         <Title
-                            template={resolveCc(CcLabel.RangeCase, lang)}
+                            template={resolve(
+                                Label.CustomComparisonsRangeCase,
+                                lang,
+                            )}
                             block={c as unknown as Block}
                             onChange={(key, value) =>
                                 ctx.onChange([...path, "cases", i, key], value)
@@ -500,11 +509,14 @@ function RangeCases({
                         {cases.length > 1 && (
                             <button
                                 className={classes.blockMenuButton}
-                                aria-label={resolveCc(
-                                    CcLabel.RemoveRange,
+                                aria-label={resolve(
+                                    Label.CustomComparisonsRemoveRange,
                                     lang,
                                 )}
-                                title={resolveCc(CcLabel.RemoveRange, lang)}
+                                title={resolve(
+                                    Label.CustomComparisonsRemoveRange,
+                                    lang,
+                                )}
                                 onClick={() =>
                                     ctx.onChange(
                                         [...path, "cases"],
@@ -543,7 +555,7 @@ function RangeCases({
                     }}
                 >
                     <Plus size={14} strokeWidth={2.5} />
-                    {resolveCc(CcLabel.AddRange, lang)}
+                    {resolve(Label.CustomComparisonsAddRange, lang)}
                 </button>
             )}
         </div>

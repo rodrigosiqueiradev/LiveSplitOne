@@ -7,7 +7,7 @@
 import React, { useRef, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { type Language } from "../../livesplit-core";
-import { CcLabel, resolveCc } from "../../localization/custom-comparisons";
+import { Label, resolve } from "../../localization";
 import { type LSOCommandSink } from "../../util/LSOCommandSink";
 import { type GeneralSettings } from "./MainSettings";
 import { ComparisonLibrary } from "./CustomComparisons/library";
@@ -111,7 +111,7 @@ function View({
     return (
         <div className={classes.view}>
             <h1 className={classes.viewTitle}>
-                {resolveCc(CcLabel.ViewTitle, lang)}
+                {resolve(Label.CustomComparisons, lang)}
             </h1>
             {problem !== null && (
                 <p className={classes.viewProblem}>{problem}</p>
@@ -138,18 +138,18 @@ function SideBar({
 }) {
     return (
         <>
-            <h1>{resolveCc(CcLabel.ViewTitle, lang)}</h1>
+            <h1>{resolve(Label.CustomComparisons, lang)}</h1>
             <hr />
             <button
                 disabled={editingComparison}
                 onClick={(_) => callbacks.openTimerView()}
             >
                 <ArrowLeft strokeWidth={2.5} />
-                {resolveCc(CcLabel.Back, lang)}
+                {resolve(Label.Back, lang)}
             </button>
             {editingComparison && (
                 <p className={classes.sidebarHint}>
-                    {resolveCc(CcLabel.SidebarEditingHint, lang)}
+                    {resolve(Label.CustomComparisonsSidebarEditingHint, lang)}
                 </p>
             )}
         </>

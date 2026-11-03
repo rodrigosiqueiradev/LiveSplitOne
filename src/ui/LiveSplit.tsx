@@ -48,7 +48,6 @@ import {
     NO_CUSTOM_COMPARISONS,
     loadCustomComparisonsPlugin,
 } from "../util/CustomComparisonsPlugin";
-import { CcLabel, formatCc } from "../localization/custom-comparisons";
 import { ToastContainer, toast } from "react-toastify";
 import * as Storage from "../storage";
 import { UrlCache } from "../util/UrlCache";
@@ -73,7 +72,13 @@ import "react-toastify/dist/ReactToastify.css";
 import classes from "../css/LiveSplit.module.css";
 import sidebarClasses from "../css/Sidebar.module.css";
 import toastClasses from "../css/Toast.module.css";
-import { Label, orAutoLang, resolve, setHtmlLang } from "../localization";
+import {
+    Label,
+    orAutoLang,
+    resolve,
+    setHtmlLang,
+    resolveFormat,
+} from "../localization";
 
 function createTheRunClient(
     generalSettings: GeneralSettings,
@@ -700,8 +705,8 @@ export class LiveSplit extends React.Component<Props, State> {
         const plugin = loadCustomComparisonsPlugin(settings);
         if (typeof plugin === "string") {
             commandSink.setCustomComparisons(null, notify);
-            return formatCc(
-                CcLabel.PluginUnavailable,
+            return resolveFormat(
+                Label.CustomComparisonsPluginUnavailable,
                 this.props.generalSettings.lang,
                 plugin,
             );

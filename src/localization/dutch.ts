@@ -656,5 +656,423 @@ export function resolveDutch(text: Label): string {
             return "LiveSplit One kon niet worden geladen.\nMogelijk gebruik je de privé‑modus.\nLiveSplit One kan geen splits, lay‑outs of andere instellingen opslaan door beperkingen van privé‑browsen.\nDeze beperkingen kunnen in de toekomst worden opgeheven.\nOm LiveSplit One nu te gebruiken, schakel privé‑browsen uit in je instellingen.";
         case Label.LoadFailedOutdatedBrowser:
             return "LiveSplit One kon niet worden geladen.\nMogelijk gebruik je een verouderde browser.\nWerk je browser of iOS‑versie bij en probeer het opnieuw.\nEen andere oorzaak kan een browserextensie zijn, zoals een adblocker, die de toegang tot belangrijke scripts blokkeert.";
+        case Label.CustomComparisonsSidebarEditingHint:
+            return "Sla eerst de vergelijking die je bewerkt op of annuleer die.";
+        case Label.CustomComparisonsComparisonMenu:
+            return "Meer acties";
+        case Label.CustomComparisonsNameRequired:
+            return "Geef de vergelijking een naam.";
+        case Label.CustomComparisonsSearchBlocks:
+            return "Blokken zoeken";
+        case Label.CustomComparisonsNoBlocksFound:
+            return "Geen blok komt overeen. Probeer een ander woord.";
+        case Label.CustomComparisonsAboutBlock:
+            return "Wat doet dit blok?";
+        case Label.CustomComparisonsBlocks:
+            return "Blokken";
+        case Label.CustomComparisonsRailHint:
+            return "Sleep een blok naar een vak, of op een blok om het te vervangen. Klik op een blok om het in het eerste lege vak te zetten waar het past.";
+        case Label.CustomComparisonsDragBlock:
+            return "Sleep om dit blok te verplaatsen";
+        case Label.CustomComparisonsOpenEditorHint:
+            return "Je eigen vergelijkingen werken met al je splits en verschijnen naast de andere vergelijkingen.";
+        case Label.CustomComparisons:
+            return "Eigen vergelijkingen";
+        case Label.CustomComparisonsExportAll:
+            return "Alles exporteren…";
+        case Label.CustomComparisonsExportAllFileName:
+            return "Eigen vergelijkingen";
+        case Label.CustomComparisonsPluginUnavailable:
+            return "De eigen vergelijkingen konden niet worden geladen, dus ze verschijnen nu niet als vergelijkingen: {0}";
+        case Label.CustomComparisonsListHeading:
+            return "Vergelijkingen";
+        case Label.CustomComparisonsNoComparisons:
+            return "Nog geen eigen vergelijkingen. Klik op Nieuw om je eerste te maken.";
+        case Label.CustomComparisonsNew:
+            return "Nieuw…";
+        case Label.CustomComparisonsEdit:
+            return "Bewerken…";
+        case Label.CustomComparisonsRename:
+            return "Hernoemen…";
+        case Label.CustomComparisonsDuplicate:
+            return "Dupliceren";
+        case Label.CustomComparisonsImport:
+            return "Importeren…";
+        case Label.CustomComparisonsExport:
+            return "Exporteren…";
+        case Label.CustomComparisonsCopyAsText:
+            return "Kopiëren als tekst";
+        case Label.CustomComparisonsPaste:
+            return "Plakken…";
+        case Label.CustomComparisonsUsedBy:
+            return "Gebruikt door {0} andere vergelijkingen";
+        case Label.CustomComparisonsUsedByOne:
+            return "Gebruikt door 1 andere vergelijking";
+        case Label.CustomComparisonsUnreadable:
+            return "Kan niet worden gelezen";
+        case Label.CustomComparisonsSaveReminder:
+            return "Wijzigingen worden meteen opgeslagen, op dit apparaat. Gebruik Alles exporteren om ze naar een ander apparaat mee te nemen.";
+        case Label.CustomComparisonsCopiedToClipboard:
+            return "Gekopieerd. Je kunt het in een chat of forumbericht plakken.";
+        case Label.CustomComparisonsCouldNotCopy:
+            return "Kon niet naar het klembord kopiëren.";
+        case Label.CustomComparisonsCouldNotReadClipboard:
+            return "Kon het klembord niet lezen. Plak de tekst hier:";
+        case Label.CustomComparisonsErrorTitle:
+            return "Dat werkte niet";
+        case Label.CustomComparisonsRenameTitle:
+            return "Vergelijking hernoemen";
+        case Label.CustomComparisonsRenameDescription:
+            return "De vergelijkingen die deze gebruiken, krijgen de nieuwe naam.";
+        case Label.CustomComparisonsNameTakenTitle:
+            return "Kies een andere naam";
+        case Label.CustomComparisonsNameTakenDescription:
+            return "{0} Typ een andere naam:";
+        case Label.CustomComparisonsRemoveTitle:
+            return "Vergelijking verwijderen";
+        case Label.CustomComparisonsRemoveDescription:
+            return "‘{0}’ verwijderen?";
+        case Label.CustomComparisonsRemoveUsedDescription:
+            return "‘{0}’ verwijderen? {1} andere vergelijkingen gebruiken deze en werken niet meer zonder.";
+        case Label.CustomComparisonsRemoveUsedOneDescription:
+            return "‘{0}’ verwijderen? 1 andere vergelijking gebruikt deze en werkt niet meer zonder.";
+        case Label.CustomComparisonsPasteTitle:
+            return "Vergelijking plakken";
+        case Label.CustomComparisonsPasteDescription:
+            return "Plak de tekst van een vergelijking die iemand heeft gedeeld:";
+        case Label.CustomComparisonsCopySuffix:
+            return "{0} (kopie)";
+        case Label.CustomComparisonsTemplatesTitle:
+            return "Nieuwe vergelijking";
+        case Label.CustomComparisonsTemplatesDescription:
+            return "Kies een startpunt. Elk is een kant-en-klare vergelijking die je zo kunt gebruiken of aanpassen.";
+        case Label.CustomComparisonsTemplateGoalPace:
+            return "Doeltempo";
+        case Label.CustomComparisonsTemplateGoalPaceDescription:
+            return "Je gebruikelijke runs, uitgerekt om precies op een doeltijd te eindigen.";
+        case Label.CustomComparisonsTemplateRealisticPace:
+            return "Realistisch tempo";
+        case Label.CustomComparisonsTemplateRealisticPaceDescription:
+            return "Percentiel 70 van de afgelopen 30 dagen: tijden die je ongeveer 70 % van de keren verslaat.";
+        case Label.CustomComparisonsTemplateRecentForm:
+            return "Recente vorm";
+        case Label.CustomComparisonsTemplateRecentFormDescription:
+            return "De mediaan van je laatste 10 voltooide runs, zonder de beste en slechtste uitschieter.";
+        case Label.CustomComparisonsTemplateSafePace:
+            return "Veilig tempo";
+        case Label.CustomComparisonsTemplateSafePaceDescription:
+            return "De langzaamste van je golds + 2 s en je mediaan, zodat het nooit onrealistisch snel is.";
+        case Label.CustomComparisonsTemplateBlank:
+            return "Leeg";
+        case Label.CustomComparisonsTemplateBlankDescription:
+            return "Begin vanaf nul.";
+        case Label.CustomComparisonsNewComparisonName:
+            return "Mijn vergelijking";
+        case Label.CustomComparisonsEditorTitle:
+            return "Eigen vergelijking";
+        case Label.CustomComparisonsName:
+            return "Naam";
+        case Label.CustomComparisonsUndo:
+            return "Ongedaan maken";
+        case Label.CustomComparisonsRedo:
+            return "Opnieuw";
+        case Label.CustomComparisonsChooseBlock:
+            return "Kies een blok…";
+        case Label.CustomComparisonsReplaceBlock:
+            return "Vervangen door…";
+        case Label.CustomComparisonsWrapBlock:
+            return "Plaatsen in…";
+        case Label.CustomComparisonsUnwrapBlock:
+            return "Verwijderen, inhoud behouden";
+        case Label.CustomComparisonsPreviewBlock:
+            return "Voorbeeld van dit blok";
+        case Label.CustomComparisonsBlockMenu:
+            return "Blokacties";
+        case Label.CustomComparisonsFillEmptySlots:
+            return "Vul de lege vakken om het voorbeeld te zien. Elk vak heeft een blok nodig.";
+        case Label.CustomComparisonsDiscardChangesDescription:
+            return "Deze vergelijking heeft wijzigingen die niet zijn opgeslagen.";
+        case Label.CustomComparisonsDiscard:
+            return "Verwerpen";
+        case Label.CustomComparisonsKeepEditing:
+            return "Verder bewerken";
+        case Label.CustomComparisonsInvalidTime:
+            return "Typ een tijd zoals 20:00 of 1:05:30.";
+        case Label.CustomComparisonsNotFound:
+            return "{0} (niet gevonden)";
+        case Label.CustomComparisonsNotInSplits:
+            return "{0}. (niet in je splits)";
+        case Label.CustomComparisonsSegmentOption:
+            return "{0}. {1}";
+        case Label.CustomComparisonsAddRange:
+            return "Bereik toevoegen";
+        case Label.CustomComparisonsRemoveRange:
+            return "Dit bereik verwijderen";
+        case Label.CustomComparisonsRangeBackwards:
+            return "Segmenten {0} tot {1} is omgekeerd. Wissel de getallen om.";
+        case Label.CustomComparisonsCategorySources:
+            return "Bronnen";
+        case Label.CustomComparisonsCategoryFilters:
+            return "Filters";
+        case Label.CustomComparisonsCategoryAggregates:
+            return "Samenvattingen";
+        case Label.CustomComparisonsCategoryMath:
+            return "Rekenen";
+        case Label.CustomComparisonsCategoryControl:
+            return "Besturing";
+        case Label.CustomComparisonsKindSamples:
+            return "Een lijst met tijden per segment";
+        case Label.CustomComparisonsKindTimes:
+            return "Eén tijd per segment";
+        case Label.CustomComparisonsBlockResult:
+            return "deze vergelijking is";
+        case Label.CustomComparisonsBlockResultTip:
+            return "De afgewerkte vergelijking. Zet de blokken die haar opbouwen hierin.";
+        case Label.CustomComparisonsBlockSegmentHistory:
+            return "al mijn tijden per segment";
+        case Label.CustomComparisonsBlockSegmentHistoryTip:
+            return "Elke tijd die je per segment hebt geregistreerd. Overgeslagen segmenten, en het samengevoegde segment direct na een overslag, worden weggelaten.";
+        case Label.CustomComparisonsBlockComparison:
+            return "vergelijking {name}";
+        case Label.CustomComparisonsBlockComparisonTip:
+            return "Een bestaande vergelijking, segment voor segment. Ingebouwde werken ook als ze zijn uitgeschakeld.";
+        case Label.CustomComparisonsBlockAttempt:
+            return "poging nr. {number}";
+        case Label.CustomComparisonsBlockAttemptTip:
+            return "De segmenten van een eerdere poging, op nummer in de pogingsgeschiedenis. Leeg waar die run een split oversloeg of werd gereset.";
+        case Label.CustomComparisonsBlockBestRecentRun:
+            return "mijn beste run van de afgelopen {days} dagen";
+        case Label.CustomComparisonsBlockBestRecentRunTip:
+            return "De segmenten van je snelste voltooide run van de afgelopen N dagen: een ‘recente PB’ die meebeweegt terwijl je speelt. Leeg als er in die tijd geen run is voltooid.";
+        case Label.CustomComparisonsBlockLastN:
+            return "laatste {count} tijden van";
+        case Label.CustomComparisonsBlockLastNTip:
+            return "Houdt de meest recente tijden per segment. Telt hoe vaak dat segment is voltooid, niet de pogingen.";
+        case Label.CustomComparisonsBlockCompletedRunsOnly:
+            return "alleen van voltooide runs";
+        case Label.CustomComparisonsBlockCompletedRunsOnlyTip:
+            return "Houdt alleen tijden van pogingen die de hele run hebben uitgespeeld.";
+        case Label.CustomComparisonsBlockRecentDays:
+            return "van de afgelopen {days} dagen";
+        case Label.CustomComparisonsBlockRecentDaysTip:
+            return "Houdt alleen tijden van pogingen die in de afgelopen N dagen eindigden, zodat oude tijden niet meer meetellen. Pogingen zonder datum worden weggelaten.";
+        case Label.CustomComparisonsBlockFinishedUnder:
+            return "van runs die eindigden onder {totalSeconds}";
+        case Label.CustomComparisonsBlockFinishedUnderTip:
+            return "Houdt alleen tijden van runs die sneller dan dit eindigden, zodat alleen je goede runs meetellen.";
+        case Label.CustomComparisonsBlockReachedSegment:
+            return "van runs die {segment} bereikten";
+        case Label.CustomComparisonsBlockReachedSegmentTip:
+            return "Houdt alleen tijden van pogingen die minstens tot dit segment kwamen. Zoals ‘alleen van voltooide runs’, maar voor games waarin de meeste runs vroeg worden gereset. Als dit segment niet in je splits staat, zie je een waarschuwing en blijven er geen tijden over.";
+        case Label.CustomComparisonsBlockTrimOutliers:
+            return "zonder de snelste en langzaamste {percent} % van";
+        case Label.CustomComparisonsBlockTrimOutliersTip:
+            return "Verwijdert uitschieters voor het middelen: laat dat deel van de snelste en langzaamste tijden van elk segment weg. Bij weinig tijden wordt niets weggelaten.";
+        case Label.CustomComparisonsBlockAtLeast:
+            return "alleen als er minstens {count} tijden zijn in";
+        case Label.CustomComparisonsBlockAtLeastTip:
+            return "Segmenten met minder tijden worden leeg, zodat je ze kunt vullen met ‘indien leeg, gebruik’ in plaats van te vertrouwen op te weinig gegevens.";
+        case Label.CustomComparisonsBlockAggregate:
+            return "{kind} van";
+        case Label.CustomComparisonsBlockAggregateTip:
+            return "Maakt van de lijst met tijden van elk segment één tijd. Een segment zonder tijden blijft leeg.";
+        case Label.CustomComparisonsAggregateMedian:
+            return "mediaan";
+        case Label.CustomComparisonsAggregateAverage:
+            return "gemiddelde";
+        case Label.CustomComparisonsAggregateMin:
+            return "beste (min)";
+        case Label.CustomComparisonsAggregateMax:
+            return "slechtste (max)";
+        case Label.CustomComparisonsBlockPercentile:
+            return "percentiel {percent} van";
+        case Label.CustomComparisonsBlockPercentileTip:
+            return "0 is je snelste tijd, 100 je langzaamste, 50 de mediaan. 70 betekent: je verslaat deze tijd ongeveer 70 % van de keren.";
+        case Label.CustomComparisonsBlockWeightedAverage:
+            return "recent gewogen gemiddelde van";
+        case Label.CustomComparisonsBlockWeightedAverageFooter:
+            return "gewicht halveert elke {halfLife} oudere tijden";
+        case Label.CustomComparisonsBlockWeightedAverageTip:
+            return "Een gemiddelde waarin recente tijden zwaarder wegen. De nieuwste tijd telt volledig, een die N tijden ouder is telt half, 2N tijden ouder een kwart, enzovoort.";
+        case Label.CustomComparisonsBlockAddTime:
+            return "tel {seconds} s per segment op bij";
+        case Label.CustomComparisonsBlockAddTimeTip:
+            return "Telt tijd op bij elk segment (of trekt die af, als het negatief is). Gaat nooit onder nul.";
+        case Label.CustomComparisonsBlockScale:
+            return "{percent} % van";
+        case Label.CustomComparisonsBlockScaleTip:
+            return "Schaalt elk segment. 103 % is 3 % langzamer, 97 % is 3 % sneller.";
+        case Label.CustomComparisonsBlockRound:
+            return "afronden op {step}";
+        case Label.CustomComparisonsBlockRoundTip:
+            return "Rondt elk segment af op de dichtstbijzijnde 0,1 s (of 1 s, 0,01 s), zodat de splittijden ook netjes zijn.";
+        case Label.CustomComparisonsRoundStep:
+            return "{0} s";
+        case Label.CustomComparisonsBlockClamp:
+            return "houd";
+        case Label.CustomComparisonsBlockClampTip:
+            return "Houdt elk segment tussen twee grenzen, bijvoorbeeld nooit sneller dan je golds en nooit langzamer dan je PB. Als de grenzen elkaar kruisen, wint ‘nooit sneller dan’.";
+        case Label.CustomComparisonsSlotNeverFaster:
+            return "nooit sneller dan";
+        case Label.CustomComparisonsSlotNeverSlower:
+            return "nooit langzamer dan";
+        case Label.CustomComparisonsBlockStretchToTotal:
+            return "uitrekken tot een eindtijd van {totalSeconds}";
+        case Label.CustomComparisonsBlockStretchToTotalTip:
+            return "Schaalt elk segment met dezelfde factor zodat de hele run precies op de doeltijd uitkomt. Als een segment leeg is, is het resultaat leeg: vul gaten eerst met ‘indien leeg, gebruik’.";
+        case Label.CustomComparisonsBlockBlend:
+            return "{percent} % van de weg van";
+        case Label.CustomComparisonsBlockBlendTip:
+            return "Mengt twee regels per segment. 0 % is helemaal de eerste, 100 % helemaal de tweede, 75 % is driekwart van de weg.";
+        case Label.CustomComparisonsSlotTo:
+            return "naar";
+        case Label.CustomComparisonsBlockPick:
+            return "de {kind} van";
+        case Label.CustomComparisonsBlockPickTip:
+            return "Per segment de langzaamste (of snelste) van de twee regels. Als een ervan geen tijd heeft voor een segment, wordt de andere gebruikt.";
+        case Label.CustomComparisonsPickSlower:
+            return "langzaamste";
+        case Label.CustomComparisonsPickFaster:
+            return "snelste";
+        case Label.CustomComparisonsSlotAnd:
+            return "en";
+        case Label.CustomComparisonsBlockFallback:
+            return "gebruik";
+        case Label.CustomComparisonsBlockFallbackTip:
+            return "Vult alleen de segmenten die de eerste regel leeg laat, bijvoorbeeld omdat er nog niet genoeg runs zijn.";
+        case Label.CustomComparisonsSlotIfEmpty:
+            return "indien leeg, gebruik";
+        case Label.CustomComparisonsBlockSegmentRange:
+            return "voor segmenten … gebruik … anders …";
+        case Label.CustomComparisonsBlockSegmentRangeTip:
+            return "Gebruikt één regel voor een bereik van segmenten en een andere voor de rest. Voeg meer bereiken toe voor meer regels: het eerste bereik dat past wint. Als een bereik voorbij het einde van je splits wijst, zie je een waarschuwing.";
+        case Label.CustomComparisonsBlockSegmentRangeHeader:
+            return "verschillende regels voor verschillende segmenten (het eerste bereik dat past wint)";
+        case Label.CustomComparisonsRangeCase:
+            return "voor segmenten {from} tot {to} gebruik";
+        case Label.CustomComparisonsSlotOtherwise:
+            return "anders";
+        case Label.CustomComparisonsPreview:
+            return "Voorbeeld";
+        case Label.CustomComparisonsPreviewingBlock:
+            return "Voorbeeld van een blok, niet van de vergelijking";
+        case Label.CustomComparisonsShowWholeComparison:
+            return "Hele vergelijking tonen";
+        case Label.CustomComparisonsSegment:
+            return "Segment";
+        case Label.CustomComparisonsDifferenceFrom:
+            return "Verschil met";
+        case Label.CustomComparisonsFasterThanGold:
+            return "Sneller dan je beste tijd voor dit segment (je gold)";
+        case Label.CustomComparisonsFasterThanGoldWarning:
+            return "{0} segmenten zijn sneller dan je golds. Dat mag, maar dit tempo is misschien niet realistisch.";
+        case Label.CustomComparisonsFasterThanGoldWarningOne:
+            return "1 segment is sneller dan je gold. Dat mag, maar dit tempo is misschien niet realistisch.";
+        case Label.CustomComparisonsFinishLine:
+            return "Eindigt op {0}, {1} ten opzichte van {2}.";
+        case Label.CustomComparisonsFinishVsSumOfBest:
+            return "Je som van beste segmenten is {0}.";
+        case Label.CustomComparisonsNoProblems:
+            return "Geen problemen.";
+        case Label.CustomComparisonsNoTimesLeft:
+            return "Geen enkel segment heeft een tijd. Klik op een rij om te zien waarom, of voeg ‘gebruik … indien leeg, gebruik’ toe met een reserve zoals je PB.";
+        case Label.CustomComparisonsOriginTitle:
+            return "Waar deze tijd vandaan komt";
+        case Label.CustomComparisonsOriginEmpty:
+            return "Dit segment heeft geen tijd, dus elke split erna is ook leeg.";
+        case Label.CustomComparisonsOriginFillingGap:
+            return "vult een gat";
+        case Label.CustomComparisonsOriginPicked:
+            return "de {0} van de twee";
+        case Label.CustomComparisonsOriginLowLimit:
+            return "vastgehouden op de grens ‘nooit sneller dan’";
+        case Label.CustomComparisonsOriginHighLimit:
+            return "vastgehouden op de grens ‘nooit langzamer dan’";
+        case Label.CustomComparisonsClickRowHint:
+            return "Klik op een rij om te zien waar de tijd vandaan komt.";
+        case Label.CustomComparisonsDescYourGolds:
+            return "je golds";
+        case Label.CustomComparisonsDescYourPb:
+            return "je PB";
+        case Label.CustomComparisonsDescComparison:
+            return "‘{0}’";
+        case Label.CustomComparisonsDescAttempt:
+            return "poging nr. {0}";
+        case Label.CustomComparisonsDescBestRecentRun:
+            return "je beste run van de afgelopen {0} dagen";
+        case Label.CustomComparisonsDescWeightedAverage:
+            return "het recent gewogen gemiddelde van {0}";
+        case Label.CustomComparisonsDescClamp:
+            return "{0}, gehouden tussen {1} en {2}";
+        case Label.CustomComparisonsDescRound:
+            return "{0}, afgerond op {1}";
+        case Label.CustomComparisonsDescMedian:
+            return "de mediaan van {0}";
+        case Label.CustomComparisonsDescAverage:
+            return "het gemiddelde van {0}";
+        case Label.CustomComparisonsDescMin:
+            return "de beste van {0}";
+        case Label.CustomComparisonsDescMax:
+            return "de slechtste van {0}";
+        case Label.CustomComparisonsDescPercentile:
+            return "percentiel {0} van {1}";
+        case Label.CustomComparisonsDescAddTime:
+            return "{0} + {1}";
+        case Label.CustomComparisonsDescRemoveTime:
+            return "{0} − {1}";
+        case Label.CustomComparisonsDescScale:
+            return "{0} % van {1}";
+        case Label.CustomComparisonsDescStretch:
+            return "{0}, uitgerekt tot een eindtijd van {1}";
+        case Label.CustomComparisonsDescBlend:
+            return "{0} % van de weg van {1} naar {2}";
+        case Label.CustomComparisonsDescSlower:
+            return "de langzaamste van {0} en {1}";
+        case Label.CustomComparisonsDescFaster:
+            return "de snelste van {0} en {1}";
+        case Label.CustomComparisonsDescFallback:
+            return "{0} (of {1} waar dat leeg is)";
+        case Label.CustomComparisonsDescRangeArm:
+            return "{0} voor {1}";
+        case Label.CustomComparisonsDescRangeOtherwise:
+            return "{0}, anders {1}";
+        case Label.CustomComparisonsDescSomething:
+            return "iets";
+        case Label.CustomComparisonsDescAllTimes:
+            return "al je tijden";
+        case Label.CustomComparisonsDescLastN:
+            return "je laatste {0} tijden";
+        case Label.CustomComparisonsQualCompleted:
+            return "van voltooide runs";
+        case Label.CustomComparisonsQualRecentDays:
+            return "van de afgelopen {0} dagen";
+        case Label.CustomComparisonsQualUnder:
+            return "van runs onder {0}";
+        case Label.CustomComparisonsQualTrim:
+            return "zonder de snelste en langzaamste {0} %";
+        case Label.CustomComparisonsQualAtLeast:
+            return "als er minstens {0} zijn";
+        case Label.CustomComparisonsQualReached:
+            return "van runs die {0} bereikten";
+        case Label.CustomComparisonsSumGapsFilled:
+            return "{0} Gaten gevuld met {1}.";
+        case Label.CustomComparisonsSumRangeArm:
+            return "{0}: {1}";
+        case Label.CustomComparisonsSumOtherSegments:
+            return "Andere segmenten: {0}";
+        case Label.CustomComparisonsSegmentNumber:
+            return "segment {0}";
+        case Label.CustomComparisonsSegmentSpan:
+            return "{0} tot {1}";
+        case Label.CustomComparisonsSeconds:
+            return "{0} s";
+        case Label.CustomComparisonsListAnd:
+            return "{0} en {1}";
+        case Label.CustomComparisonsWarnSegment:
+            return "Gebruikt segment {0}, maar je splits hebben er {1}";
+        case Label.CustomComparisonsWarnSegments:
+            return "Gebruikt segmenten {0}, maar je splits hebben er {1}";
+        case Label.CustomComparisonsSentence:
+            return "{0}.";
     }
 }
