@@ -656,5 +656,423 @@ export function resolveJapanese(text: Label): string {
             return "LiveSplit One を読み込めませんでした。\nプライベートブラウジングを使用している可能性があります。\nブラウザのプライベートブラウジングの制限により、LiveSplit One はスプリット、レイアウト、その他の設定を保存できません。\nこれらの制限は将来解除される可能性があります。\n今すぐ LiveSplit One を使うには、設定でプライベートブラウジングを無効にしてください。";
         case Label.LoadFailedOutdatedBrowser:
             return "LiveSplit One を読み込めませんでした。\nブラウザが最新でない可能性があります。\nブラウザまたは iOS のバージョンを更新して、もう一度お試しください。\n別の原因として、広告ブロッカーなどのブラウザ拡張機能が重要なスクリプトへのアクセスをブロックしている可能性があります。";
+        case Label.CustomComparisonsSidebarEditingHint:
+            return "先に編集中の比較対象を保存するかキャンセルしてください。";
+        case Label.CustomComparisonsComparisonMenu:
+            return "その他の操作";
+        case Label.CustomComparisonsNameRequired:
+            return "比較対象に名前を付けてください。";
+        case Label.CustomComparisonsSearchBlocks:
+            return "ブロックを検索";
+        case Label.CustomComparisonsNoBlocksFound:
+            return "一致するブロックがありません。別の言葉で試してください。";
+        case Label.CustomComparisonsAboutBlock:
+            return "このブロックの働き";
+        case Label.CustomComparisonsBlocks:
+            return "ブロック";
+        case Label.CustomComparisonsRailHint:
+            return "ブロックを空き枠にドラッグするか、ブロックの上にドラッグして置き換えます。クリックすると、合う最初の空き枠に入ります。";
+        case Label.CustomComparisonsDragBlock:
+            return "ドラッグしてこのブロックを移動";
+        case Label.CustomComparisonsOpenEditorHint:
+            return "カスタム比較対象はすべてのスプリットで使え、他の比較対象と並んで表示されます。";
+        case Label.CustomComparisons:
+            return "カスタム比較対象";
+        case Label.CustomComparisonsExportAll:
+            return "すべてエクスポート…";
+        case Label.CustomComparisonsExportAllFileName:
+            return "カスタム比較対象";
+        case Label.CustomComparisonsPluginUnavailable:
+            return "カスタム比較対象を読み込めなかったため、現在は比較対象として表示されません：{0}";
+        case Label.CustomComparisonsListHeading:
+            return "比較対象";
+        case Label.CustomComparisonsNoComparisons:
+            return "カスタム比較対象はまだありません。「新規」をクリックして最初の比較対象を作成しましょう。";
+        case Label.CustomComparisonsNew:
+            return "新規…";
+        case Label.CustomComparisonsEdit:
+            return "編集…";
+        case Label.CustomComparisonsRename:
+            return "名前変更…";
+        case Label.CustomComparisonsDuplicate:
+            return "複製";
+        case Label.CustomComparisonsImport:
+            return "インポート…";
+        case Label.CustomComparisonsExport:
+            return "エクスポート…";
+        case Label.CustomComparisonsCopyAsText:
+            return "テキストとしてコピー";
+        case Label.CustomComparisonsPaste:
+            return "貼り付け…";
+        case Label.CustomComparisonsUsedBy:
+            return "他の {0} 個の比較対象で使用中";
+        case Label.CustomComparisonsUsedByOne:
+            return "他の 1 個の比較対象で使用中";
+        case Label.CustomComparisonsUnreadable:
+            return "読み込めません";
+        case Label.CustomComparisonsSaveReminder:
+            return "変更はこの端末にすぐ保存されます。別の端末に移すには「すべてエクスポート」を使ってください。";
+        case Label.CustomComparisonsCopiedToClipboard:
+            return "コピーしました。チャットやフォーラムの投稿に貼り付けられます。";
+        case Label.CustomComparisonsCouldNotCopy:
+            return "クリップボードにコピーできませんでした。";
+        case Label.CustomComparisonsCouldNotReadClipboard:
+            return "クリップボードを読み取れませんでした。代わりにここにテキストを貼り付けてください：";
+        case Label.CustomComparisonsErrorTitle:
+            return "うまくいきませんでした";
+        case Label.CustomComparisonsRenameTitle:
+            return "比較対象の名前を変更";
+        case Label.CustomComparisonsRenameDescription:
+            return "これを使う比較対象も新しい名前に更新されます。";
+        case Label.CustomComparisonsNameTakenTitle:
+            return "別の名前を選んでください";
+        case Label.CustomComparisonsNameTakenDescription:
+            return "{0} 別の名前を入力してください：";
+        case Label.CustomComparisonsRemoveTitle:
+            return "比較対象を削除";
+        case Label.CustomComparisonsRemoveDescription:
+            return "「{0}」を削除しますか？";
+        case Label.CustomComparisonsRemoveUsedDescription:
+            return "「{0}」を削除しますか？ 他の {1} 個の比較対象がこれを使っており、削除すると動作しなくなります。";
+        case Label.CustomComparisonsRemoveUsedOneDescription:
+            return "「{0}」を削除しますか？ 他の 1 個の比較対象がこれを使っており、削除すると動作しなくなります。";
+        case Label.CustomComparisonsPasteTitle:
+            return "比較対象を貼り付け";
+        case Label.CustomComparisonsPasteDescription:
+            return "共有された比較対象のテキストを貼り付けてください：";
+        case Label.CustomComparisonsCopySuffix:
+            return "{0}（コピー）";
+        case Label.CustomComparisonsTemplatesTitle:
+            return "新しい比較対象";
+        case Label.CustomComparisonsTemplatesDescription:
+            return "出発点を選んでください。どれも完成した比較対象で、そのまま使うことも変更することもできます。";
+        case Label.CustomComparisonsTemplateGoalPace:
+            return "目標ペース";
+        case Label.CustomComparisonsTemplateGoalPaceDescription:
+            return "普段のランを、目標タイムちょうどで終わるように引き伸ばしたもの。";
+        case Label.CustomComparisonsTemplateRealisticPace:
+            return "現実的なペース";
+        case Label.CustomComparisonsTemplateRealisticPaceDescription:
+            return "過去 30 日の 70 パーセンタイル：約 70 % の確率で上回れるタイム。";
+        case Label.CustomComparisonsTemplateRecentForm:
+            return "最近の調子";
+        case Label.CustomComparisonsTemplateRecentFormDescription:
+            return "完走した直近 10 ランの中央値。最も良い偶然と悪い偶然は除外します。";
+        case Label.CustomComparisonsTemplateSafePace:
+            return "安全なペース";
+        case Label.CustomComparisonsTemplateSafePaceDescription:
+            return "区間ベスト + 2 秒と中央値の遅い方。非現実的に速くなることはありません。";
+        case Label.CustomComparisonsTemplateBlank:
+            return "空白";
+        case Label.CustomComparisonsTemplateBlankDescription:
+            return "ゼロから始めます。";
+        case Label.CustomComparisonsNewComparisonName:
+            return "マイ比較対象";
+        case Label.CustomComparisonsEditorTitle:
+            return "カスタム比較対象";
+        case Label.CustomComparisonsName:
+            return "名前";
+        case Label.CustomComparisonsUndo:
+            return "元に戻す";
+        case Label.CustomComparisonsRedo:
+            return "やり直す";
+        case Label.CustomComparisonsChooseBlock:
+            return "ブロックを選択…";
+        case Label.CustomComparisonsReplaceBlock:
+            return "置き換え…";
+        case Label.CustomComparisonsWrapBlock:
+            return "中に入れる…";
+        case Label.CustomComparisonsUnwrapBlock:
+            return "削除して中身を残す";
+        case Label.CustomComparisonsPreviewBlock:
+            return "このブロックをプレビュー";
+        case Label.CustomComparisonsBlockMenu:
+            return "ブロックの操作";
+        case Label.CustomComparisonsFillEmptySlots:
+            return "プレビューを見るには空き枠を埋めてください。すべての枠にブロックが必要です。";
+        case Label.CustomComparisonsDiscardChangesDescription:
+            return "この比較対象には保存されていない変更があります。";
+        case Label.CustomComparisonsDiscard:
+            return "破棄";
+        case Label.CustomComparisonsKeepEditing:
+            return "編集を続ける";
+        case Label.CustomComparisonsInvalidTime:
+            return "20:00 や 1:05:30 のようにタイムを入力してください。";
+        case Label.CustomComparisonsNotFound:
+            return "{0}（見つかりません）";
+        case Label.CustomComparisonsNotInSplits:
+            return "{0}.（スプリットにありません）";
+        case Label.CustomComparisonsSegmentOption:
+            return "{0}. {1}";
+        case Label.CustomComparisonsAddRange:
+            return "範囲を追加";
+        case Label.CustomComparisonsRemoveRange:
+            return "この範囲を削除";
+        case Label.CustomComparisonsRangeBackwards:
+            return "区間 {0}〜{1} が逆になっています。数字を入れ替えてください。";
+        case Label.CustomComparisonsCategorySources:
+            return "ソース";
+        case Label.CustomComparisonsCategoryFilters:
+            return "フィルター";
+        case Label.CustomComparisonsCategoryAggregates:
+            return "集計";
+        case Label.CustomComparisonsCategoryMath:
+            return "計算";
+        case Label.CustomComparisonsCategoryControl:
+            return "制御";
+        case Label.CustomComparisonsKindSamples:
+            return "区間ごとのタイムのリスト";
+        case Label.CustomComparisonsKindTimes:
+            return "区間ごとに 1 つのタイム";
+        case Label.CustomComparisonsBlockResult:
+            return "この比較対象は";
+        case Label.CustomComparisonsBlockResultTip:
+            return "完成した比較対象です。これを組み立てるブロックをここに入れてください。";
+        case Label.CustomComparisonsBlockSegmentHistory:
+            return "各区間の自分の全タイム";
+        case Label.CustomComparisonsBlockSegmentHistoryTip:
+            return "各区間で記録したすべてのタイム。スキップした区間と、スキップ直後の結合された区間は除外されます。";
+        case Label.CustomComparisonsBlockComparison:
+            return "比較対象 {name}";
+        case Label.CustomComparisonsBlockComparisonTip:
+            return "既存の比較対象を区間ごとに使います。組み込みの比較対象はオフでも使えます。";
+        case Label.CustomComparisonsBlockAttempt:
+            return "試行 #{number}";
+        case Label.CustomComparisonsBlockAttemptTip:
+            return "試行履歴の番号で指定した過去の試行の区間。そのランがスプリットをスキップした所やリセットした所は空になります。";
+        case Label.CustomComparisonsBlockBestRecentRun:
+            return "過去 {days} 日の自己最速ラン";
+        case Label.CustomComparisonsBlockBestRecentRunTip:
+            return "過去 N 日で完走した最速ランの区間：プレイするにつれて変わる「最近の自己ベスト」です。その期間に完走したランがなければ空になります。";
+        case Label.CustomComparisonsBlockLastN:
+            return "直近 {count} 回のタイム：";
+        case Label.CustomComparisonsBlockLastNTip:
+            return "各区間の最新のタイムを残します。試行回数ではなく、その区間を完了した回数で数えます。";
+        case Label.CustomComparisonsBlockCompletedRunsOnly:
+            return "完走したランのみ";
+        case Label.CustomComparisonsBlockCompletedRunsOnlyTip:
+            return "ラン全体を完走した試行のタイムだけを残します。";
+        case Label.CustomComparisonsBlockRecentDays:
+            return "過去 {days} 日";
+        case Label.CustomComparisonsBlockRecentDaysTip:
+            return "過去 N 日に終わった試行のタイムだけを残し、古いタイムが数えられないようにします。日付のない試行は除外されます。";
+        case Label.CustomComparisonsBlockFinishedUnder:
+            return "{totalSeconds} 未満で完走したラン";
+        case Label.CustomComparisonsBlockFinishedUnderTip:
+            return "これより速く完走したランのタイムだけを残し、良いランだけが数えられるようにします。";
+        case Label.CustomComparisonsBlockReachedSegment:
+            return "{segment} まで到達したラン";
+        case Label.CustomComparisonsBlockReachedSegmentTip:
+            return "少なくともこの区間まで到達した試行のタイムだけを残します。「完走したランのみ」と似ていますが、ほとんどのランが早くリセットされるゲーム向けです。この区間がスプリットにない場合は警告が表示され、タイムは残りません。";
+        case Label.CustomComparisonsBlockTrimOutliers:
+            return "最速と最遅の {percent} % を除外：";
+        case Label.CustomComparisonsBlockTrimOutliersTip:
+            return "平均する前に偶然を取り除きます：各区間の最速と最遅のタイムをこの割合だけ除外します。タイムが少ないときは何も除外しません。";
+        case Label.CustomComparisonsBlockAtLeast:
+            return "{count} 個以上のタイムがある場合のみ：";
+        case Label.CustomComparisonsBlockAtLeastTip:
+            return "タイムが少ない区間は空になります。少なすぎるデータを信用する代わりに「空なら使う」で埋められます。";
+        case Label.CustomComparisonsBlockAggregate:
+            return "{kind}：";
+        case Label.CustomComparisonsBlockAggregateTip:
+            return "各区間のタイムのリストを 1 つのタイムにします。タイムのない区間は空のままです。";
+        case Label.CustomComparisonsAggregateMedian:
+            return "中央値";
+        case Label.CustomComparisonsAggregateAverage:
+            return "平均";
+        case Label.CustomComparisonsAggregateMin:
+            return "最良 (最小)";
+        case Label.CustomComparisonsAggregateMax:
+            return "最悪 (最大)";
+        case Label.CustomComparisonsBlockPercentile:
+            return "{percent} パーセンタイル：";
+        case Label.CustomComparisonsBlockPercentileTip:
+            return "0 は最速タイム、100 は最遅、50 は中央値です。70 は「約 70 % の確率でこのタイムを上回る」という意味です。";
+        case Label.CustomComparisonsBlockWeightedAverage:
+            return "最近を重視した平均：";
+        case Label.CustomComparisonsBlockWeightedAverageFooter:
+            return "{halfLife} 回古くなるごとに重みが半分";
+        case Label.CustomComparisonsBlockWeightedAverageTip:
+            return "最近のタイムほど重く数える平均です。最新のタイムは全体、N 回前のタイムは半分、2N 回前は 4 分の 1 というように数えます。";
+        case Label.CustomComparisonsBlockAddTime:
+            return "区間ごとに {seconds} 秒加算：";
+        case Label.CustomComparisonsBlockAddTimeTip:
+            return "各区間にタイムを加えます（負の値なら減らします）。ゼロ未満にはなりません。";
+        case Label.CustomComparisonsBlockScale:
+            return "{percent} %：";
+        case Label.CustomComparisonsBlockScaleTip:
+            return "各区間を拡大縮小します。103 % は 3 % 遅く、97 % は 3 % 速くなります。";
+        case Label.CustomComparisonsBlockRound:
+            return "{step} 単位に丸める";
+        case Label.CustomComparisonsBlockRoundTip:
+            return "各区間を最も近い 0.1 秒（または 1 秒、0.01 秒）に丸め、スプリットタイムもきれいにします。";
+        case Label.CustomComparisonsRoundStep:
+            return "{0} 秒";
+        case Label.CustomComparisonsBlockClamp:
+            return "範囲内に保つ";
+        case Label.CustomComparisonsBlockClampTip:
+            return "各区間を 2 つの限度の間に保ちます。たとえば区間ベストより速くならず、自己ベストより遅くならないようにします。限度が交差した場合は「これより速くしない」が優先されます。";
+        case Label.CustomComparisonsSlotNeverFaster:
+            return "これより速くしない";
+        case Label.CustomComparisonsSlotNeverSlower:
+            return "これより遅くしない";
+        case Label.CustomComparisonsBlockStretchToTotal:
+            return "{totalSeconds} で完走するよう引き伸ばす";
+        case Label.CustomComparisonsBlockStretchToTotalTip:
+            return "すべての区間を同じ割合で拡大縮小し、ラン全体の合計を目標タイムにします。空の区間があると結果は空になります：先に「空なら使う」で埋めてください。";
+        case Label.CustomComparisonsBlockBlend:
+            return "{percent} % の位置：";
+        case Label.CustomComparisonsBlockBlendTip:
+            return "区間ごとに 2 つのルールを混ぜます。0 % はすべて 1 つ目、100 % はすべて 2 つ目、75 % は 4 分の 3 の位置です。";
+        case Label.CustomComparisonsSlotTo:
+            return "から";
+        case Label.CustomComparisonsBlockPick:
+            return "{kind}方：";
+        case Label.CustomComparisonsBlockPickTip:
+            return "区間ごとに 2 つのルールのうち遅い（または速い）方を使います。一方にその区間のタイムがなければ、もう一方を使います。";
+        case Label.CustomComparisonsPickSlower:
+            return "遅い";
+        case Label.CustomComparisonsPickFaster:
+            return "速い";
+        case Label.CustomComparisonsSlotAnd:
+            return "と";
+        case Label.CustomComparisonsBlockFallback:
+            return "使う";
+        case Label.CustomComparisonsBlockFallbackTip:
+            return "最初のルールが空のままにした区間だけを埋めます。たとえばまだランが足りない場合です。";
+        case Label.CustomComparisonsSlotIfEmpty:
+            return "空なら使う";
+        case Label.CustomComparisonsBlockSegmentRange:
+            return "区間 … には … を使い、それ以外は …";
+        case Label.CustomComparisonsBlockSegmentRangeTip:
+            return "ある範囲の区間には 1 つのルールを、残りには別のルールを使います。範囲を追加するとルールを増やせます：最初に一致した範囲が優先されます。範囲がスプリットの最後を超える場合は警告が表示されます。";
+        case Label.CustomComparisonsBlockSegmentRangeHeader:
+            return "区間ごとに異なるルール（最初に一致した範囲が優先）";
+        case Label.CustomComparisonsRangeCase:
+            return "区間 {from}〜{to} には";
+        case Label.CustomComparisonsSlotOtherwise:
+            return "それ以外";
+        case Label.CustomComparisonsPreview:
+            return "プレビュー";
+        case Label.CustomComparisonsPreviewingBlock:
+            return "比較対象ではなくブロックをプレビュー中";
+        case Label.CustomComparisonsShowWholeComparison:
+            return "比較対象全体を表示";
+        case Label.CustomComparisonsSegment:
+            return "区間";
+        case Label.CustomComparisonsDifferenceFrom:
+            return "差の比較先";
+        case Label.CustomComparisonsFasterThanGold:
+            return "この区間の自己最速タイム（区間ベスト）より速い";
+        case Label.CustomComparisonsFasterThanGoldWarning:
+            return "{0} 個の区間が区間ベストより速くなっています。許可されていますが、このペースは現実的でないかもしれません。";
+        case Label.CustomComparisonsFasterThanGoldWarningOne:
+            return "1 個の区間が区間ベストより速くなっています。許可されていますが、このペースは現実的でないかもしれません。";
+        case Label.CustomComparisonsFinishLine:
+            return "{0} で完走、{2} と比べて {1}。";
+        case Label.CustomComparisonsFinishVsSumOfBest:
+            return "区間ベストの合計は {0} です。";
+        case Label.CustomComparisonsNoProblems:
+            return "問題はありません。";
+        case Label.CustomComparisonsNoTimesLeft:
+            return "タイムのある区間がありません。行をクリックして理由を確認するか、自己ベストなどを予備にして「… 空なら使う」を追加してください。";
+        case Label.CustomComparisonsOriginTitle:
+            return "このタイムの出どころ";
+        case Label.CustomComparisonsOriginEmpty:
+            return "この区間にはタイムがないため、以降のスプリットもすべて空になります。";
+        case Label.CustomComparisonsOriginFillingGap:
+            return "空きを埋めている";
+        case Label.CustomComparisonsOriginPicked:
+            return "2 つのうち{0}方";
+        case Label.CustomComparisonsOriginLowLimit:
+            return "「これより速くしない」の限度で保持";
+        case Label.CustomComparisonsOriginHighLimit:
+            return "「これより遅くしない」の限度で保持";
+        case Label.CustomComparisonsClickRowHint:
+            return "行をクリックすると、そのタイムの出どころが表示されます。";
+        case Label.CustomComparisonsDescYourGolds:
+            return "区間ベスト";
+        case Label.CustomComparisonsDescYourPb:
+            return "自己ベスト";
+        case Label.CustomComparisonsDescComparison:
+            return "「{0}」";
+        case Label.CustomComparisonsDescAttempt:
+            return "試行 #{0}";
+        case Label.CustomComparisonsDescBestRecentRun:
+            return "過去 {0} 日の最速ラン";
+        case Label.CustomComparisonsDescWeightedAverage:
+            return "{0}の最近を重視した平均";
+        case Label.CustomComparisonsDescClamp:
+            return "{1}から{2}の範囲に保った{0}";
+        case Label.CustomComparisonsDescRound:
+            return "{1}単位に丸めた{0}";
+        case Label.CustomComparisonsDescMedian:
+            return "{0}の中央値";
+        case Label.CustomComparisonsDescAverage:
+            return "{0}の平均";
+        case Label.CustomComparisonsDescMin:
+            return "{0}の最良";
+        case Label.CustomComparisonsDescMax:
+            return "{0}の最悪";
+        case Label.CustomComparisonsDescPercentile:
+            return "{1}の {0} パーセンタイル";
+        case Label.CustomComparisonsDescAddTime:
+            return "{0} + {1}";
+        case Label.CustomComparisonsDescRemoveTime:
+            return "{0} − {1}";
+        case Label.CustomComparisonsDescScale:
+            return "{1}の {0} %";
+        case Label.CustomComparisonsDescStretch:
+            return "{1}で完走するよう引き伸ばした{0}";
+        case Label.CustomComparisonsDescBlend:
+            return "{1}から{2}への {0} % の位置";
+        case Label.CustomComparisonsDescSlower:
+            return "{0}と{1}の遅い方";
+        case Label.CustomComparisonsDescFaster:
+            return "{0}と{1}の速い方";
+        case Label.CustomComparisonsDescFallback:
+            return "{0}（空の所は{1}）";
+        case Label.CustomComparisonsDescRangeArm:
+            return "{1}は{0}";
+        case Label.CustomComparisonsDescRangeOtherwise:
+            return "{0}、それ以外は{1}";
+        case Label.CustomComparisonsDescSomething:
+            return "何か";
+        case Label.CustomComparisonsDescAllTimes:
+            return "全タイム";
+        case Label.CustomComparisonsDescLastN:
+            return "直近 {0} 回のタイム";
+        case Label.CustomComparisonsQualCompleted:
+            return "（完走したランのみ）";
+        case Label.CustomComparisonsQualRecentDays:
+            return "（過去 {0} 日）";
+        case Label.CustomComparisonsQualUnder:
+            return "（{0} 未満のラン）";
+        case Label.CustomComparisonsQualTrim:
+            return "（最速と最遅の {0} % を除く）";
+        case Label.CustomComparisonsQualAtLeast:
+            return "（{0} 個以上ある場合）";
+        case Label.CustomComparisonsQualReached:
+            return "（{0} まで到達したラン）";
+        case Label.CustomComparisonsSumGapsFilled:
+            return "{0}空きは{1}で埋めます。";
+        case Label.CustomComparisonsSumRangeArm:
+            return "{0}：{1}";
+        case Label.CustomComparisonsSumOtherSegments:
+            return "その他の区間：{0}";
+        case Label.CustomComparisonsSegmentNumber:
+            return "区間 {0}";
+        case Label.CustomComparisonsSegmentSpan:
+            return "{0}〜{1}";
+        case Label.CustomComparisonsSeconds:
+            return "{0} 秒";
+        case Label.CustomComparisonsListAnd:
+            return "{0}と{1}";
+        case Label.CustomComparisonsWarnSegment:
+            return "区間 {0} を使っていますが、スプリットは {1} 区間です";
+        case Label.CustomComparisonsWarnSegments:
+            return "区間 {0} を使っていますが、スプリットは {1} 区間です";
+        case Label.CustomComparisonsSentence:
+            return "{0}。";
     }
 }

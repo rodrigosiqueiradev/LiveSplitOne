@@ -31,7 +31,6 @@ import {
     Settings,
     X,
 } from "lucide-react";
-import { CcLabel, resolveCc } from "../../localization/custom-comparisons";
 
 import LiveSplitIcon from "../../assets/icon.svg";
 
@@ -370,7 +369,7 @@ export function SideBar({
             </div>
             <button onClick={() => callbacks.openCustomComparisons()}>
                 <Blocks strokeWidth={2.5} />
-                {resolveCc(CcLabel.SidebarButton, lang)}
+                {resolve(Label.CustomComparisons, lang)}
             </button>
             <hr />
             <button onClick={() => callbacks.popOut()}>

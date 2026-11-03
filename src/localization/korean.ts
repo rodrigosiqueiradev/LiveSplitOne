@@ -656,5 +656,423 @@ export function resolveKorean(text: Label): string {
             return "LiveSplit One을 불러올 수 없습니다.\n시크릿/프라이빗 브라우징 모드일 수 있습니다.\n브라우저의 프라이빗 모드 제한으로 인해 LiveSplit One은 스플릿, 레이아웃 또는 다른 설정을 저장할 수 없습니다.\n이 제한은 향후 해제될 수 있습니다.\n지금 LiveSplit One을 사용하려면 설정에서 프라이빗 브라우징을 비활성화해 주세요.";
         case Label.LoadFailedOutdatedBrowser:
             return "LiveSplit One을 불러올 수 없습니다.\n브라우저가 최신 버전이 아닐 수 있습니다.\n브라우저 또는 iOS 버전을 업데이트한 후 다시 시도해 주세요.\n또 다른 이유로는 광고 차단기 같은 브라우저 확장 프로그램이 중요한 스크립트에 대한 접근을 차단하고 있을 수 있습니다.";
+        case Label.CustomComparisonsSidebarEditingHint:
+            return "먼저 편집 중인 비교를 저장하거나 취소하세요.";
+        case Label.CustomComparisonsComparisonMenu:
+            return "추가 작업";
+        case Label.CustomComparisonsNameRequired:
+            return "비교에 이름을 붙이세요.";
+        case Label.CustomComparisonsSearchBlocks:
+            return "블록 검색";
+        case Label.CustomComparisonsNoBlocksFound:
+            return "일치하는 블록이 없습니다. 다른 단어로 시도해 보세요.";
+        case Label.CustomComparisonsAboutBlock:
+            return "이 블록은 무엇을 하나요?";
+        case Label.CustomComparisonsBlocks:
+            return "블록";
+        case Label.CustomComparisonsRailHint:
+            return "블록을 빈 칸으로 끌어다 놓거나, 다른 블록 위에 놓아 교체하세요. 블록을 클릭하면 맞는 첫 번째 빈 칸에 들어갑니다.";
+        case Label.CustomComparisonsDragBlock:
+            return "끌어서 이 블록 이동";
+        case Label.CustomComparisonsOpenEditorHint:
+            return "사용자 지정 비교는 모든 스플릿에서 작동하며 다른 비교와 함께 표시됩니다.";
+        case Label.CustomComparisons:
+            return "사용자 지정 비교";
+        case Label.CustomComparisonsExportAll:
+            return "모두 내보내기…";
+        case Label.CustomComparisonsExportAllFileName:
+            return "사용자 지정 비교";
+        case Label.CustomComparisonsPluginUnavailable:
+            return "사용자 지정 비교를 불러오지 못해 지금은 비교로 표시되지 않습니다: {0}";
+        case Label.CustomComparisonsListHeading:
+            return "비교";
+        case Label.CustomComparisonsNoComparisons:
+            return "아직 사용자 지정 비교가 없습니다. 새로 만들기를 클릭해 첫 번째 비교를 만드세요.";
+        case Label.CustomComparisonsNew:
+            return "새로 만들기…";
+        case Label.CustomComparisonsEdit:
+            return "편집…";
+        case Label.CustomComparisonsRename:
+            return "이름 변경…";
+        case Label.CustomComparisonsDuplicate:
+            return "복제";
+        case Label.CustomComparisonsImport:
+            return "가져오기…";
+        case Label.CustomComparisonsExport:
+            return "내보내기…";
+        case Label.CustomComparisonsCopyAsText:
+            return "텍스트로 복사";
+        case Label.CustomComparisonsPaste:
+            return "붙여넣기…";
+        case Label.CustomComparisonsUsedBy:
+            return "다른 비교 {0}개에서 사용 중";
+        case Label.CustomComparisonsUsedByOne:
+            return "다른 비교 1개에서 사용 중";
+        case Label.CustomComparisonsUnreadable:
+            return "읽을 수 없음";
+        case Label.CustomComparisonsSaveReminder:
+            return "변경 사항은 이 기기에 바로 저장됩니다. 다른 기기로 옮기려면 모두 내보내기를 사용하세요.";
+        case Label.CustomComparisonsCopiedToClipboard:
+            return "복사했습니다. 채팅이나 포럼 글에 붙여넣을 수 있습니다.";
+        case Label.CustomComparisonsCouldNotCopy:
+            return "클립보드에 복사하지 못했습니다.";
+        case Label.CustomComparisonsCouldNotReadClipboard:
+            return "클립보드를 읽지 못했습니다. 대신 여기에 텍스트를 붙여넣으세요:";
+        case Label.CustomComparisonsErrorTitle:
+            return "작업에 실패했습니다";
+        case Label.CustomComparisonsRenameTitle:
+            return "비교 이름 변경";
+        case Label.CustomComparisonsRenameDescription:
+            return "이 비교를 사용하는 비교도 새 이름으로 업데이트됩니다.";
+        case Label.CustomComparisonsNameTakenTitle:
+            return "다른 이름 선택";
+        case Label.CustomComparisonsNameTakenDescription:
+            return "{0} 다른 이름을 입력하세요:";
+        case Label.CustomComparisonsRemoveTitle:
+            return "비교 제거";
+        case Label.CustomComparisonsRemoveDescription:
+            return '"{0}"을(를) 제거할까요?';
+        case Label.CustomComparisonsRemoveUsedDescription:
+            return '"{0}"을(를) 제거할까요? 다른 비교 {1}개가 이를 사용하며, 없으면 작동하지 않습니다.';
+        case Label.CustomComparisonsRemoveUsedOneDescription:
+            return '"{0}"을(를) 제거할까요? 다른 비교 1개가 이를 사용하며, 없으면 작동하지 않습니다.';
+        case Label.CustomComparisonsPasteTitle:
+            return "비교 붙여넣기";
+        case Label.CustomComparisonsPasteDescription:
+            return "다른 사람이 공유한 비교의 텍스트를 붙여넣으세요:";
+        case Label.CustomComparisonsCopySuffix:
+            return "{0} (복사본)";
+        case Label.CustomComparisonsTemplatesTitle:
+            return "새 비교";
+        case Label.CustomComparisonsTemplatesDescription:
+            return "시작점을 고르세요. 각각 그대로 쓰거나 바꿀 수 있는 완성된 비교입니다.";
+        case Label.CustomComparisonsTemplateGoalPace:
+            return "목표 페이스";
+        case Label.CustomComparisonsTemplateGoalPaceDescription:
+            return "평소의 런을 목표 시간에 정확히 끝나도록 늘인 것입니다.";
+        case Label.CustomComparisonsTemplateRealisticPace:
+            return "현실적인 페이스";
+        case Label.CustomComparisonsTemplateRealisticPaceDescription:
+            return "최근 30일의 70번째 백분위수: 약 70 %의 확률로 이기는 시간입니다.";
+        case Label.CustomComparisonsTemplateRecentForm:
+            return "최근 컨디션";
+        case Label.CustomComparisonsTemplateRecentFormDescription:
+            return "최근 완주한 10번의 런의 중앙값으로, 가장 좋은 우연과 가장 나쁜 우연은 제외합니다.";
+        case Label.CustomComparisonsTemplateSafePace:
+            return "안전한 페이스";
+        case Label.CustomComparisonsTemplateSafePaceDescription:
+            return "최고 세그먼트 + 2초와 중앙값 중 느린 쪽이라 비현실적으로 빨라지지 않습니다.";
+        case Label.CustomComparisonsTemplateBlank:
+            return "빈 비교";
+        case Label.CustomComparisonsTemplateBlankDescription:
+            return "처음부터 시작합니다.";
+        case Label.CustomComparisonsNewComparisonName:
+            return "내 비교";
+        case Label.CustomComparisonsEditorTitle:
+            return "사용자 지정 비교";
+        case Label.CustomComparisonsName:
+            return "이름";
+        case Label.CustomComparisonsUndo:
+            return "실행 취소";
+        case Label.CustomComparisonsRedo:
+            return "다시 실행";
+        case Label.CustomComparisonsChooseBlock:
+            return "블록 선택…";
+        case Label.CustomComparisonsReplaceBlock:
+            return "다음으로 교체…";
+        case Label.CustomComparisonsWrapBlock:
+            return "안에 넣기…";
+        case Label.CustomComparisonsUnwrapBlock:
+            return "제거하고 안의 내용은 유지";
+        case Label.CustomComparisonsPreviewBlock:
+            return "이 블록 미리 보기";
+        case Label.CustomComparisonsBlockMenu:
+            return "블록 작업";
+        case Label.CustomComparisonsFillEmptySlots:
+            return "미리 보기를 보려면 빈 칸을 채우세요. 모든 칸에 블록이 필요합니다.";
+        case Label.CustomComparisonsDiscardChangesDescription:
+            return "이 비교에 저장되지 않은 변경 사항이 있습니다.";
+        case Label.CustomComparisonsDiscard:
+            return "버리기";
+        case Label.CustomComparisonsKeepEditing:
+            return "계속 편집";
+        case Label.CustomComparisonsInvalidTime:
+            return "20:00 또는 1:05:30처럼 시간을 입력하세요.";
+        case Label.CustomComparisonsNotFound:
+            return "{0} (찾을 수 없음)";
+        case Label.CustomComparisonsNotInSplits:
+            return "{0}. (스플릿에 없음)";
+        case Label.CustomComparisonsSegmentOption:
+            return "{0}. {1}";
+        case Label.CustomComparisonsAddRange:
+            return "범위 추가";
+        case Label.CustomComparisonsRemoveRange:
+            return "이 범위 제거";
+        case Label.CustomComparisonsRangeBackwards:
+            return "세그먼트 {0}~{1}이(가) 거꾸로 되어 있습니다. 숫자를 바꾸세요.";
+        case Label.CustomComparisonsCategorySources:
+            return "소스";
+        case Label.CustomComparisonsCategoryFilters:
+            return "필터";
+        case Label.CustomComparisonsCategoryAggregates:
+            return "집계";
+        case Label.CustomComparisonsCategoryMath:
+            return "계산";
+        case Label.CustomComparisonsCategoryControl:
+            return "제어";
+        case Label.CustomComparisonsKindSamples:
+            return "세그먼트별 시간 목록";
+        case Label.CustomComparisonsKindTimes:
+            return "세그먼트별 시간 하나";
+        case Label.CustomComparisonsBlockResult:
+            return "이 비교는";
+        case Label.CustomComparisonsBlockResultTip:
+            return "완성된 비교입니다. 이를 만드는 블록을 여기에 넣으세요.";
+        case Label.CustomComparisonsBlockSegmentHistory:
+            return "각 세그먼트의 내 모든 시간";
+        case Label.CustomComparisonsBlockSegmentHistoryTip:
+            return "각 세그먼트에 기록한 모든 시간입니다. 건너뛴 세그먼트와 건너뛴 직후의 합쳐진 세그먼트는 제외됩니다.";
+        case Label.CustomComparisonsBlockComparison:
+            return "비교 {name}";
+        case Label.CustomComparisonsBlockComparisonTip:
+            return "기존 비교를 세그먼트별로 사용합니다. 기본 제공 비교는 꺼져 있어도 작동합니다.";
+        case Label.CustomComparisonsBlockAttempt:
+            return "시도 #{number}";
+        case Label.CustomComparisonsBlockAttemptTip:
+            return "시도 기록의 번호로 지정한 지난 시도의 세그먼트입니다. 그 런이 스플릿을 건너뛰거나 리셋한 곳은 비어 있습니다.";
+        case Label.CustomComparisonsBlockBestRecentRun:
+            return "최근 {days}일 동안의 내 최고 런";
+        case Label.CustomComparisonsBlockBestRecentRunTip:
+            return '최근 N일 동안 완주한 가장 빠른 런의 세그먼트입니다. 플레이할수록 바뀌는 "최근 PB"입니다. 그 기간에 완주한 런이 없으면 비어 있습니다.';
+        case Label.CustomComparisonsBlockLastN:
+            return "최근 {count}개의 시간:";
+        case Label.CustomComparisonsBlockLastNTip:
+            return "각 세그먼트의 가장 최근 시간을 유지합니다. 시도 횟수가 아니라 그 세그먼트를 완료한 횟수를 셉니다.";
+        case Label.CustomComparisonsBlockCompletedRunsOnly:
+            return "완주한 런만";
+        case Label.CustomComparisonsBlockCompletedRunsOnlyTip:
+            return "런 전체를 완주한 시도의 시간만 유지합니다.";
+        case Label.CustomComparisonsBlockRecentDays:
+            return "최근 {days}일";
+        case Label.CustomComparisonsBlockRecentDaysTip:
+            return "최근 N일 안에 끝난 시도의 시간만 유지해 오래된 시간이 더 이상 반영되지 않게 합니다. 날짜가 없는 시도는 제외됩니다.";
+        case Label.CustomComparisonsBlockFinishedUnder:
+            return "{totalSeconds} 안에 완주한 런";
+        case Label.CustomComparisonsBlockFinishedUnderTip:
+            return "이보다 빨리 완주한 런의 시간만 유지해 좋은 런만 반영되게 합니다.";
+        case Label.CustomComparisonsBlockReachedSegment:
+            return "{segment}까지 도달한 런";
+        case Label.CustomComparisonsBlockReachedSegmentTip:
+            return '적어도 이 세그먼트까지 도달한 시도의 시간만 유지합니다. "완주한 런만"과 비슷하지만 대부분의 런이 일찍 리셋되는 게임용입니다. 이 세그먼트가 스플릿에 없으면 경고가 표시되고 남는 시간이 없습니다.';
+        case Label.CustomComparisonsBlockTrimOutliers:
+            return "가장 빠르고 느린 {percent} % 제외:";
+        case Label.CustomComparisonsBlockTrimOutliersTip:
+            return "평균을 내기 전에 우연을 제거합니다. 각 세그먼트의 가장 빠른 시간과 가장 느린 시간을 이 비율만큼 버립니다. 시간이 적으면 아무것도 버리지 않습니다.";
+        case Label.CustomComparisonsBlockAtLeast:
+            return "시간이 {count}개 이상일 때만:";
+        case Label.CustomComparisonsBlockAtLeastTip:
+            return '시간이 적은 세그먼트는 비게 되므로, 너무 적은 데이터를 믿는 대신 "비어 있으면 사용"으로 채울 수 있습니다.';
+        case Label.CustomComparisonsBlockAggregate:
+            return "{kind}:";
+        case Label.CustomComparisonsBlockAggregateTip:
+            return "각 세그먼트의 시간 목록을 하나의 시간으로 만듭니다. 시간이 없는 세그먼트는 비어 있습니다.";
+        case Label.CustomComparisonsAggregateMedian:
+            return "중앙값";
+        case Label.CustomComparisonsAggregateAverage:
+            return "평균";
+        case Label.CustomComparisonsAggregateMin:
+            return "최고 (최소)";
+        case Label.CustomComparisonsAggregateMax:
+            return "최저 (최대)";
+        case Label.CustomComparisonsBlockPercentile:
+            return "{percent}번째 백분위수:";
+        case Label.CustomComparisonsBlockPercentileTip:
+            return "0은 가장 빠른 시간, 100은 가장 느린 시간, 50은 중앙값입니다. 70은 약 70 %의 확률로 이 시간을 이긴다는 뜻입니다.";
+        case Label.CustomComparisonsBlockWeightedAverage:
+            return "최근 가중 평균:";
+        case Label.CustomComparisonsBlockWeightedAverageFooter:
+            return "{halfLife}개 더 오래될 때마다 가중치가 절반으로";
+        case Label.CustomComparisonsBlockWeightedAverageTip:
+            return "최근 시간일수록 더 크게 반영되는 평균입니다. 가장 최근 시간은 온전히, N개 더 오래된 시간은 절반, 2N개 더 오래된 시간은 4분의 1로 반영되는 식입니다.";
+        case Label.CustomComparisonsBlockAddTime:
+            return "세그먼트마다 {seconds}초 더하기:";
+        case Label.CustomComparisonsBlockAddTimeTip:
+            return "모든 세그먼트에 시간을 더합니다(음수이면 뺍니다). 0 아래로 내려가지 않습니다.";
+        case Label.CustomComparisonsBlockScale:
+            return "{percent} %:";
+        case Label.CustomComparisonsBlockScaleTip:
+            return "모든 세그먼트의 크기를 조절합니다. 103 %는 3 % 느리게, 97 %는 3 % 빠르게 합니다.";
+        case Label.CustomComparisonsBlockRound:
+            return "{step} 단위로 반올림";
+        case Label.CustomComparisonsBlockRoundTip:
+            return "모든 세그먼트를 가장 가까운 0.1초(또는 1초, 0.01초)로 반올림해 스플릿 시간도 깔끔하게 만듭니다.";
+        case Label.CustomComparisonsRoundStep:
+            return "{0}초";
+        case Label.CustomComparisonsBlockClamp:
+            return "범위 유지";
+        case Label.CustomComparisonsBlockClampTip:
+            return '각 세그먼트를 두 한계 사이로 유지합니다. 예를 들어 최고 세그먼트보다 빠르지 않고 PB보다 느리지 않게 합니다. 한계가 서로 엇갈리면 "이보다 빠르지 않게"가 우선합니다.';
+        case Label.CustomComparisonsSlotNeverFaster:
+            return "이보다 빠르지 않게";
+        case Label.CustomComparisonsSlotNeverSlower:
+            return "이보다 느리지 않게";
+        case Label.CustomComparisonsBlockStretchToTotal:
+            return "{totalSeconds}에 완주하도록 늘이기";
+        case Label.CustomComparisonsBlockStretchToTotalTip:
+            return '모든 세그먼트를 같은 비율로 조절해 런 전체의 합이 목표 시간이 되게 합니다. 빈 세그먼트가 있으면 결과도 비어 있습니다. 먼저 "비어 있으면 사용"으로 빈 곳을 채우세요.';
+        case Label.CustomComparisonsBlockBlend:
+            return "{percent} % 지점:";
+        case Label.CustomComparisonsBlockBlendTip:
+            return "세그먼트마다 두 규칙을 섞습니다. 0 %는 전부 첫 번째, 100 %는 전부 두 번째, 75 %는 4분의 3 지점입니다.";
+        case Label.CustomComparisonsSlotTo:
+            return "에서";
+        case Label.CustomComparisonsBlockPick:
+            return "더 {kind} 쪽:";
+        case Label.CustomComparisonsBlockPickTip:
+            return "세그먼트마다 두 규칙 중 더 느린(또는 빠른) 쪽을 씁니다. 한쪽에 그 세그먼트의 시간이 없으면 다른 쪽을 씁니다.";
+        case Label.CustomComparisonsPickSlower:
+            return "느린";
+        case Label.CustomComparisonsPickFaster:
+            return "빠른";
+        case Label.CustomComparisonsSlotAnd:
+            return "그리고";
+        case Label.CustomComparisonsBlockFallback:
+            return "사용";
+        case Label.CustomComparisonsBlockFallbackTip:
+            return "첫 번째 규칙이 비워 둔 세그먼트만 채웁니다. 예를 들어 아직 런이 충분하지 않을 때입니다.";
+        case Label.CustomComparisonsSlotIfEmpty:
+            return "비어 있으면 사용";
+        case Label.CustomComparisonsBlockSegmentRange:
+            return "세그먼트 …에는 … 사용, 그 외에는 …";
+        case Label.CustomComparisonsBlockSegmentRangeTip:
+            return "세그먼트 범위 하나에는 한 규칙을, 나머지에는 다른 규칙을 씁니다. 범위를 추가해 규칙을 늘릴 수 있으며, 처음 일치하는 범위가 우선합니다. 범위가 스플릿 끝을 넘어가면 경고가 표시됩니다.";
+        case Label.CustomComparisonsBlockSegmentRangeHeader:
+            return "세그먼트마다 다른 규칙 (처음 일치하는 범위가 우선)";
+        case Label.CustomComparisonsRangeCase:
+            return "세그먼트 {from}~{to}에는 사용";
+        case Label.CustomComparisonsSlotOtherwise:
+            return "그 외에는";
+        case Label.CustomComparisonsPreview:
+            return "미리 보기";
+        case Label.CustomComparisonsPreviewingBlock:
+            return "비교가 아닌 블록을 미리 보는 중";
+        case Label.CustomComparisonsShowWholeComparison:
+            return "비교 전체 보기";
+        case Label.CustomComparisonsSegment:
+            return "세그먼트";
+        case Label.CustomComparisonsDifferenceFrom:
+            return "차이 비교 대상";
+        case Label.CustomComparisonsFasterThanGold:
+            return "이 세그먼트의 최고 시간(골드)보다 빠름";
+        case Label.CustomComparisonsFasterThanGoldWarning:
+            return "세그먼트 {0}개가 골드보다 빠릅니다. 허용되지만 이 페이스는 현실적이지 않을 수 있습니다.";
+        case Label.CustomComparisonsFasterThanGoldWarningOne:
+            return "세그먼트 1개가 골드보다 빠릅니다. 허용되지만 이 페이스는 현실적이지 않을 수 있습니다.";
+        case Label.CustomComparisonsFinishLine:
+            return "{0}에 완주, {2} 대비 {1}.";
+        case Label.CustomComparisonsFinishVsSumOfBest:
+            return "최고 세그먼트 합계는 {0}입니다.";
+        case Label.CustomComparisonsNoProblems:
+            return "문제가 없습니다.";
+        case Label.CustomComparisonsNoTimesLeft:
+            return '시간이 있는 세그먼트가 없습니다. 행을 클릭해 이유를 확인하거나, PB 같은 예비 값으로 "… 비어 있으면 사용"을 추가하세요.';
+        case Label.CustomComparisonsOriginTitle:
+            return "이 시간의 출처";
+        case Label.CustomComparisonsOriginEmpty:
+            return "이 세그먼트에 시간이 없어서 이후의 모든 스플릿도 비어 있습니다.";
+        case Label.CustomComparisonsOriginFillingGap:
+            return "빈 곳을 채움";
+        case Label.CustomComparisonsOriginPicked:
+            return "둘 중 더 {0} 쪽";
+        case Label.CustomComparisonsOriginLowLimit:
+            return '"이보다 빠르지 않게" 한계에서 유지됨';
+        case Label.CustomComparisonsOriginHighLimit:
+            return '"이보다 느리지 않게" 한계에서 유지됨';
+        case Label.CustomComparisonsClickRowHint:
+            return "행을 클릭하면 그 시간의 출처를 볼 수 있습니다.";
+        case Label.CustomComparisonsDescYourGolds:
+            return "내 골드";
+        case Label.CustomComparisonsDescYourPb:
+            return "내 PB";
+        case Label.CustomComparisonsDescComparison:
+            return '"{0}"';
+        case Label.CustomComparisonsDescAttempt:
+            return "시도 #{0}";
+        case Label.CustomComparisonsDescBestRecentRun:
+            return "최근 {0}일 동안의 내 최고 런";
+        case Label.CustomComparisonsDescWeightedAverage:
+            return "{0}의 최근 가중 평균";
+        case Label.CustomComparisonsDescClamp:
+            return "{1}와(과) {2} 사이로 유지한 {0}";
+        case Label.CustomComparisonsDescRound:
+            return "{1} 단위로 반올림한 {0}";
+        case Label.CustomComparisonsDescMedian:
+            return "{0}의 중앙값";
+        case Label.CustomComparisonsDescAverage:
+            return "{0}의 평균";
+        case Label.CustomComparisonsDescMin:
+            return "{0} 중 최고";
+        case Label.CustomComparisonsDescMax:
+            return "{0} 중 최저";
+        case Label.CustomComparisonsDescPercentile:
+            return "{1}의 {0}번째 백분위수";
+        case Label.CustomComparisonsDescAddTime:
+            return "{0} + {1}";
+        case Label.CustomComparisonsDescRemoveTime:
+            return "{0} − {1}";
+        case Label.CustomComparisonsDescScale:
+            return "{1}의 {0} %";
+        case Label.CustomComparisonsDescStretch:
+            return "{1}에 완주하도록 늘인 {0}";
+        case Label.CustomComparisonsDescBlend:
+            return "{1}에서 {2}까지의 {0} % 지점";
+        case Label.CustomComparisonsDescSlower:
+            return "{0}와(과) {1} 중 느린 쪽";
+        case Label.CustomComparisonsDescFaster:
+            return "{0}와(과) {1} 중 빠른 쪽";
+        case Label.CustomComparisonsDescFallback:
+            return "{0} (비어 있는 곳은 {1})";
+        case Label.CustomComparisonsDescRangeArm:
+            return "{1}에는 {0}";
+        case Label.CustomComparisonsDescRangeOtherwise:
+            return "{0}, 그 외에는 {1}";
+        case Label.CustomComparisonsDescSomething:
+            return "무언가";
+        case Label.CustomComparisonsDescAllTimes:
+            return "내 모든 시간";
+        case Label.CustomComparisonsDescLastN:
+            return "내 최근 {0}개의 시간";
+        case Label.CustomComparisonsQualCompleted:
+            return "(완주한 런만)";
+        case Label.CustomComparisonsQualRecentDays:
+            return "(최근 {0}일)";
+        case Label.CustomComparisonsQualUnder:
+            return "({0} 안에 끝난 런)";
+        case Label.CustomComparisonsQualTrim:
+            return "(가장 빠르고 느린 {0} % 제외)";
+        case Label.CustomComparisonsQualAtLeast:
+            return "({0}개 이상일 때)";
+        case Label.CustomComparisonsQualReached:
+            return "({0}까지 도달한 런)";
+        case Label.CustomComparisonsSumGapsFilled:
+            return "{0} 빈 곳은 {1}(으)로 채웁니다.";
+        case Label.CustomComparisonsSumRangeArm:
+            return "{0}: {1}";
+        case Label.CustomComparisonsSumOtherSegments:
+            return "나머지 세그먼트: {0}";
+        case Label.CustomComparisonsSegmentNumber:
+            return "세그먼트 {0}";
+        case Label.CustomComparisonsSegmentSpan:
+            return "{0}~{1}";
+        case Label.CustomComparisonsSeconds:
+            return "{0}초";
+        case Label.CustomComparisonsListAnd:
+            return "{0} 및 {1}";
+        case Label.CustomComparisonsWarnSegment:
+            return "세그먼트 {0}을(를) 사용하지만 스플릿에는 {1}개뿐입니다";
+        case Label.CustomComparisonsWarnSegments:
+            return "세그먼트 {0}을(를) 사용하지만 스플릿에는 {1}개뿐입니다";
+        case Label.CustomComparisonsSentence:
+            return "{0}.";
     }
 }

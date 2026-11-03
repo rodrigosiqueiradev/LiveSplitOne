@@ -2,13 +2,13 @@
  * The starting points offered when making a new comparison.
  */
 
-import { CcLabel } from "../../../localization/custom-comparisons";
+import { Label } from "../../../localization";
 import { type Block } from "./model";
 import { PERSONAL_BEST, BEST_SEGMENTS } from "./blocks";
 
 export interface Template {
-    title: CcLabel;
-    description: CcLabel;
+    title: Label;
+    description: Label;
     /** Builds the blocks for the goal time in seconds. Null for no blocks. */
     build: (goalSeconds: number) => Block | null;
 }
@@ -21,8 +21,8 @@ const pb = (): Block => ({ type: "comparison", name: PERSONAL_BEST });
 
 export const TEMPLATES: Template[] = [
     {
-        title: CcLabel.TemplateGoalPace,
-        description: CcLabel.TemplateGoalPaceDescription,
+        title: Label.CustomComparisonsTemplateGoalPace,
+        description: Label.CustomComparisonsTemplateGoalPaceDescription,
         build: (goal) => ({
             type: "stretchToTotal",
             totalSeconds: goal,
@@ -42,8 +42,8 @@ export const TEMPLATES: Template[] = [
         }),
     },
     {
-        title: CcLabel.TemplateRealisticPace,
-        description: CcLabel.TemplateRealisticPaceDescription,
+        title: Label.CustomComparisonsTemplateRealisticPace,
+        description: Label.CustomComparisonsTemplateRealisticPaceDescription,
         build: () => ({
             type: "fallback",
             primary: {
@@ -63,8 +63,8 @@ export const TEMPLATES: Template[] = [
         }),
     },
     {
-        title: CcLabel.TemplateRecentForm,
-        description: CcLabel.TemplateRecentFormDescription,
+        title: Label.CustomComparisonsTemplateRecentForm,
+        description: Label.CustomComparisonsTemplateRecentFormDescription,
         build: () => ({
             type: "fallback",
             primary: {
@@ -84,8 +84,8 @@ export const TEMPLATES: Template[] = [
         }),
     },
     {
-        title: CcLabel.TemplateSafePace,
-        description: CcLabel.TemplateSafePaceDescription,
+        title: Label.CustomComparisonsTemplateSafePace,
+        description: Label.CustomComparisonsTemplateSafePaceDescription,
         build: () => ({
             type: "pick",
             kind: "slower",
@@ -106,8 +106,8 @@ export const TEMPLATES: Template[] = [
         }),
     },
     {
-        title: CcLabel.TemplateBlank,
-        description: CcLabel.TemplateBlankDescription,
+        title: Label.CustomComparisonsTemplateBlank,
+        description: Label.CustomComparisonsTemplateBlankDescription,
         build: () => null,
     },
 ];

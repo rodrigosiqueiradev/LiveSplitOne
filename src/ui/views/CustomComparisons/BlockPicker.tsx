@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { type Language } from "../../../livesplit-core";
-import { CcLabel, resolveCc } from "../../../localization/custom-comparisons";
+import { Label, resolve } from "../../../localization";
 import { type BlockSpec, CATEGORIES, ALL_BLOCKS, RANGE } from "./blocks";
 
 import { KindIcon } from "./KindIcon";
@@ -75,8 +75,14 @@ export function BlockPicker({
                 <input
                     type="search"
                     className={classes.pickerSearch}
-                    placeholder={resolveCc(CcLabel.SearchBlocks, lang)}
-                    aria-label={resolveCc(CcLabel.SearchBlocks, lang)}
+                    placeholder={resolve(
+                        Label.CustomComparisonsSearchBlocks,
+                        lang,
+                    )}
+                    aria-label={resolve(
+                        Label.CustomComparisonsSearchBlocks,
+                        lang,
+                    )}
                     value={query}
                     autoFocus
                     onChange={(e) => setQuery(e.target.value)}
@@ -90,12 +96,15 @@ export function BlockPicker({
                 <div className={classes.pickerList}>
                     {groups.length === 0 && (
                         <p className={classes.pickerTip}>
-                            {resolveCc(CcLabel.NoBlocksFound, lang)}
+                            {resolve(
+                                Label.CustomComparisonsNoBlocksFound,
+                                lang,
+                            )}
                         </p>
                     )}
                     {groups.map((group) => (
                         <section key={group.label}>
-                            <h3>{resolveCc(group.label, lang)}</h3>
+                            <h3>{resolve(group.label, lang)}</h3>
                             {group.blocks.map((spec) => (
                                 <button
                                     key={spec.type}
@@ -107,7 +116,7 @@ export function BlockPicker({
                                         {blockName(spec, lang)}
                                     </span>
                                     <span className={classes.pickerTip}>
-                                        {resolveCc(spec.tip, lang)}
+                                        {resolve(spec.tip, lang)}
                                     </span>
                                 </button>
                             ))}
@@ -117,11 +126,11 @@ export function BlockPicker({
                 <div className={classes.pickerFooter}>
                     <span>
                         <KindIcon kind="samples" />{" "}
-                        {resolveCc(CcLabel.KindSamples, lang)}
+                        {resolve(Label.CustomComparisonsKindSamples, lang)}
                     </span>
                     <span>
                         <KindIcon kind="times" />{" "}
-                        {resolveCc(CcLabel.KindTimes, lang)}
+                        {resolve(Label.CustomComparisonsKindTimes, lang)}
                     </span>
                 </div>
             </div>
@@ -144,7 +153,7 @@ export function blockMatches(
     lang: Language | undefined,
 ): boolean {
     const text =
-        `${blockName(spec, lang)} ${resolveCc(spec.tip, lang)}`.toLowerCase();
+        `${blockName(spec, lang)} ${resolve(spec.tip, lang)}`.toLowerCase();
     return words.every((word) => text.includes(word));
 }
 
@@ -164,16 +173,14 @@ export function blockName(spec: BlockSpec, lang: Language | undefined): string {
     // empty, use …"), as some blocks are only told apart by them.
     const slots = spec.slots
         .map((slot) =>
-            slot.label !== undefined
-                ? ` ${resolveCc(slot.label, lang)} …`
-                : " …",
+            slot.label !== undefined ? ` ${resolve(slot.label, lang)} …` : " …",
         )
         .join("");
     return title + slots;
 }
 
 function fillTitle(spec: BlockSpec, lang: Language | undefined): string {
-    return resolveCc(spec.title, lang).replace(/\{([a-zA-Z]+)\}/g, (_, key) => {
+    return resolve(spec.title, lang).replace(/\{([a-zA-Z]+)\}/g, (_, key) => {
         const field = spec.fields.find((f) => f.key === key);
         if (field?.type === "choice") {
             const choice = field.choices.find((c) => c.value === field.default);
@@ -187,8 +194,8 @@ function fillTitle(spec: BlockSpec, lang: Language | undefined): string {
 
 /** The label of a choice. Numeric choices are filled into their label. */
 export function choiceLabel(
-    choice: { value: string | number; label: CcLabel },
+    choice: { value: string | number; label: Label },
     lang: Language | undefined,
 ): string {
-    return resolveCc(choice.label, lang).replace("{0}", String(choice.value));
+    return resolve(choice.label, lang).replace("{0}", String(choice.value));
 }
