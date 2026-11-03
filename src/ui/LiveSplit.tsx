@@ -46,6 +46,7 @@ import { LayoutView } from "./views/LayoutView";
 import { CustomComparisonsView } from "./views/CustomComparisonsView";
 import {
     NO_CUSTOM_COMPARISONS,
+    takeCustomComparisonsOutOfLayout,
     loadCustomComparisonsPlugin,
 } from "../util/CustomComparisonsPlugin";
 import { CcLabel, formatCc } from "../localization/custom-comparisons";
@@ -251,10 +252,13 @@ export class LiveSplit extends React.Component<Props, State> {
         }
 
         let layout: Option<Layout> = null;
+        let layoutComparisons: string | undefined;
         try {
             const data = props.layout;
             if (data !== undefined) {
-                layout = Layout.parseJson(data);
+                const taken = takeCustomComparisonsOutOfLayout(data);
+                layoutComparisons = taken.customComparisons;
+                layout = Layout.parseJson(taken.layout);
             }
         } catch (_) {
             /* Looks like the storage has no valid data */
@@ -273,11 +277,11 @@ export class LiveSplit extends React.Component<Props, State> {
         let customComparisons: string;
         if (props.customComparisons !== undefined) {
             customComparisons = props.customComparisons;
+        } else if (layoutComparisons !== undefined) {
+            customComparisons = layoutComparisons;
+            Storage.storeCustomComparisons(customComparisons);
         } else {
-            customComparisons = layout.customComparisonsSettings();
-            if (customComparisons !== NO_CUSTOM_COMPARISONS) {
-                Storage.storeCustomComparisons(customComparisons);
-            }
+            customComparisons = NO_CUSTOM_COMPARISONS;
         }
         const customComparisonsProblem = this.installCustomComparisons(
             commandSink,
@@ -1053,7 +1057,9 @@ export class LiveSplit extends React.Component<Props, State> {
     private importLayoutFromString(file: string) {
         let layout = null;
         try {
-            layout = Layout.parseJson(JSON.parse(file));
+            layout = Layout.parseJson(
+                takeCustomComparisonsOutOfLayout(JSON.parse(file)).layout,
+            );
         } catch (_) {
             /* Failed to load the layout */
         }
