@@ -11,7 +11,7 @@ Comparisons*, so a comparison made in one opens in the other and gives the
 same times.
 
 This guide is for runners. How the feature is built is described in
-livesplit-core's [`docs/comparison-plugins.md`](https://github.com/rodrigosiqueiradev/livesplit-core/blob/comparison-plugins/docs/comparison-plugins.md).
+livesplit-core's [`CUSTOM-COMPARISONS.md`](https://github.com/rodrigosiqueiradev/livesplit-core/blob/comparison-plugins/CUSTOM-COMPARISONS.md).
 
 ## Contents
 
