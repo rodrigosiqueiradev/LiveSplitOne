@@ -9,7 +9,6 @@
 import React, { useState } from "react";
 import {
     CustomComparisonsEditor,
-    Layout,
     type Language,
     type RunRef,
     type TimingMethod,
@@ -289,12 +288,12 @@ export function ComparisonList({
         const [text, file] = result;
         let texts: string[] | null = null;
         if (file.name.toLowerCase().endsWith(".lsl")) {
-            using layout = Layout.parseOriginalLivesplitString(text);
-            if (layout === null) {
+            const settings = CustomComparisonsEditor.readLayout(text);
+            if (settings === "") {
                 await showError(resolveCc(CcLabel.LayoutUnreadable, lang));
                 return;
             }
-            texts = readSettings(layout.customComparisonsSettings());
+            texts = readSettings(settings);
             if (texts === null || texts.length === 0) {
                 await showError(
                     resolveCc(CcLabel.LayoutHasNoComparisons, lang),
